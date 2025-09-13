@@ -88,7 +88,7 @@ function NewTravel() {
         </Button>
       </div>
 
-      <h1 className="font-light text-5xl mt-8 text-slate-900">Where next?</h1>
+      <h1 className="font-light text-5xl mt-8 text-foreground">Where next?</h1>
 
       <Form {...form}>
         <form

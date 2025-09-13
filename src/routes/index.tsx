@@ -19,7 +19,7 @@ function Index() {
   if (!activeTravel) {
     return (
       <div className="p-2">
-        <h1 className="mt-4 text-slate-900">No active travel</h1>
+        <h1 className="mt-4 text-foreground">No active travel</h1>
       </div>
     );
   }
@@ -27,7 +27,7 @@ function Index() {
   return (
     <>
       <div className="p-4 border-b">
-        <h1 className="font-light text-3xl mt-4 text-slate-900">
+        <h1 className="font-light text-3xl mt-4 text-foreground">
           {activeTravel.emoji} {activeTravel.name}
         </h1>
       </div>

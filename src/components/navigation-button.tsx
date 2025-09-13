@@ -18,13 +18,13 @@ export const NavigationButton = ({
         <Icon
           className={cn(
             "size-6 transition-colors",
-            active ? "text-slate-800" : "text-slate-400",
+            active ? "text-foreground" : "text-muted-foreground",
           )}
         />
       </Button>
       <div
         className={cn(
-          "h-1 w-1 rounded-full bg-slate-800 transition-opacity",
+          "h-1 w-1 rounded-full bg-foreground transition-opacity",
           active ? "opacity-100" : "opacity-0",
         )}
       />

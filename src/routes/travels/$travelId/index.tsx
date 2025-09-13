@@ -19,34 +19,36 @@ function TravelIndex() {
         <TopBar travel={travel} />
 
         <div className="px-5 pb-6">
-          <div className="font-semibold text-xl text-slate-700">Hi Alexis,</div>
-          <div className="mt-1 text-slate-400 text-sm font-light">
+          <div className="font-semibold text-xl text-foreground">
+            Hi Alexis,
+          </div>
+          <div className="mt-1 text-muted-foreground text-sm font-light">
             What are we doing today?
           </div>
 
           <div className="mt-6">
-            <div className=" text-slate-500">Total travel cost</div>
-            <div className="text-5xl text-slate-800 font-mono mt-1">
+            <div className="text-subtle-foreground">Total travel cost</div>
+            <div className="text-5xl text-foreground font-mono mt-1">
               8405.30€
             </div>
           </div>
 
           <div className="grid grid-cols-3 mt-6">
-            <div className="border-l-2 border-slate-800 px-4">
-              <div className="text-sm text-slate-500">Today cost</div>
-              <div className="text-slate-800 font-mono font-semibold">
+            <div className="border-l-2 border-foreground px-4">
+              <div className="text-sm text-subtle-foreground">Today cost</div>
+              <div className="text-foreground font-mono font-semibold">
                 5.30€
               </div>
             </div>
-            <div className="border-l-2 border-slate-400 px-4">
-              <div className="text-sm text-slate-500">Per people</div>
-              <div className="text-slate-800 font-mono font-semibold">
+            <div className="border-l-2 border-muted-foreground px-4">
+              <div className="text-sm text-subtle-foreground">Per people</div>
+              <div className="text-foreground font-mono font-semibold">
                 4045.30€
               </div>
             </div>
-            <div className="border-l-2 border-slate-300 px-4">
-              <div className="text-sm text-slate-500">Forecast</div>
-              <div className="text-slate-500 font-mono font-semibold">
+            <div className="border-l-2 border-border px-4">
+              <div className="text-sm text-subtle-foreground">Forecast</div>
+              <div className="text-subtle-foreground font-mono font-semibold">
                 12905.30€
               </div>
             </div>

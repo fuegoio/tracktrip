@@ -1,16 +1,17 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Budget } from "../budget";
+import { firstPartyCategoriesList } from "@/data/categories";
 
 export const Budgets = () => {
   return (
     <div className="w-full py-4 px-2 rounded-2xl shadow-up">
       <div className="flex justify-between px-2 items-center">
         <div>
-          <div className="text-sm font-semibold text-slate-800">
+          <div className="text-sm font-semibold text-foreground">
             Budgets by category
           </div>
-          <div className="text-xs text-slate-500">For today</div>
+          <div className="text-xs text-subtle-foreground">For today</div>
         </div>
         <Button variant="secondary" size="icon" className="size-6">
           <ArrowRight className="size-4" />
@@ -18,9 +19,9 @@ export const Budgets = () => {
       </div>
 
       <div className="flex px-4 justify-between items-center mt-4">
-        <Budget />
-        <Budget />
-        <Budget />
+        {firstPartyCategoriesList.map((category) => (
+          <Budget category={category} />
+        ))}
       </div>
     </div>
   );

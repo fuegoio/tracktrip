@@ -7,7 +7,7 @@ export const Transactions = () => {
   return (
     <div className="w-full py-4 px-2 rounded-2xl shadow-up">
       <div className="flex px-2 items-center gap-3">
-        <div className="text-sm font-semibold text-slate-800 flex-1">
+        <div className="text-sm font-semibold text-foreground flex-1">
           Recent transactions
         </div>
         <Button variant="outline" size="icon" className="size-6">

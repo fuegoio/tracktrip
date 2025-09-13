@@ -97,7 +97,7 @@ function NewTransaction() {
         </Button>
       </div>
 
-      <h1 className="font-light text-4xl mt-8 text-slate-900">
+      <h1 className="font-light text-4xl mt-8 text-foreground">
         What did you do?
       </h1>
 
