@@ -1,6 +1,6 @@
 import { Menu, Plus } from "lucide-react";
 import { Button } from "./ui/button";
-import type { Travel } from "@/store/types";
+import type { Travel } from "@/data/travels";
 
 export const TopBar = ({ travel }: { travel: Travel }) => {
   return (

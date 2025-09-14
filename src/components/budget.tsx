@@ -1,8 +1,7 @@
-import type { Category } from "@/data/categories";
 import { CategoryBadge } from "./category-badge";
 import { AnimatedCircularProgressBar } from "./ui/circular-progress";
 
-export const Budget = ({ category }: { category: Category }) => {
+export const Budget = ({ categoryId }: { categoryId: string }) => {
   return (
     <div className="flex flex-col items-center">
       <AnimatedCircularProgressBar
@@ -11,7 +10,7 @@ export const Budget = ({ category }: { category: Category }) => {
         gaugePrimaryColor="var(--color-subtle-foreground)"
         gaugeSecondaryColor="var(--color-muted)"
       >
-        <CategoryBadge category={category} />
+        <CategoryBadge categoryId={categoryId} />
       </AnimatedCircularProgressBar>
       <div className="font-mono font-medium text-xs text-foreground mt-1">
         13.4€

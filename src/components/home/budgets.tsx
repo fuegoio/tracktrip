@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Budget } from "../budget";
 import { firstPartyCategoriesList } from "@/data/categories";
 
-export const Budgets = () => {
+export const Budgets = ({ travelId }: { travelId: string }) => {
   return (
     <div className="w-full py-4 px-2 rounded-2xl shadow-up">
       <div className="flex justify-between px-2 items-center">
@@ -20,7 +20,7 @@ export const Budgets = () => {
 
       <div className="flex px-4 justify-between items-center mt-4">
         {firstPartyCategoriesList.map((category) => (
-          <Budget category={category} />
+          <Budget categoryId={category.id} />
         ))}
       </div>
     </div>

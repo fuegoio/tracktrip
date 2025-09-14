@@ -31,10 +31,7 @@ import {
 import { transactionsCollection, usersCollection } from "@/store/collections";
 import { useTravel } from "@/lib/params";
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import {
-  firstPartyCategories,
-  firstPartyCategoriesEmoji,
-} from "@/data/categories";
+import { firstPartyCategoriesList } from "@/data/categories";
 
 export const Route = createFileRoute("/travels/$travelId/transactions/new")({
   component: NewTransaction,
@@ -48,7 +45,7 @@ const formSchema = z.object({
   amount: z.number(),
   currency: z.string(),
   place: z.string().optional(),
-  category: z.string().optional(),
+  category: z.string(),
   subcategory: z.string().optional(),
   days: z.number(),
 });
@@ -74,7 +71,8 @@ function NewTransaction() {
       id: crypto.randomUUID(),
       ...values,
       travel: travel.id,
-      date: values.date.toJSON(),
+      // date in "2024-01-01" format
+      date: values.date.toISOString().split("T")[0],
     });
     navigate({ to: "/" });
   };
@@ -271,10 +269,10 @@ function NewTransaction() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {firstPartyCategories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {firstPartyCategoriesEmoji[category]}{" "}
-                        <span className="capitalize">{category}</span>
+                    {firstPartyCategoriesList.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.emoji}{" "}
+                        <span className="capitalize">{category.name}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>

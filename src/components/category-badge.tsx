@@ -1,7 +1,10 @@
-import type { Category } from "@/data/categories";
+import { firstPartyCategoriesList } from "@/data/categories";
 import { cn } from "@/lib/utils";
 
-export const CategoryBadge = ({ category }: { category: Category }) => {
+export const CategoryBadge = ({ categoryId }: { categoryId: string }) => {
+  const category = firstPartyCategoriesList.find((c) => c.id === categoryId);
+  if (!category) return null;
+
   return (
     <div
       className={cn(

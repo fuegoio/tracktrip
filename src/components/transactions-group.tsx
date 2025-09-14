@@ -1,17 +1,28 @@
-import { Transaction } from "./transaction";
+import type { Transaction } from "@/data/transactions";
+import { TransactionRow } from "./transaction-row";
 
-export const TransactionsGroup = () => {
+export const TransactionsGroup = ({
+  date,
+  transactions,
+}: {
+  date: Date;
+  transactions: Transaction[];
+}) => {
   return (
     <div className="mt-4">
       <div className="px-2 text-subtle-foreground text-xs mb-2">
-        13th September 2025
+        {date.toLocaleDateString(undefined, {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
       </div>
 
       <div className="space-y-1">
-        <Transaction />
-        <Transaction />
-        <Transaction />
-        <Transaction />
+        {transactions.map((transaction) => (
+          <TransactionRow key={transaction.id} transaction={transaction} />
+        ))}
       </div>
     </div>
   );

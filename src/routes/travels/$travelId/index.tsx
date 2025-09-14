@@ -55,8 +55,8 @@ function TravelIndex() {
           </div>
         </div>
 
-        <Budgets />
-        <Transactions />
+        <Budgets travelId={travel.id} />
+        <Transactions travelId={travel.id} />
       </div>
       <NavBar />
     </>

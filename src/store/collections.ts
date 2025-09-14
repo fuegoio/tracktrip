@@ -2,8 +2,8 @@ import { createCollection } from "@tanstack/react-db";
 import { localStorageCollectionOptions } from "@tanstack/react-db";
 import {
   budgetsSchema,
-  categoriesSchema,
-  subcategoriesSchema,
+  customCategoriesSchema,
+  customSubcategoriesSchema,
   transactionsSchema,
   travelsSchema,
   usersSchema,
@@ -32,7 +32,7 @@ export const categoriesCollection = createCollection(
     id: "categories",
     storageKey: "categories",
     getKey: (item) => item.id,
-    schema: categoriesSchema,
+    schema: customCategoriesSchema,
   }),
 );
 
@@ -41,7 +41,7 @@ export const subcategoriesCollection = createCollection(
     id: "subcategories",
     storageKey: "subcategories",
     getKey: (item) => item.id,
-    schema: subcategoriesSchema,
+    schema: customSubcategoriesSchema,
   }),
 );
 

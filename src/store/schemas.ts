@@ -81,12 +81,12 @@ export const transactionsSchema = z.object({
    * The category of the transaction.
    * This is used to group transactions by category.
    */
-  category: z.uuid().optional(),
+  category: z.string(),
   /**
    * The subcategory of the transaction.
    * This is used to group transactions by subcategory.
    */
-  subcategory: z.uuid().optional(),
+  subcategory: z.string().optional(),
   /**
    * The number of days the transaction applies to.
    * Quite useful for housing or groceries.
@@ -122,9 +122,10 @@ export const usersSchema = z.object({
 });
 
 /**
- * Schema for a category object.
+ * Schema for a custom category.
+ * There are already some categories, but users can add their own.
  */
-export const categoriesSchema = z.object({
+export const customCategoriesSchema = z.object({
   /**
    * The unique identifier for the category.
    */
@@ -144,9 +145,10 @@ export const categoriesSchema = z.object({
 });
 
 /**
- * Schema for a subcategory object.
+ * Schema for a custom subcategory.
+ * Like categories, there are already some subcategories, but users can add their own.
  */
-export const subcategoriesSchema = z.object({
+export const customSubcategoriesSchema = z.object({
   /**
    * The unique identifier for the subcategory.
    */
@@ -154,7 +156,7 @@ export const subcategoriesSchema = z.object({
   /**
    * The category this subcategory belongs to.
    */
-  category: z.uuid(),
+  category: z.string(),
   /**
    * The name of the subcategory.
    */
@@ -184,11 +186,11 @@ export const budgetsSchema = z.object({
   /**
    * The category this budget applies to.
    */
-  category: z.uuid().optional(),
+  category: z.string().optional(),
   /**
    * The subcategory this budget applies to.
    */
-  subcategory: z.uuid().optional(),
+  subcategory: z.string().optional(),
   /**
    * The period of the budget.
    */
