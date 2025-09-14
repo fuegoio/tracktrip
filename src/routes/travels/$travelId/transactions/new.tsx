@@ -42,7 +42,9 @@ const formSchema = z.object({
   description: z.string().optional(),
   date: z.date(),
   user: z.uuid(),
-  amount: z.number(),
+  amount: z.coerce
+    .number<number>("Number is required")
+    .positive("Amount must be positive."),
   currency: z.string(),
   place: z.string().optional(),
   category: z.string(),
@@ -151,7 +153,7 @@ function NewTransaction() {
                       <Button
                         variant="outline"
                         data-empty={!field.value}
-                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal"
+                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md"
                       >
                         <CalendarIcon />
                         {field.value ? (

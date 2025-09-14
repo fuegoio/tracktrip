@@ -4,6 +4,7 @@ import { TransactionsGroup } from "../transactions-group";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
 import type { Transaction } from "@/data/transactions";
+import { Link } from "@tanstack/react-router";
 
 export const Transactions = ({ travelId }: { travelId: string }) => {
   const transactions = useLiveQuery((q) =>
@@ -30,8 +31,10 @@ export const Transactions = ({ travelId }: { travelId: string }) => {
         <div className="text-sm font-semibold text-foreground flex-1">
           Recent transactions
         </div>
-        <Button variant="outline" size="icon" className="size-6">
-          <Plus className="size-4" />
+        <Button variant="outline" size="icon" className="size-6" asChild>
+          <Link to="/travels/$travelId/transactions/new" params={{ travelId }}>
+            <Plus className="size-4" />
+          </Link>
         </Button>
         <Button variant="secondary" size="icon" className="size-6">
           <ArrowRight className="size-4" />
