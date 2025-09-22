@@ -4,15 +4,17 @@ import { TRPCError } from "@trpc/server";
 import { TrpcSync } from "trpc-db-collection/server";
 import type { Travel } from "@/data/travels";
 import { db } from "@/db";
-import { travelsTable } from "@/db/schema";
+import { eventsTable, travelsTable } from "@/db/schema";
 import { createInsertSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
+import { and, eq, gt } from "drizzle-orm";
 
 const travelsRouterSync = new TrpcSync<Travel>();
 
 export const travelsRouter = router({
   list: authedProcedure.query(async () => {
-    return await db.select().from(travelsTable);
+    const travels = await db.select().from(travelsTable);
+    return travels;
   }),
 
   create: authedProcedure
@@ -73,8 +75,22 @@ export const travelsRouter = router({
         userId: opts.ctx.session.user.id,
         signal: opts.signal,
         lastEventId: opts.input?.lastEventId,
-        fetchLastEvents: async () => {
-          return [];
+        fetchLastEvents: async (lastEventId) => {
+          const events = await db
+            .select()
+            .from(eventsTable)
+            .where(
+              and(
+                eq(eventsTable.router, "travels"),
+                eq(eventsTable.userId, opts.ctx.session.user.id),
+                gt(eventsTable.id, lastEventId),
+              ),
+            );
+
+          return events.map((event) => ({
+            ...event,
+            data: event.data as Travel,
+          }));
         },
       });
     }),

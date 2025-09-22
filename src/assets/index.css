@@ -80,9 +80,7 @@
 
 @theme {
   --font-sans: "Inter", sans-serif;
-  --font-sans--font-optical-sizing: auto;
   --font-mono: "JetBrains Mono", monospace;
-  --font-mono--font-optical-sizing: auto;
 
   --shadow-up: 0 -8px 16px rgba(0, 0, 0, 0.05);
 }
@@ -137,8 +135,9 @@
 }
 
 html,
-body,
-#root {
+body {
   height: 100%;
   width: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }

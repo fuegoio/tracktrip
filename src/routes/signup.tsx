@@ -1,0 +1,216 @@
+import { authClient } from "@/auth/client";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { LoaderCircle } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import z from "zod";
+
+const searchParamsSchema = z.object({
+  redirect: z.string().optional(),
+});
+
+export const Route = createFileRoute("/signup")({
+  component: RouteComponent,
+  validateSearch: searchParamsSchema,
+});
+
+const formSchema = z.object({
+  firstName: z
+    .string("First name is required.")
+    .min(1, "First name is required."),
+  lastName: z.string("Last name is required.").min(1, "Last name is required."),
+  email: z.string("Email is required.").min(1, "Email is required."),
+  password: z.string("Password is required.").min(1, "Password is required."),
+  terms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions.",
+  }),
+});
+
+function RouteComponent() {
+  const navigate = Route.useNavigate();
+  const { redirect } = Route.useSearch();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      terms: false,
+    },
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async ({
+    email,
+    password,
+    firstName,
+    lastName,
+  }: z.infer<typeof formSchema>) => {
+    setLoading(true);
+    const { error } = await authClient.signUp.email({
+      email,
+      password,
+      name: `${firstName} ${lastName}`,
+      callbackURL: redirect || "/",
+    });
+
+    if (error) {
+      form.setError("password", {
+        message: error.message,
+      });
+    } else {
+      navigate({ to: redirect || "/" });
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div className="p-6 flex flex-col justify-center gap-6 h-full">
+      <div>
+        <div className="text-2xl">🚄</div>
+        <h1 className="text-lg font-semibold mt-3">Create an account</h1>
+        <div className="text-sm text-muted-foreground mt-1">
+          Welcome! Create an account to get started.
+        </div>
+      </div>
+
+      <Button
+        variant="outline"
+        type="button"
+        className="w-full"
+        disabled={loading}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path
+            d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
+            fill="currentColor"
+          />
+        </svg>
+        Sign up with Google
+      </Button>
+      <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        <span className="bg-card text-muted-foreground relative z-10 px-2">
+          Or
+        </span>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <div className="flex gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} autoComplete="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="terms"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormControl>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="terms"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <Label htmlFor="terms" className="text-sm">
+                      I agree to the{" "}
+                      <a href="#" className="underline underline-offset-4">
+                        Terms and Conditions
+                      </a>
+                    </Label>
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? (
+              <LoaderCircle className="ml-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Create account"
+            )}
+          </Button>
+
+          <div className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="underline underline-offset-4"
+              search={{ redirect }}
+            >
+              Login
+            </Link>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}

@@ -12,7 +12,7 @@ import appCss from "../assets/index.css?url";
 function RootComponent() {
   return (
     <RootDocument>
-      <main className="bg-white h-full w-full max-w-xl mx-auto md:border-r md:border-l md:shadow-xl">
+      <main className="bg-background h-full w-full max-w-md mx-auto">
         <Outlet />
       </main>
     </RootDocument>
@@ -44,10 +44,13 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Voyage",
       },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico" },
+    ],
   }),
   shellComponent: RootComponent,
 });

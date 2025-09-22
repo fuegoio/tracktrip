@@ -74,9 +74,11 @@ export const travelsTable = pgTable("travels", {
   name: varchar({ length: 255 }).notNull(),
   emoji: varchar({ length: 255 }).notNull(),
   currency: varchar({ length: 255 }).notNull(),
-  startDate: timestamp({ withTimezone: true }).notNull(),
-  endDate: timestamp({ withTimezone: true }).notNull(),
-  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  startDate: timestamp("start_date", { withTimezone: true }).notNull(),
+  endDate: timestamp("end_date", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   ownerId: text("owner_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),

@@ -1,7 +1,0 @@
-Voyage
-* Use Tanstack Start instead of only router
-* Implement tRPC for data manipulation
-* Drizzle for the DB
-
-tRPC DB collection
-* Tanstack DB with custom collection for custom events
