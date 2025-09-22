@@ -20,6 +20,7 @@ export const travelsRouter = router({
   create: authedProcedure
     .input(
       createInsertSchema(travelsTable).omit({
+        id: true,
         createdAt: true,
         ownerId: true,
       }),
@@ -29,6 +30,7 @@ export const travelsRouter = router({
         .insert(travelsTable)
         .values({
           ...input,
+          id: crypto.randomUUID(),
           ownerId: ctx.session.user.id,
         })
         .returning();

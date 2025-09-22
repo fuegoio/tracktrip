@@ -15,9 +15,9 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as TravelsNewRouteImport } from './routes/travels/new'
-import { Route as TravelsTravelIdIndexRouteImport } from './routes/travels/$travelId/index'
-import { Route as TravelsTravelIdTransactionsNewRouteImport } from './routes/travels/$travelId/transactions/new'
+import { Route as AuthenticatedTravelsNewRouteImport } from './routes/_authenticated/travels/new'
+import { Route as AuthenticatedTravelsTravelIdIndexRouteImport } from './routes/_authenticated/travels/$travelId/index'
+import { Route as AuthenticatedTravelsTravelIdTransactionsNewRouteImport } from './routes/_authenticated/travels/$travelId/transactions/new'
 import { ServerRoute as ApiAuthServerRouteImport } from './routes/api/auth'
 import { ServerRoute as ApiTrpcSplatServerRouteImport } from './routes/api/trpc/$'
 
@@ -42,21 +42,22 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const TravelsNewRoute = TravelsNewRouteImport.update({
+const AuthenticatedTravelsNewRoute = AuthenticatedTravelsNewRouteImport.update({
   id: '/travels/new',
   path: '/travels/new',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const TravelsTravelIdIndexRoute = TravelsTravelIdIndexRouteImport.update({
-  id: '/travels/$travelId/',
-  path: '/travels/$travelId/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TravelsTravelIdTransactionsNewRoute =
-  TravelsTravelIdTransactionsNewRouteImport.update({
+const AuthenticatedTravelsTravelIdIndexRoute =
+  AuthenticatedTravelsTravelIdIndexRouteImport.update({
+    id: '/travels/$travelId/',
+    path: '/travels/$travelId/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTravelsTravelIdTransactionsNewRoute =
+  AuthenticatedTravelsTravelIdTransactionsNewRouteImport.update({
     id: '/travels/$travelId/transactions/new',
     path: '/travels/$travelId/transactions/new',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const ApiAuthServerRoute = ApiAuthServerRouteImport.update({
   id: '/api/auth',
@@ -72,44 +73,44 @@ const ApiTrpcSplatServerRoute = ApiTrpcSplatServerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/travels/new': typeof TravelsNewRoute
   '/': typeof AuthenticatedIndexRoute
-  '/travels/$travelId': typeof TravelsTravelIdIndexRoute
-  '/travels/$travelId/transactions/new': typeof TravelsTravelIdTransactionsNewRoute
+  '/travels/new': typeof AuthenticatedTravelsNewRoute
+  '/travels/$travelId': typeof AuthenticatedTravelsTravelIdIndexRoute
+  '/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/travels/new': typeof TravelsNewRoute
   '/': typeof AuthenticatedIndexRoute
-  '/travels/$travelId': typeof TravelsTravelIdIndexRoute
-  '/travels/$travelId/transactions/new': typeof TravelsTravelIdTransactionsNewRoute
+  '/travels/new': typeof AuthenticatedTravelsNewRoute
+  '/travels/$travelId': typeof AuthenticatedTravelsTravelIdIndexRoute
+  '/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/travels/new': typeof TravelsNewRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/travels/$travelId/': typeof TravelsTravelIdIndexRoute
-  '/travels/$travelId/transactions/new': typeof TravelsTravelIdTransactionsNewRoute
+  '/_authenticated/travels/new': typeof AuthenticatedTravelsNewRoute
+  '/_authenticated/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
+  '/_authenticated/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/login'
     | '/signup'
-    | '/travels/new'
     | '/'
+    | '/travels/new'
     | '/travels/$travelId'
     | '/travels/$travelId/transactions/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
     | '/signup'
-    | '/travels/new'
     | '/'
+    | '/travels/new'
     | '/travels/$travelId'
     | '/travels/$travelId/transactions/new'
   id:
@@ -117,19 +118,16 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/signup'
-    | '/travels/new'
     | '/_authenticated/'
-    | '/travels/$travelId/'
-    | '/travels/$travelId/transactions/new'
+    | '/_authenticated/travels/new'
+    | '/_authenticated/travels/$travelId/'
+    | '/_authenticated/travels/$travelId/transactions/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
-  TravelsNewRoute: typeof TravelsNewRoute
-  TravelsTravelIdIndexRoute: typeof TravelsTravelIdIndexRoute
-  TravelsTravelIdTransactionsNewRoute: typeof TravelsTravelIdTransactionsNewRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/auth': typeof ApiAuthServerRoute
@@ -187,26 +185,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/travels/new': {
-      id: '/travels/new'
+    '/_authenticated/travels/new': {
+      id: '/_authenticated/travels/new'
       path: '/travels/new'
       fullPath: '/travels/new'
-      preLoaderRoute: typeof TravelsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTravelsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/travels/$travelId/': {
-      id: '/travels/$travelId/'
+    '/_authenticated/travels/$travelId/': {
+      id: '/_authenticated/travels/$travelId/'
       path: '/travels/$travelId'
       fullPath: '/travels/$travelId'
-      preLoaderRoute: typeof TravelsTravelIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTravelsTravelIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/travels/$travelId/transactions/new': {
-      id: '/travels/$travelId/transactions/new'
+    '/_authenticated/travels/$travelId/transactions/new': {
+      id: '/_authenticated/travels/$travelId/transactions/new'
       path: '/travels/$travelId/transactions/new'
       fullPath: '/travels/$travelId/transactions/new'
-      preLoaderRoute: typeof TravelsTravelIdTransactionsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTravelsTravelIdTransactionsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
@@ -231,10 +229,18 @@ declare module '@tanstack/react-start/server' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedTravelsNewRoute: typeof AuthenticatedTravelsNewRoute
+  AuthenticatedTravelsTravelIdIndexRoute: typeof AuthenticatedTravelsTravelIdIndexRoute
+  AuthenticatedTravelsTravelIdTransactionsNewRoute: typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedTravelsNewRoute: AuthenticatedTravelsNewRoute,
+  AuthenticatedTravelsTravelIdIndexRoute:
+    AuthenticatedTravelsTravelIdIndexRoute,
+  AuthenticatedTravelsTravelIdTransactionsNewRoute:
+    AuthenticatedTravelsTravelIdTransactionsNewRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -245,9 +251,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
-  TravelsNewRoute: TravelsNewRoute,
-  TravelsTravelIdIndexRoute: TravelsTravelIdIndexRoute,
-  TravelsTravelIdTransactionsNewRoute: TravelsTravelIdTransactionsNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

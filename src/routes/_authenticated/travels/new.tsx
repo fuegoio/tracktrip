@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/select";
 import { travelsCollection } from "@/store/collections";
 
-export const Route = createFileRoute("/travels/new")({
+export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
 });
 
@@ -72,8 +72,8 @@ function NewTravel() {
     travelsCollection.insert({
       id: crypto.randomUUID(),
       ...values,
-      startDate: values.startDate.toJSON(),
-      endDate: values.endDate.toJSON(),
+      startDate: values.startDate,
+      endDate: values.endDate,
     });
     navigate({ to: "/" });
   };

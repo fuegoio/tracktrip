@@ -33,7 +33,7 @@ import { useTravel } from "@/lib/params";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { firstPartyCategoriesList } from "@/data/categories";
 
-export const Route = createFileRoute("/travels/$travelId/transactions/new")({
+export const Route = createFileRoute("/_authenticated/travels/$travelId/transactions/new")({
   component: NewTransaction,
 });
 

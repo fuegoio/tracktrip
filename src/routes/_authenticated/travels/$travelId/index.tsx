@@ -5,7 +5,7 @@ import { TopBar } from "@/components/top-bar";
 import { useTravel } from "@/lib/params";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/travels/$travelId/")({
+export const Route = createFileRoute("/_authenticated/travels/$travelId/")({
   component: TravelIndex,
 });
 
@@ -22,7 +22,7 @@ function TravelIndex() {
           <div className="font-semibold text-xl text-foreground">
             Hi Alexis,
           </div>
-          <div className="mt-1 text-muted-foreground text-sm font-light">
+          <div className="mt-1 text-muted-foreground text-sm">
             What are we doing today?
           </div>
 

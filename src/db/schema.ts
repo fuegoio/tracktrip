@@ -86,7 +86,7 @@ export const travelsTable = pgTable("travels", {
 
 export const eventsTable = pgTable(`events`, {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: text().notNull(),
+  userId: text("user_id").notNull(),
   router: varchar({ length: 255 }).notNull(),
   action: varchar({ length: 255 })
     .notNull()
