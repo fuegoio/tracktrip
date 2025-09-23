@@ -20,7 +20,7 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
 
       <div className="flex px-4 justify-between items-center mt-4">
         {firstPartyCategoriesList.map((category) => (
-          <Budget categoryId={category.id} />
+          <Budget categoryId={category.id} key={category.id} />
         ))}
       </div>
     </div>
