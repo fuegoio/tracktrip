@@ -1,10 +1,6 @@
 import { createCollection } from "@tanstack/react-db";
 import { localStorageCollectionOptions } from "@tanstack/react-db";
-import {
-  budgetsSchema,
-  customCategoriesSchema,
-  transactionsSchema,
-} from "./schemas";
+import { budgetsSchema, transactionsSchema } from "./schemas";
 import { trpcCollectionOptions } from "trpc-db-collection";
 import { trpc } from "@/trpc/client";
 import type { Travel } from "@/data/travels";
@@ -19,11 +15,8 @@ export const transactionsCollection = createCollection(
 );
 
 export const categoriesCollection = createCollection(
-  localStorageCollectionOptions({
-    id: "categories",
-    storageKey: "categories",
-    getKey: (item) => item.id,
-    schema: customCategoriesSchema,
+  trpcCollectionOptions({
+    trpcRouter: trpc.categories,
   }),
 );
 

@@ -28,9 +28,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { transactionsCollection } from "@/store/collections";
+import {
+  categoriesCollection,
+  transactionsCollection,
+} from "@/store/collections";
 import { useTravel } from "@/lib/params";
-import { firstPartyCategoriesList } from "@/data/categories";
+import { eq, useLiveQuery } from "@tanstack/react-db";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/transactions/new",
@@ -84,6 +87,12 @@ function NewTransaction() {
   };
 
   const supportedCurrencies = Intl.supportedValuesOf("currency");
+
+  const { data: categories } = useLiveQuery((q) =>
+    q
+      .from({ categories: categoriesCollection })
+      .where(({ categories }) => eq(categories.travel, travel.id)),
+  );
 
   return (
     <div className="p-4">
@@ -269,7 +278,7 @@ function NewTransaction() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {firstPartyCategoriesList.map((category) => (
+                    {categories.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
                         {category.emoji}{" "}
                         <span className="capitalize">{category.name}</span>

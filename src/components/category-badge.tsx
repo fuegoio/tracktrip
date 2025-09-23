@@ -1,8 +1,15 @@
-import { firstPartyCategoriesList } from "@/data/categories";
 import { cn } from "@/lib/utils";
+import { categoriesCollection } from "@/store/collections";
+import { eq, useLiveQuery } from "@tanstack/react-db";
 
 export const CategoryBadge = ({ categoryId }: { categoryId: string }) => {
-  const category = firstPartyCategoriesList.find((c) => c.id === categoryId);
+  const { data: categories } = useLiveQuery((q) =>
+    q
+      .from({ categories: categoriesCollection })
+      .where(({ categories }) => eq(categories.id, categoryId)),
+  );
+
+  const category = categories[0];
   if (!category) return null;
 
   return (
