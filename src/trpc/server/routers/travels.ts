@@ -4,17 +4,35 @@ import { TRPCError } from "@trpc/server";
 import { TrpcSync } from "trpc-db-collection/server";
 import type { Travel } from "@/data/travels";
 import { db } from "@/db";
-import { eventsTable, travelsTable } from "@/db/schema";
-import { createInsertSchema } from "@/db/zod";
+import { eventsTable, travelsTable, travelsUsersTable } from "@/db/schema";
+import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
 import { and, eq, gt } from "drizzle-orm";
 
 const travelsRouterSync = new TrpcSync<Travel>();
 
 export const travelsRouter = router({
-  list: authedProcedure.query(async () => {
-    const travels = await db.select().from(travelsTable);
-    return travels;
+  list: authedProcedure.query(async ({ ctx }) => {
+    const travels = await db
+      .select()
+      .from(travelsTable)
+      .leftJoin(
+        travelsUsersTable,
+        eq(travelsTable.id, travelsUsersTable.travel),
+      )
+      .where(eq(travelsUsersTable.user, ctx.session.user.id));
+
+    return travels.map((travel) => ({
+      ...travel.travels,
+      users: [
+        {
+          id: ctx.session.user.id,
+          name: ctx.session.user.name,
+          email: ctx.session.user.email,
+          role: "owner" as const,
+        },
+      ],
+    }));
   }),
 
   create: authedProcedure
@@ -43,6 +61,12 @@ export const travelsRouter = router({
         });
       }
 
+      await db.insert(travelsUsersTable).values({
+        id: crypto.randomUUID(),
+        travel: travel.id,
+        user: ctx.session.user.id,
+      });
+
       const eventId = await travelsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
         event: {
@@ -53,11 +77,33 @@ export const travelsRouter = router({
           drizzleEventsAdapter<Travel>(ctx.session.user.id, "todos", event),
       });
 
-      return { item: travel, eventId };
+      return {
+        item: {
+          ...travel,
+          users: [
+            {
+              id: ctx.session.user.id,
+              name: ctx.session.user.name,
+              email: ctx.session.user.email,
+              role: "owner" as const,
+            },
+          ],
+        },
+        eventId,
+      };
     }),
 
   update: authedProcedure
-    .input(z.object({ id: z.string(), data: z.any() }))
+    .input(
+      z.object({
+        id: z.string(),
+        data: createUpdateSchema(travelsTable).omit({
+          id: true,
+          createdAt: true,
+          ownerId: true,
+        }),
+      }),
+    )
     .mutation(async () => {}),
 
   delete: authedProcedure

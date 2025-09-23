@@ -55,6 +55,7 @@ const formSchema = z
 
 function NewTravel() {
   const navigate = useNavigate({ from: "/travels/new" });
+  const { session } = Route.useRouteContext();
 
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
@@ -69,13 +70,20 @@ function NewTravel() {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const id = crypto.randomUUID();
     travelsCollection.insert({
-      id: crypto.randomUUID(),
+      id,
       ...values,
-      startDate: values.startDate,
-      endDate: values.endDate,
+      users: [
+        {
+          id: session.user.id,
+          name: session.user.name,
+          email: session.user.email,
+          role: "owner",
+        },
+      ],
     });
-    navigate({ to: "/" });
+    navigate({ to: "/travels/$travelId", params: { travelId: id } });
   };
 
   const supportedCurrencies = Intl.supportedValuesOf("currency");

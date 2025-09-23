@@ -5,10 +5,10 @@ import {
   customCategoriesSchema,
   customSubcategoriesSchema,
   transactionsSchema,
-  usersSchema,
 } from "./schemas";
 import { trpcCollectionOptions } from "trpc-db-collection";
 import { trpc } from "@/trpc/client";
+import type { Travel } from "@/data/travels";
 
 export const transactionsCollection = createCollection(
   localStorageCollectionOptions({
@@ -16,15 +16,6 @@ export const transactionsCollection = createCollection(
     storageKey: "transactions",
     getKey: (item) => item.id,
     schema: transactionsSchema,
-  }),
-);
-
-export const usersCollection = createCollection(
-  localStorageCollectionOptions({
-    id: "users",
-    storageKey: "users",
-    getKey: (item) => item.id,
-    schema: usersSchema,
   }),
 );
 
@@ -47,7 +38,7 @@ export const subcategoriesCollection = createCollection(
 );
 
 export const travelsCollection = createCollection(
-  trpcCollectionOptions({
+  trpcCollectionOptions<Travel>({
     trpcRouter: trpc.travels,
   }),
 );

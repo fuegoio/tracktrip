@@ -13,6 +13,14 @@ export const Route = createFileRoute("/_authenticated")({
         },
       });
     }
+
+    const { travelsCollection } = await import("@/store/collections");
+    await travelsCollection.preload();
+    await travelsCollection.stateWhenReady();
+
+    return {
+      session: res.data,
+    };
   },
 });
 

@@ -1,3 +1,4 @@
+import { CategoryTypes } from "@/data/categories";
 import {
   boolean,
   pgTable,
@@ -7,6 +8,9 @@ import {
   uuid,
   integer,
   jsonb,
+  numeric,
+  date,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
@@ -82,6 +86,58 @@ export const travelsTable = pgTable("travels", {
   ownerId: text("owner_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
+});
+
+export const travelsUsersTable = pgTable("travels_users", {
+  id: uuid().primaryKey(),
+  user: text()
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  travel: uuid()
+    .notNull()
+    .references(() => travelsTable.id, { onDelete: "cascade" }),
+});
+
+export const placesTable = pgTable("places", {
+  id: uuid().primaryKey(),
+  travel: uuid()
+    .notNull()
+    .references(() => travelsTable.id, { onDelete: "cascade" }),
+  name: text().notNull(),
+});
+
+export const categoryTypesEnum = pgEnum("category_types", CategoryTypes);
+
+export const categoriesTable = pgTable("categories", {
+  id: uuid().primaryKey(),
+  travel: uuid()
+    .notNull()
+    .references(() => travelsTable.id, { onDelete: "cascade" }),
+  name: text().notNull(),
+  type: categoryTypesEnum().notNull(),
+  emoji: varchar({ length: 255 }).notNull(),
+  color: varchar({ length: 255 }).notNull(),
+});
+
+export const transactionsTable = pgTable("transactions", {
+  id: uuid().primaryKey(),
+  travel: uuid()
+    .notNull()
+    .references(() => travelsTable.id, { onDelete: "cascade" }),
+  user: text()
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  date: date().notNull(),
+  amount: numeric().notNull(),
+  currency: varchar({ length: 255 }).notNull(),
+  title: text().notNull(),
+  description: text(),
+  category: uuid()
+    .notNull()
+    .references(() => categoriesTable.id, { onDelete: "cascade" }),
+  place: uuid().references(() => placesTable.id, { onDelete: "cascade" }),
+  days: integer(),
+  meals: integer(),
 });
 
 export const eventsTable = pgTable(`events`, {

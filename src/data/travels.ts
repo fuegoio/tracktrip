@@ -5,4 +5,12 @@ export type Travel = {
   currency: string;
   startDate: Date;
   endDate: Date;
+  users: TravelUser[];
+};
+
+export type TravelUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: "owner" | "member";
 };
