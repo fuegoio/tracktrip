@@ -3,7 +3,6 @@ import { localStorageCollectionOptions } from "@tanstack/react-db";
 import {
   budgetsSchema,
   customCategoriesSchema,
-  customSubcategoriesSchema,
   transactionsSchema,
 } from "./schemas";
 import { trpcCollectionOptions } from "trpc-db-collection";
@@ -25,15 +24,6 @@ export const categoriesCollection = createCollection(
     storageKey: "categories",
     getKey: (item) => item.id,
     schema: customCategoriesSchema,
-  }),
-);
-
-export const subcategoriesCollection = createCollection(
-  localStorageCollectionOptions({
-    id: "subcategories",
-    storageKey: "subcategories",
-    getKey: (item) => item.id,
-    schema: customSubcategoriesSchema,
   }),
 );
 

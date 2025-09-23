@@ -4,7 +4,12 @@ import { TRPCError } from "@trpc/server";
 import { TrpcSync } from "trpc-db-collection/server";
 import type { Travel } from "@/data/travels";
 import { db } from "@/db";
-import { eventsTable, travelsTable, travelsUsersTable } from "@/db/schema";
+import {
+  eventsTable,
+  travelsTable,
+  travelsUsersTable,
+  usersTable,
+} from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
 import { and, eq, gt } from "drizzle-orm";
@@ -16,23 +21,39 @@ export const travelsRouter = router({
     const travels = await db
       .select()
       .from(travelsTable)
-      .leftJoin(
+      .innerJoin(
         travelsUsersTable,
         eq(travelsTable.id, travelsUsersTable.travel),
       )
+      .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
       .where(eq(travelsUsersTable.user, ctx.session.user.id));
 
-    return travels.map((travel) => ({
-      ...travel.travels,
-      users: [
-        {
-          id: ctx.session.user.id,
-          name: ctx.session.user.name,
-          email: ctx.session.user.email,
-          role: "owner" as const,
-        },
-      ],
-    }));
+    return travels.reduce((acc, row) => {
+      const travel = acc.find((t) => t.id === row.travels.id);
+
+      if (travel) {
+        travel.users.push({
+          id: row.users.id,
+          name: row.users.name,
+          email: row.users.email,
+          role: row.travels.ownerId === row.users.id ? "owner" : "member",
+        });
+      } else {
+        acc.push({
+          ...row.travels,
+          users: [
+            {
+              id: row.users.id,
+              name: row.users.name,
+              email: row.users.email,
+              role: row.travels.ownerId === row.users.id ? "owner" : "member",
+            },
+          ],
+        });
+      }
+
+      return acc;
+    }, [] as Travel[]);
   }),
 
   create: authedProcedure
@@ -107,7 +128,6 @@ export const travelsRouter = router({
         data: createUpdateSchema(travelsTable).omit({
           id: true,
           createdAt: true,
-          ownerId: true,
         }),
       }),
     )
@@ -147,20 +167,25 @@ export const travelsRouter = router({
         });
       }
 
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, input.id));
+
       const travel: Travel = {
         ...updatedTravel,
-        users: [
-          {
-            id: ctx.session.user.id,
-            name: ctx.session.user.name,
-            email: ctx.session.user.email,
-            role: "owner" as const,
-          },
-        ],
+        users: travelUsers.map((row) => ({
+          id: row.users.id,
+          name: row.users.name,
+          email: row.users.email,
+          role: updatedTravel.ownerId === row.users.id ? "owner" : "member",
+        })),
       };
 
       const eventId = await travelsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
+        otherUserIds: travel.users.map((user) => user.id),
         event: {
           action: "update",
           data: travel,
@@ -198,22 +223,27 @@ export const travelsRouter = router({
         });
       }
 
-      await db.delete(travelsTable).where(eq(travelsTable.id, input.id));
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, input.id));
 
       const travel: Travel = {
         ...dbTravel,
-        users: [
-          {
-            id: ctx.session.user.id,
-            name: ctx.session.user.name,
-            email: ctx.session.user.email,
-            role: "owner" as const,
-          },
-        ],
+        users: travelUsers.map((row) => ({
+          id: row.users.id,
+          name: row.users.name,
+          email: row.users.email,
+          role: dbTravel.ownerId === row.users.id ? "owner" : "member",
+        })),
       };
+
+      await db.delete(travelsTable).where(eq(travelsTable.id, input.id));
 
       const eventId = await travelsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
+        otherUserIds: travel.users.map((user) => user.id),
         event: {
           action: "delete",
           data: travel,
