@@ -28,12 +28,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { transactionsCollection, usersCollection } from "@/store/collections";
+import { transactionsCollection } from "@/store/collections";
 import { useTravel } from "@/lib/params";
-import { eq, useLiveQuery } from "@tanstack/react-db";
 import { firstPartyCategoriesList } from "@/data/categories";
 
-export const Route = createFileRoute("/_authenticated/travels/$travelId/transactions/new")({
+export const Route = createFileRoute(
+  "/_authenticated/travels/$travelId/transactions/new",
+)({
   component: NewTransaction,
 });
 
@@ -54,6 +55,8 @@ const formSchema = z.object({
 
 function NewTransaction() {
   const params = Route.useParams();
+  const { session } = Route.useRouteContext();
+
   const navigate = useNavigate({ from: "/travels/$travelId/transactions/new" });
   const travel = useTravel({ id: params.travelId });
 
@@ -65,6 +68,7 @@ function NewTransaction() {
       date: new Date(),
       currency: "EUR",
       days: 1,
+      user: session.user.id,
     },
   });
 
@@ -80,12 +84,6 @@ function NewTransaction() {
   };
 
   const supportedCurrencies = Intl.supportedValuesOf("currency");
-
-  const users = useLiveQuery((q) =>
-    q
-      .from({ users: usersCollection })
-      .where(({ users }) => eq(users.travel, travel.id)),
-  );
 
   return (
     <div className="p-4">
@@ -243,7 +241,7 @@ function NewTransaction() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {users.data.map((user) => (
+                    {travel.users.map((user) => (
                       <SelectItem key={user.id} value={user.id}>
                         {user.name}
                       </SelectItem>
