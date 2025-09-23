@@ -9,9 +9,5 @@ export const useTravel = ({ id }: { id: string }) => {
   );
 
   const travel = matchingTravels[0];
-  return {
-    ...travel,
-    startDate: new Date(travel.startDate),
-    endDate: new Date(travel.endDate),
-  };
+  return travel;
 };

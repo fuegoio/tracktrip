@@ -21,7 +21,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@tailwindcss/vite": "^4.1.12",
-    "@tanstack/react-db": "^0.1.9",
+    "@tanstack/react-db": "^0.1.18",
     "@tanstack/react-router": "^1.131.32",
     "@tanstack/react-router-devtools": "^1.131.32",
     "@tanstack/react-start": "^1.131.49",
@@ -44,7 +44,7 @@
     "superjson": "^2.2.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
-    "trpc-db-collection": "^0.0.1",
+    "trpc-db-collection": "file:../trpc-db-collection",
     "vaul": "^1.1.2",
     "zod": "^4.1.5"
   },
@@ -63,7 +63,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "tw-animate-css": "^1.3.8",
-    "typescript": "~5.8.3",
+    "typescript": "~5.9.2",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2"
   }
