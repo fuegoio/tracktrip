@@ -8,9 +8,9 @@ import {
   uuid,
   integer,
   jsonb,
-  numeric,
   date,
   pgEnum,
+  real,
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
@@ -127,8 +127,8 @@ export const transactionsTable = pgTable("transactions", {
   user: text()
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
-  date: date().notNull(),
-  amount: numeric().notNull(),
+  date: date({ mode: "date" }).notNull(),
+  amount: real().notNull(),
   currency: varchar({ length: 255 }).notNull(),
   title: text().notNull(),
   description: text(),

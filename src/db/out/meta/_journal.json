@@ -15,6 +15,13 @@
       "when": 1758629937820,
       "tag": "0001_worried_excalibur",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758694864579,
+      "tag": "0002_nasty_captain_flint",
+      "breakpoints": true
     }
   ]
 }

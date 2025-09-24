@@ -1,9 +1,15 @@
-import { Menu, Plus } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import type { Travel } from "@/data/travels";
-import { Link } from "@tanstack/react-router";
+import { NewTransactionDrawer } from "./transactions/new-transaction-drawer";
 
-export const TopBar = ({ travel }: { travel: Travel }) => {
+export const TopBar = ({
+  travel,
+  userId,
+}: {
+  travel: Travel;
+  userId: string;
+}) => {
   return (
     <div className="w-full flex items-center justify-between p-4">
       <Button variant="ghost" size="icon">
@@ -12,14 +18,7 @@ export const TopBar = ({ travel }: { travel: Travel }) => {
 
       <div className="text-3xl">{travel.emoji}</div>
 
-      <Button size="icon" asChild>
-        <Link
-          to="/travels/$travelId/transactions/new"
-          params={{ travelId: travel.id }}
-        >
-          <Plus className="size-5" />
-        </Link>
-      </Button>
+      <NewTransactionDrawer travel={travel} userId={userId} />
     </div>
   );
 };

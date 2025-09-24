@@ -4,7 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { TrpcSync } from "trpc-db-collection/server";
 import { db } from "@/db";
 import {
-  categoriesTable,
+  transactionsTable,
   eventsTable,
   travelsTable,
   travelsUsersTable,
@@ -13,28 +13,28 @@ import {
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
 import { and, eq, gt } from "drizzle-orm";
-import type { Category } from "@/data/categories";
+import type { Transaction } from "@/data/transactions";
 
-const categoriesRouterSync = new TrpcSync<Category>();
+const transactionsRouterSync = new TrpcSync<Transaction>();
 
-export const categoriesRouter = router({
+export const transactionsRouter = router({
   list: authedProcedure.query(async ({ ctx }) => {
-    const categories = await db
-      .select({ category: categoriesTable })
-      .from(categoriesTable)
-      .innerJoin(travelsTable, eq(categoriesTable.travel, travelsTable.id))
+    const transactions = await db
+      .select({ transaction: transactionsTable })
+      .from(transactionsTable)
+      .innerJoin(travelsTable, eq(transactionsTable.travel, travelsTable.id))
       .innerJoin(
         travelsUsersTable,
         eq(travelsTable.id, travelsUsersTable.travel),
       )
       .where(eq(travelsUsersTable.user, ctx.session.user.id));
 
-    return categories.map((row) => row.category);
+    return transactions.map((row) => row.transaction);
   }),
 
   create: authedProcedure
     .input(
-      createInsertSchema(categoriesTable)
+      createInsertSchema(transactionsTable)
         .omit({
           id: true,
         })
@@ -53,7 +53,7 @@ export const categoriesRouter = router({
         .where(
           and(
             eq(travelsTable.id, input.travel),
-            eq(travelsTable.ownerId, ctx.session.user.id),
+            eq(travelsUsersTable.user, ctx.session.user.id),
           ),
         )
         .limit(1);
@@ -65,9 +65,9 @@ export const categoriesRouter = router({
         });
       }
 
-      const dbCategory = (
+      const dbTransaction = (
         await db
-          .insert(categoriesTable)
+          .insert(transactionsTable)
           .values({
             id: crypto.randomUUID(),
             ...input,
@@ -75,30 +75,30 @@ export const categoriesRouter = router({
           .returning()
       )[0];
 
-      if (!dbCategory) {
+      if (!dbTransaction) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create category",
+          message: "Failed to create transaction",
         });
       }
 
-      const eventId = await categoriesRouterSync.registerEvent({
+      const eventId = await transactionsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
         otherUserIds: dbTravel.map((row) => row.travels_users.id),
         event: {
           action: "insert",
-          data: dbCategory,
+          data: dbTransaction,
         },
         saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
+          drizzleEventsAdapter<Transaction>(
             ctx.session.user.id,
-            "category",
+            "transaction",
             event,
           ),
       });
 
       return {
-        item: dbCategory,
+        item: dbTransaction,
         eventId,
       };
     }),
@@ -107,46 +107,53 @@ export const categoriesRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: createUpdateSchema(categoriesTable).omit({
+        data: createUpdateSchema(transactionsTable).omit({
           id: true,
           travel: true,
         }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const dbCategory = (
+      const dbTransaction = (
         await db
           .select()
-          .from(categoriesTable)
-          .innerJoin(travelsTable, eq(categoriesTable.travel, travelsTable.id))
+          .from(transactionsTable)
+          .innerJoin(
+            travelsTable,
+            eq(transactionsTable.travel, travelsTable.id),
+          )
+          .innerJoin(
+            travelsUsersTable,
+            eq(transactionsTable.travel, travelsUsersTable.travel),
+          )
           .where(
             and(
-              eq(categoriesTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(transactionsTable.id, input.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)
       )[0];
 
-      if (!dbCategory) {
+      if (!dbTransaction) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Category not found",
+          message: "Transaction not found",
         });
       }
 
-      const updatedCategory = (
+      const updatedTransaction = (
         await db
-          .update(categoriesTable)
+          .update(transactionsTable)
           .set(input.data)
-          .where(eq(categoriesTable.id, input.id))
+          .where(eq(transactionsTable.id, input.id))
           .returning()
       )[0];
 
-      if (!updatedCategory) {
+      if (!updatedTransaction) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to update category",
+          message: "Failed to update transaction",
         });
       }
 
@@ -156,23 +163,23 @@ export const categoriesRouter = router({
         .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
         .where(eq(travelsUsersTable.travel, input.id));
 
-      const eventId = await categoriesRouterSync.registerEvent({
+      const eventId = await transactionsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
         otherUserIds: travelUsers.map((row) => row.users.id),
         event: {
           action: "update",
-          data: updatedCategory,
+          data: updatedTransaction,
         },
         saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
+          drizzleEventsAdapter<Transaction>(
             ctx.session.user.id,
-            "categories",
+            "transactions",
             event,
           ),
       });
 
       return {
-        item: updatedCategory,
+        item: updatedTransaction,
         eventId,
       };
     }),
@@ -180,24 +187,31 @@ export const categoriesRouter = router({
   delete: authedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const dbCategory = (
+      const dbTransaction = (
         await db
           .select()
-          .from(categoriesTable)
-          .innerJoin(travelsTable, eq(categoriesTable.travel, travelsTable.id))
+          .from(transactionsTable)
+          .innerJoin(
+            travelsTable,
+            eq(transactionsTable.travel, travelsTable.id),
+          )
+          .innerJoin(
+            travelsUsersTable,
+            eq(transactionsTable.travel, travelsUsersTable.travel),
+          )
           .where(
             and(
-              eq(categoriesTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(transactionsTable.id, input.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)
       )[0];
 
-      if (!dbCategory) {
+      if (!dbTransaction) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Category not found",
+          message: "Transaction not found",
         });
       }
 
@@ -207,25 +221,27 @@ export const categoriesRouter = router({
         .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
         .where(eq(travelsUsersTable.travel, input.id));
 
-      await db.delete(categoriesTable).where(eq(categoriesTable.id, input.id));
+      await db
+        .delete(transactionsTable)
+        .where(eq(transactionsTable.id, input.id));
 
-      const eventId = await categoriesRouterSync.registerEvent({
+      const eventId = await transactionsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
         otherUserIds: travelUsers.map((row) => row.users.id),
         event: {
           action: "delete",
-          data: dbCategory.categories,
+          data: dbTransaction.transactions,
         },
         saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
+          drizzleEventsAdapter<Transaction>(
             ctx.session.user.id,
-            "categories",
+            "transactions",
             event,
           ),
       });
 
       return {
-        item: dbCategory.categories,
+        item: dbTransaction.transactions,
         eventId,
       };
     }),
@@ -239,7 +255,7 @@ export const categoriesRouter = router({
         .optional(),
     )
     .subscription(async function* (opts) {
-      yield* categoriesRouterSync.eventsSubscription({
+      yield* transactionsRouterSync.eventsSubscription({
         userId: opts.ctx.session.user.id,
         signal: opts.signal,
         lastEventId: opts.input?.lastEventId,
@@ -249,7 +265,7 @@ export const categoriesRouter = router({
             .from(eventsTable)
             .where(
               and(
-                eq(eventsTable.router, "categories"),
+                eq(eventsTable.router, "transactions"),
                 eq(eventsTable.userId, opts.ctx.session.user.id),
                 gt(eventsTable.id, lastEventId),
               ),
@@ -257,7 +273,7 @@ export const categoriesRouter = router({
 
           return events.map((event) => ({
             ...event,
-            data: event.data as Category,
+            data: event.data as Transaction,
           }));
         },
       });
