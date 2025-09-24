@@ -18,7 +18,8 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedTravelsNewRouteImport } from './routes/_authenticated/travels/new'
 import { Route as AuthenticatedTravelsTravelIdRouteImport } from './routes/_authenticated/travels/$travelId'
 import { Route as AuthenticatedTravelsTravelIdIndexRouteImport } from './routes/_authenticated/travels/$travelId/index'
-import { Route as AuthenticatedTravelsTravelIdTransactionsNewRouteImport } from './routes/_authenticated/travels/$travelId/transactions/new'
+import { Route as AuthenticatedTravelsTravelIdTransactionsIndexRouteImport } from './routes/_authenticated/travels/$travelId/transactions/index'
+import { Route as AuthenticatedTravelsTravelIdTransactionsTransactionIdRouteImport } from './routes/_authenticated/travels/$travelId/transactions/$transactionId'
 import { ServerRoute as ApiAuthServerRouteImport } from './routes/api/auth'
 import { ServerRoute as ApiTrpcSplatServerRouteImport } from './routes/api/trpc/$'
 
@@ -60,10 +61,16 @@ const AuthenticatedTravelsTravelIdIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
   } as any)
-const AuthenticatedTravelsTravelIdTransactionsNewRoute =
-  AuthenticatedTravelsTravelIdTransactionsNewRouteImport.update({
-    id: '/transactions/new',
-    path: '/transactions/new',
+const AuthenticatedTravelsTravelIdTransactionsIndexRoute =
+  AuthenticatedTravelsTravelIdTransactionsIndexRouteImport.update({
+    id: '/transactions/',
+    path: '/transactions/',
+    getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
+  } as any)
+const AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute =
+  AuthenticatedTravelsTravelIdTransactionsTransactionIdRouteImport.update({
+    id: '/transactions/$transactionId',
+    path: '/transactions/$transactionId',
     getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
   } as any)
 const ApiAuthServerRoute = ApiAuthServerRouteImport.update({
@@ -84,7 +91,8 @@ export interface FileRoutesByFullPath {
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/travels/new': typeof AuthenticatedTravelsNewRoute
   '/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
-  '/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
+  '/travels/$travelId/transactions/$transactionId': typeof AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute
+  '/travels/$travelId/transactions': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -92,7 +100,8 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdIndexRoute
-  '/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
+  '/travels/$travelId/transactions/$transactionId': typeof AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute
+  '/travels/$travelId/transactions': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,7 +112,8 @@ export interface FileRoutesById {
   '/_authenticated/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/_authenticated/travels/new': typeof AuthenticatedTravelsNewRoute
   '/_authenticated/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
-  '/_authenticated/travels/$travelId/transactions/new': typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
+  '/_authenticated/travels/$travelId/transactions/$transactionId': typeof AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute
+  '/_authenticated/travels/$travelId/transactions/': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,7 +124,8 @@ export interface FileRouteTypes {
     | '/travels/$travelId'
     | '/travels/new'
     | '/travels/$travelId/'
-    | '/travels/$travelId/transactions/new'
+    | '/travels/$travelId/transactions/$transactionId'
+    | '/travels/$travelId/transactions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -122,7 +133,8 @@ export interface FileRouteTypes {
     | '/'
     | '/travels/new'
     | '/travels/$travelId'
-    | '/travels/$travelId/transactions/new'
+    | '/travels/$travelId/transactions/$transactionId'
+    | '/travels/$travelId/transactions'
   id:
     | '__root__'
     | '/_authenticated'
@@ -132,7 +144,8 @@ export interface FileRouteTypes {
     | '/_authenticated/travels/$travelId'
     | '/_authenticated/travels/new'
     | '/_authenticated/travels/$travelId/'
-    | '/_authenticated/travels/$travelId/transactions/new'
+    | '/_authenticated/travels/$travelId/transactions/$transactionId'
+    | '/_authenticated/travels/$travelId/transactions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,11 +230,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTravelsTravelIdIndexRouteImport
       parentRoute: typeof AuthenticatedTravelsTravelIdRoute
     }
-    '/_authenticated/travels/$travelId/transactions/new': {
-      id: '/_authenticated/travels/$travelId/transactions/new'
-      path: '/transactions/new'
-      fullPath: '/travels/$travelId/transactions/new'
-      preLoaderRoute: typeof AuthenticatedTravelsTravelIdTransactionsNewRouteImport
+    '/_authenticated/travels/$travelId/transactions/': {
+      id: '/_authenticated/travels/$travelId/transactions/'
+      path: '/transactions'
+      fullPath: '/travels/$travelId/transactions'
+      preLoaderRoute: typeof AuthenticatedTravelsTravelIdTransactionsIndexRouteImport
+      parentRoute: typeof AuthenticatedTravelsTravelIdRoute
+    }
+    '/_authenticated/travels/$travelId/transactions/$transactionId': {
+      id: '/_authenticated/travels/$travelId/transactions/$transactionId'
+      path: '/transactions/$transactionId'
+      fullPath: '/travels/$travelId/transactions/$transactionId'
+      preLoaderRoute: typeof AuthenticatedTravelsTravelIdTransactionsTransactionIdRouteImport
       parentRoute: typeof AuthenticatedTravelsTravelIdRoute
     }
   }
@@ -247,15 +267,18 @@ declare module '@tanstack/react-start/server' {
 
 interface AuthenticatedTravelsTravelIdRouteChildren {
   AuthenticatedTravelsTravelIdIndexRoute: typeof AuthenticatedTravelsTravelIdIndexRoute
-  AuthenticatedTravelsTravelIdTransactionsNewRoute: typeof AuthenticatedTravelsTravelIdTransactionsNewRoute
+  AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute: typeof AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute
+  AuthenticatedTravelsTravelIdTransactionsIndexRoute: typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
 }
 
 const AuthenticatedTravelsTravelIdRouteChildren: AuthenticatedTravelsTravelIdRouteChildren =
   {
     AuthenticatedTravelsTravelIdIndexRoute:
       AuthenticatedTravelsTravelIdIndexRoute,
-    AuthenticatedTravelsTravelIdTransactionsNewRoute:
-      AuthenticatedTravelsTravelIdTransactionsNewRoute,
+    AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute:
+      AuthenticatedTravelsTravelIdTransactionsTransactionIdRoute,
+    AuthenticatedTravelsTravelIdTransactionsIndexRoute:
+      AuthenticatedTravelsTravelIdTransactionsIndexRoute,
   }
 
 const AuthenticatedTravelsTravelIdRouteWithChildren =

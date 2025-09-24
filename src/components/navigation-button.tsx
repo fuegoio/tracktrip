@@ -1,19 +1,30 @@
 import type { LucideIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { Link, useRouterState } from "@tanstack/react-router";
+import type { NavItem } from "./nav-bar";
 
 export const NavigationButton = ({
   icon,
   active,
+  path,
   onClick,
 }: {
   icon: LucideIcon;
-  active?: boolean;
+  active: boolean;
+  path: NavItem["path"];
   onClick?: () => void;
 }) => {
+  const location = useRouterState({ select: (s) => s.location });
+  const travelId = location.pathname.split("/")[2];
+
   const Icon = icon;
   return (
-    <div className="flex flex-col items-center justify-center gap-1">
+    <Link
+      to={`/travels/$travelId${path}`}
+      params={{ travelId: travelId }}
+      className="flex flex-col items-center justify-center gap-1"
+    >
       <Button variant="ghost" size="icon" className="size-10" onClick={onClick}>
         <Icon
           className={cn(
@@ -28,6 +39,6 @@ export const NavigationButton = ({
           active ? "opacity-100" : "opacity-0",
         )}
       />
-    </div>
+    </Link>
   );
 };

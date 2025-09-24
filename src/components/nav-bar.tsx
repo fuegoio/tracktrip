@@ -1,21 +1,36 @@
-import { Cog, Home, List, Ruler, ScanQrCode } from "lucide-react";
+import {
+  Cog,
+  Home,
+  List,
+  Ruler,
+  ScanQrCode,
+  type LucideIcon,
+} from "lucide-react";
 import { NavigationButton } from "./navigation-button";
-import { useState } from "react";
+import { useRouterState } from "@tanstack/react-router";
 
-const navItems = [
-  { icon: Home, active: true },
-  { icon: List },
-  { icon: ScanQrCode },
-  { icon: Ruler },
-  { icon: Cog },
+export type NavItem = {
+  icon: LucideIcon;
+  path: "" | "/transactions";
+};
+
+const navItems: NavItem[] = [
+  { icon: Home, path: "" },
+  { icon: List, path: "/transactions" },
+  { icon: ScanQrCode, path: "" },
+  { icon: Ruler, path: "" },
+  { icon: Cog, path: "" },
 ];
 
 export const NavBar = () => {
-  // const location = useRouterState({ select: (s) => s.location });
-  const [activeIndex, setActiveIndex] = useState(0);
-  const onClick = (index: number) => {
-    setActiveIndex(index);
-  };
+  const location = useRouterState({ select: (s) => s.location });
+  const travelLocation = location.pathname.split("/")[3];
+
+  const activeIndex = navItems.findIndex(
+    (item) =>
+      item.path === `/${travelLocation}` ||
+      (item.path === "" && travelLocation === undefined),
+  );
 
   return (
     <nav
@@ -28,8 +43,8 @@ export const NavBar = () => {
         <NavigationButton
           key={index}
           icon={item.icon}
+          path={item.path}
           active={index === activeIndex}
-          onClick={() => onClick(index)}
         />
       ))}
     </nav>
