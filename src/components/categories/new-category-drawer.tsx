@@ -116,7 +116,7 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                       defaultValue={field.value}
                     >
                       <FormControl className="w-full">
-                        <SelectTrigger size="lg">
+                        <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
@@ -152,7 +152,7 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                         >
                           <PopoverTrigger asChild>
                             <Button
-                              variant="outline"
+                              variant="secondary"
                               data-empty={!field.value}
                               className="data-[empty=true]:text-muted-foreground justify-start text-left font-normal h-10"
                             >

@@ -1,4 +1,5 @@
 import { NewCategoryDrawer } from "@/components/categories/new-category-drawer";
+import { CategoryBadge } from "@/components/category-badge";
 import { Button } from "@/components/ui/button";
 import { categoriesCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
@@ -44,9 +45,9 @@ function RouteComponent() {
 
       <div className="px-5 space-y-2">
         {categories?.map((category) => (
-          <div key={category.id} className="flex items-center gap-2">
-            <div className="text-2xl">{category.emoji}</div>
-            <div className="font-medium">{category.name}</div>
+          <div key={category.id} className="flex items-center gap-2 h-8">
+            <CategoryBadge categoryId={category.id} />
+            <div className="font-medium text-sm">{category.name}</div>
           </div>
         ))}
       </div>
