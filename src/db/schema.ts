@@ -132,9 +132,14 @@ export const transactionsTable = pgTable("transactions", {
   currency: varchar({ length: 255 }).notNull(),
   title: text().notNull(),
   description: text(),
-  category: uuid()
-    .notNull()
-    .references(() => categoriesTable.id, { onDelete: "cascade" }),
+  type: categoryTypesEnum().notNull(),
+
+  /*
+   * Optional fields
+   */
+  category: uuid().references(() => categoriesTable.id, {
+    onDelete: "cascade",
+  }),
   place: uuid().references(() => placesTable.id, { onDelete: "cascade" }),
   days: integer(),
   meals: integer(),
@@ -145,7 +150,7 @@ export const budgetsTable = pgTable("budgets", {
   travel: uuid()
     .notNull()
     .references(() => travelsTable.id, { onDelete: "cascade" }),
-  categoryType: categoryTypesEnum(),
+  categoryType: categoryTypesEnum("category_type"),
   category: uuid().references(() => categoriesTable.id, {
     onDelete: "cascade",
   }),

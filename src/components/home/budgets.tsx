@@ -1,14 +1,16 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
-import { Budget } from "../budget";
-import { categoriesCollection } from "@/store/collections";
-import { eq, useLiveQuery } from "@tanstack/react-db";
+import { budgetsCollection } from "@/store/collections";
+import { and, eq, not, useLiveQuery } from "@tanstack/react-db";
+import { BudgetSummary } from "../budget-summary";
 
 export const Budgets = ({ travelId }: { travelId: string }) => {
-  const { data: categories } = useLiveQuery((q) =>
+  const { data: mainBudgets } = useLiveQuery((q) =>
     q
-      .from({ categories: categoriesCollection })
-      .where(({ categories }) => eq(categories.travel, travelId)),
+      .from({ budgets: budgetsCollection })
+      .where(({ budgets }) =>
+        and(eq(budgets.travel, travelId), not(eq(budgets.categoryType, null))),
+      ),
   );
 
   return (
@@ -26,8 +28,8 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
       </div>
 
       <div className="flex px-4 justify-between items-center mt-4">
-        {categories.map((category) => (
-          <Budget categoryId={category.id} key={category.id} />
+        {mainBudgets.map((budget) => (
+          <BudgetSummary budget={budget} key={budget.id} />
         ))}
       </div>
     </div>

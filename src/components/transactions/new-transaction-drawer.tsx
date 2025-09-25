@@ -44,8 +44,10 @@ import {
 } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { AmountInput } from "../ui/amount-input";
+import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
+import type { Transaction } from "@/data/transactions";
 
-const formSchema = z.object({
+const createTransactionSchema = z.object({
   title: z.string("Name is required.").min(1, "Name is required."),
   description: z.string().optional(),
   date: z.date(),
@@ -54,10 +56,14 @@ const formSchema = z.object({
     .number<number>("Number is required")
     .positive("Amount must be positive."),
   currency: z.string(),
+  type: z.enum(CategoryTypes),
+});
+
+const completeTransactionSchema = z.object({
+  category: z.string().optional(),
   place: z.string().optional(),
-  category: z.string(),
-  subcategory: z.string().optional(),
-  days: z.number(),
+  days: z.number().optional(),
+  meals: z.number().optional(),
 });
 
 export const NewTransactionDrawer = ({
@@ -69,30 +75,62 @@ export const NewTransactionDrawer = ({
   userId: string;
   children?: React.ReactNode;
 }) => {
+  const [createdTransaction, setCreatedTransaction] =
+    useState<Transaction | null>(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const createTransactionForm = useForm<
+    z.infer<typeof createTransactionSchema>
+  >({
+    resolver: zodResolver(createTransactionSchema),
     defaultValues: {
       title: "",
       description: "",
       date: new Date(),
       currency: "EUR",
-      days: 1,
       user: userId,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    transactionsCollection.insert({
+  const completeTransactionForm = useForm<
+    z.infer<typeof completeTransactionSchema>
+  >({
+    resolver: zodResolver(completeTransactionSchema),
+  });
+
+  const onSubmitCreateTransaction = (
+    values: z.infer<typeof createTransactionSchema>,
+  ) => {
+    const transaction = {
       id: crypto.randomUUID(),
       ...values,
       travel: travel.id,
       description: values.description ?? null,
-      place: values.place ?? null,
+
+      category: null,
+      place: null,
+      days: null,
+      meals: null,
+    };
+    transactionsCollection.insert(transaction);
+
+    createTransactionForm.reset();
+    setCreatedTransaction(transaction);
+  };
+
+  const onSubmitCompleteTransaction = (
+    values: z.infer<typeof completeTransactionSchema>,
+  ) => {
+    if (!createdTransaction) return;
+
+    transactionsCollection.update(createdTransaction.id, (transaction) => {
+      return {
+        ...transaction,
+        ...values,
+      };
     });
 
-    form.reset();
+    completeTransactionForm.reset();
   };
 
   const { data: categories } = useLiveQuery((q) =>
@@ -102,7 +140,12 @@ export const NewTransactionDrawer = ({
   );
 
   return (
-    <Drawer>
+    <Drawer
+      onClose={() => {
+        createTransactionForm.reset();
+        setCreatedTransaction(null);
+      }}
+    >
       <DrawerTrigger asChild>
         {children ?? (
           <Button size="icon">
@@ -126,180 +169,260 @@ export const NewTransactionDrawer = ({
             </DrawerDescription>
           </div>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-4 mt-6"
-            >
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Restaurant"
-                        {...field}
-                        className="h-10"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+          {createdTransaction === null ? (
+            <Form {...createTransactionForm}>
+              <form
+                onSubmit={createTransactionForm.handleSubmit(
+                  onSubmitCreateTransaction,
                 )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Description</FormLabel>
-                      <span className="text-sm text-muted-foreground">
-                        Optional
-                      </span>
-                    </div>
-                    <FormControl>
-                      <Input
-                        placeholder="A great place"
-                        {...field}
-                        className="h-10"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Amount</FormLabel>
-                    <FormControl>
-                      <AmountInput
-                        amountDefaultValue={field.value}
-                        onAmountChange={field.onChange}
-                        currencyDefaultValue={form.getValues("currency")}
-                        onCurrencyChange={(currency) =>
-                          form.setValue("currency", currency)
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="w-full">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                className="space-y-4 mt-6"
+              >
+                <FormField
+                  control={createTransactionForm.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Restaurant"
+                          {...field}
+                          className="h-10"
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.emoji}{" "}
-                            <span className="capitalize">{category.name}</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="user"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Who paid</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="w-full">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                <FormField
+                  control={createTransactionForm.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Description</FormLabel>
+                        <span className="text-sm text-muted-foreground">
+                          Optional
+                        </span>
+                      </div>
+                      <FormControl>
+                        <Input
+                          placeholder="A great place"
+                          {...field}
+                          className="h-10"
+                        />
                       </FormControl>
-                      <SelectContent>
-                        {travel.users.map((user) => (
-                          <SelectItem key={user.id} value={user.id}>
-                            {user.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Popover
-                        open={isDatePickerOpen}
-                        onOpenChange={setIsDatePickerOpen}
+                <FormField
+                  control={createTransactionForm.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Amount</FormLabel>
+                      <FormControl>
+                        <AmountInput
+                          amountDefaultValue={field.value}
+                          onAmountChange={field.onChange}
+                          currencyDefaultValue={createTransactionForm.getValues(
+                            "currency",
+                          )}
+                          onCurrencyChange={(currency) =>
+                            createTransactionForm.setValue("currency", currency)
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createTransactionForm.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
                       >
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="secondary"
-                            data-empty={!field.value}
-                            className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
-                          >
-                            <CalendarIcon />
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={(date) => {
-                              field.onChange(date);
-                              setIsDatePickerOpen(false);
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                        <FormControl className="w-full">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {CategoryTypes.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {categoryTypeToEmoji[type]}{" "}
+                              <span className="capitalize">{type}</span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createTransactionForm.control}
+                  name="user"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Who paid</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="w-full">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {travel.users.map((user) => (
+                            <SelectItem key={user.id} value={user.id}>
+                              {user.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={createTransactionForm.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <Popover
+                          open={isDatePickerOpen}
+                          onOpenChange={setIsDatePickerOpen}
+                        >
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="secondary"
+                              data-empty={!field.value}
+                              className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
+                            >
+                              <CalendarIcon />
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={(date) => {
+                                field.onChange(date);
+                                setIsDatePickerOpen(false);
+                              }}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="h-px bg-border" />
+
+                <Button type="submit" className="w-full" size="lg">
+                  Save transaction
+                  <CheckCircle className="size-4" />
+                </Button>
+              </form>
+            </Form>
+          ) : (
+            <Form {...completeTransactionForm}>
+              <form
+                onSubmit={completeTransactionForm.handleSubmit(
+                  onSubmitCompleteTransaction,
                 )}
-              />
+                className="space-y-4 mt-6"
+              >
+                <FormField
+                  control={completeTransactionForm.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="w-full">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.emoji}{" "}
+                              <span className="capitalize">
+                                {category.name}
+                              </span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <div className="h-px bg-border" />
+                <FormField
+                  control={completeTransactionForm.control}
+                  name="place"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Place</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Restaurant"
+                          {...field}
+                          className="h-10"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button type="submit" className="w-full" size="lg">
-                Save transaction
-                <CheckCircle className="size-4" />
-              </Button>
-            </form>
-          </Form>
+                <DrawerClose asChild>
+                  <Button type="submit" className="w-full" size="lg">
+                    Complete transaction
+                  </Button>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    size="lg"
+                    variant="secondary"
+                  >
+                    Skip
+                  </Button>
+                </DrawerClose>
+              </form>
+            </Form>
+          )}
         </div>
       </DrawerContent>
     </Drawer>
