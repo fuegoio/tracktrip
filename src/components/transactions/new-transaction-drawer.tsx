@@ -63,9 +63,11 @@ const formSchema = z.object({
 export const NewTransactionDrawer = ({
   travel,
   userId,
+  children,
 }: {
   travel: Travel;
   userId: string;
+  children?: React.ReactNode;
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -102,9 +104,11 @@ export const NewTransactionDrawer = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button size="icon">
-          <Plus className="size-5" />
-        </Button>
+        {children ?? (
+          <Button size="icon">
+            <Plus className="size-5" />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent>
         <div className="px-6 overflow-y-auto py-5">

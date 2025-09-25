@@ -11,6 +11,9 @@ function TravelIndex() {
   const params = Route.useParams();
   const travel = useTravel({ id: params.travelId });
 
+  const { session } = Route.useRouteContext();
+  const userId = session.user.id;
+
   return (
     <>
       <div className="px-5 pb-6">
@@ -47,7 +50,7 @@ function TravelIndex() {
       </div>
 
       <Budgets travelId={travel.id} />
-      <Transactions travelId={travel.id} />
+      <Transactions travelId={travel.id} userId={userId} />
     </>
   );
 }

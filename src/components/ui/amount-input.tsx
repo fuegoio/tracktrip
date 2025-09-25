@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import {

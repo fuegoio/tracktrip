@@ -4,18 +4,28 @@ import { TransactionsGroup } from "../transactions-group";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
 import type { Transaction } from "@/data/transactions";
-import { Link } from "@tanstack/react-router";
+import dayjs from "dayjs";
+import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
+import { useTravel } from "@/lib/params";
 
-export const Transactions = ({ travelId }: { travelId: string }) => {
+export const Transactions = ({
+  travelId,
+  userId,
+}: {
+  travelId: string;
+  userId: string;
+}) => {
   const transactions = useLiveQuery((q) =>
     q
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travelId)),
   );
 
+  const travel = useTravel({ id: travelId });
+
   const transactionsGroupedByDate = transactions.data.reduce(
     (acc, transaction) => {
-      const date = transaction.date;
+      const date = dayjs(transaction.date).format("YYYY-MM-DD");
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -31,11 +41,11 @@ export const Transactions = ({ travelId }: { travelId: string }) => {
         <div className="text-sm font-semibold text-foreground flex-1">
           Recent transactions
         </div>
-        <Button variant="outline" size="icon" className="size-6" asChild>
-          <Link to="/travels/$travelId/transactions/new" params={{ travelId }}>
+        <NewTransactionDrawer travel={travel} userId={userId}>
+          <Button variant="outline" size="icon" className="size-6">
             <Plus className="size-4" />
-          </Link>
-        </Button>
+          </Button>
+        </NewTransactionDrawer>
         <Button variant="secondary" size="icon" className="size-6">
           <ArrowRight className="size-4" />
         </Button>
