@@ -49,7 +49,7 @@ const formSchema = z.object({
   title: z.string("Name is required.").min(1, "Name is required."),
   description: z.string().optional(),
   date: z.date(),
-  user: z.uuid(),
+  user: z.string(),
   amount: z.coerce
     .number<number>("Number is required")
     .positive("Amount must be positive."),
@@ -72,6 +72,8 @@ export const NewTransactionDrawer = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: "",
+      description: "",
       date: new Date(),
       currency: "EUR",
       days: 1,
@@ -87,6 +89,8 @@ export const NewTransactionDrawer = ({
       description: values.description ?? null,
       place: values.place ?? null,
     });
+
+    form.reset();
   };
 
   const { data: categories } = useLiveQuery((q) =>
@@ -146,7 +150,12 @@ export const NewTransactionDrawer = ({
                 name="description"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Description</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Description</FormLabel>
+                      <span className="text-sm text-muted-foreground">
+                        Optional
+                      </span>
+                    </div>
                     <FormControl>
                       <Input
                         placeholder="A great place"
@@ -250,9 +259,9 @@ export const NewTransactionDrawer = ({
                       >
                         <PopoverTrigger asChild>
                           <Button
-                            variant="outline"
+                            variant="secondary"
                             data-empty={!field.value}
-                            className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md"
+                            className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
                           >
                             <CalendarIcon />
                             {field.value ? (

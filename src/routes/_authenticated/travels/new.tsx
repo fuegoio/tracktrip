@@ -150,11 +150,7 @@ function NewTravel() {
                 <FormItem className="flex-1">
                   <FormLabel className="opacity-0">Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Europe by train"
-                      {...field}
-                      className="h-10"
-                    />
+                    <Input placeholder="Europe by train" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

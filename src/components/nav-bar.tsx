@@ -11,7 +11,7 @@ import { useRouterState } from "@tanstack/react-router";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions";
+  path: "" | "/transactions" | "/settings";
 };
 
 const navItems: NavItem[] = [
@@ -19,7 +19,7 @@ const navItems: NavItem[] = [
   { icon: List, path: "/transactions" },
   { icon: ScanQrCode, path: "" },
   { icon: Ruler, path: "" },
-  { icon: Cog, path: "" },
+  { icon: Cog, path: "/settings" },
 ];
 
 export const NavBar = () => {

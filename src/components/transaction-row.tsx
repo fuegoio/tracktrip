@@ -12,9 +12,7 @@ export const TransactionRow = ({
       <div className="text-xs font-medium text-foreground">
         {transaction.title}
       </div>
-      <div className="text-xs text-muted-foreground">
-        {transaction.category}
-      </div>
+      <div className="text-xs text-muted-foreground">{transaction.place}</div>
       <div className="flex-1" />
       <div className="text-xs font-mono text-foreground">
         {transaction.amount.toLocaleString(undefined, {

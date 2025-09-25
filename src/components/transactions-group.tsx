@@ -1,5 +1,6 @@
 import type { Transaction } from "@/data/transactions";
 import { TransactionRow } from "./transaction-row";
+import dayjs from "dayjs";
 
 export const TransactionsGroup = ({
   date,
@@ -11,12 +12,7 @@ export const TransactionsGroup = ({
   return (
     <div className="mt-4">
       <div className="px-2 text-subtle-foreground text-xs mb-2">
-        {date.toLocaleDateString(undefined, {
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
+        {dayjs(date).format("DD MMMM YYYY")}
       </div>
 
       <div className="space-y-1">

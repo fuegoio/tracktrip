@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import {
@@ -61,10 +61,10 @@ export function AmountInput({
   return (
     <div
       className={cn(
-        "flex items-center rounded-md border bg-background text-sm ring-offset-background transition-colors focus-within:ring-2 focus-within:ring-ring/50 focus-within:ring-offset-2",
+        "flex items-center rounded-md border border-transparent focus-within:border-ring bg-input/50 focus-within:bg-background ring-offset-background transition-colors focus-within:ring-2 focus-within:ring-ring/50 focus-within:ring-offset-2 h-10",
       )}
     >
-      <span className="pl-3 pr-1 text-muted-foreground">
+      <span className="pl-3 pr-1 text-muted-foreground text-sm">
         {selectedCurrency?.symbol}
       </span>
       <input
@@ -73,22 +73,21 @@ export function AmountInput({
         inputMode="decimal"
         value={amount}
         onChange={(e) => {
-          setAmount(e.target.value.replace(/[^d.]/g, ""));
-          onAmountChange(parseFloat(e.target.value.replace(/[^d.]/g, "")));
+          setAmount(e.target.value.replace(/[^\d.]/g, ""));
+          onAmountChange(parseFloat(e.target.value.replace(/[^\d.]/g, "")));
         }}
-        className="h-9 flex-1 bg-transparent py-1 text-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="flex-1 text-sm bg-transparent py-1 outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
-      <div className="h-5 w-px bg-border mx-1" />
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="flex h-9 items-center gap-2 px-3 text-sm focus:outline-none"
+            className="flex items-center gap-2 px-3 focus:outline-none"
           >
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 text-muted-foreground text-sm font-medium">
               {selectedCurrency?.label}
             </span>
-            <ChevronsUpDown className="h-4 w-4 opacity-50" />
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-[180px] p-0">
@@ -109,7 +108,7 @@ export function AmountInput({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "h-4 w-4",
                         currency === c.value ? "opacity-100" : "opacity-0",
                       )}
                     />
