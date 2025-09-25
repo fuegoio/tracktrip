@@ -140,6 +140,18 @@ export const transactionsTable = pgTable("transactions", {
   meals: integer(),
 });
 
+export const budgetsTable = pgTable("budgets", {
+  id: uuid().primaryKey(),
+  travel: uuid()
+    .notNull()
+    .references(() => travelsTable.id, { onDelete: "cascade" }),
+  categoryType: categoryTypesEnum(),
+  category: uuid().references(() => categoriesTable.id, {
+    onDelete: "cascade",
+  }),
+  amount: real().notNull(),
+});
+
 export const eventsTable = pgTable(`events`, {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: text("user_id").notNull(),
