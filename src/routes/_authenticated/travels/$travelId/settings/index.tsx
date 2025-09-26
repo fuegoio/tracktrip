@@ -1,11 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Tag, User } from "lucide-react";
+import { ChevronRight, Gauge, Tag, User } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/",
 )({
   component: RouteComponent,
 });
+
+const travelLinks = [
+  { name: "People", path: "./users", icon: User },
+  { name: "Categories", path: "./categories", icon: Tag },
+  { name: "Budgets", path: "./budgets", icon: Gauge },
+] as const;
 
 function RouteComponent() {
   return (
@@ -19,30 +25,20 @@ function RouteComponent() {
 
       <div className="px-5 space-y-2">
         <div className="text-muted-foreground text-xs font-medium">Travel</div>
-        <Link
-          from={Route.fullPath}
-          to="./users"
-          className="w-full h-10 flex items-center font-medium gap-2"
-        >
-          <div className="flex items-center justify-center rounded-full size-8 bg-muted">
-            <User className="size-4" />
-          </div>
-          People
-          <div className="flex-1" />
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
-        <Link
-          from={Route.fullPath}
-          to="./categories"
-          className="w-full h-10 flex items-center font-medium gap-2"
-        >
-          <div className="flex items-center justify-center rounded-full size-8 bg-muted">
-            <Tag className="size-4" />
-          </div>
-          Categories
-          <div className="flex-1" />
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
+        {travelLinks.map((link) => (
+          <Link
+            from={Route.fullPath}
+            to={link.path}
+            className="w-full h-10 flex items-center font-medium gap-2"
+          >
+            <div className="flex items-center justify-center rounded-full size-8 bg-muted">
+              <link.icon className="size-4" />
+            </div>
+            {link.name}
+            <div className="flex-1" />
+            <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
+        ))}
       </div>
     </>
   );

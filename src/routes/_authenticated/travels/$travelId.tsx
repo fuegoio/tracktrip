@@ -13,9 +13,6 @@ function RouteComponent() {
   const userId = session.user.id;
 
   const travel = useTravel({ id: params.travelId });
-  if (!travel) {
-    throw new Error("Travel not found");
-  }
 
   return (
     <>

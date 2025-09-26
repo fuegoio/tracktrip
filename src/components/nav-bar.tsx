@@ -1,8 +1,8 @@
 import {
+  ChartColumn,
   Cog,
   Home,
   List,
-  Ruler,
   ScanQrCode,
   type LucideIcon,
 } from "lucide-react";
@@ -18,7 +18,7 @@ const navItems: NavItem[] = [
   { icon: Home, path: "" },
   { icon: List, path: "/transactions" },
   { icon: ScanQrCode, path: "" },
-  { icon: Ruler, path: "" },
+  { icon: ChartColumn, path: "" },
   { icon: Cog, path: "/settings" },
 ];
 

@@ -3,7 +3,6 @@ import { CategoryBadge } from "./category-badge";
 import { CategoryTypeBadge } from "./category-type-badge";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { placesCollection } from "@/store/collections";
-import { Link } from "@tanstack/react-router";
 import { TransactionDrawer } from "./transactions/transaction-drawer";
 
 export const TransactionRow = ({

@@ -43,7 +43,7 @@ export const BudgetSummary = ({ budget }: { budget: Budget }) => {
         {budget.category && <CategoryBadge categoryId={budget.category} />}
       </AnimatedCircularProgressBar>
       <div className="font-mono font-medium text-xs text-foreground mt-1">
-        13.4€
+        {todayTransactions[0]?.totalAmount || 0}
       </div>
       <div className="font-mono text-xs text-muted-foreground">
         {budget.amount}

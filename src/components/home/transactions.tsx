@@ -60,7 +60,7 @@ export const Transactions = ({
         <TransactionsGroup
           key={date}
           date={new Date(date)}
-          transactions={transactionsGroupedByDate[date]}
+          transactions={transactionsGroupedByDate[date]!}
         />
       ))}
     </div>
