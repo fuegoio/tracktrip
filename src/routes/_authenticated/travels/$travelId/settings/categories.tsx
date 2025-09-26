@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { categoriesCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, EllipsisVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/categories",
@@ -39,15 +47,28 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="px-5 pb-4">
+      <div className="px-5 pb-4 space-y-4">
         <NewCategoryDrawer travelId={travelId} />
-      </div>
 
-      <div className="px-5 space-y-2">
+        <div className="h-px bg-border" />
+
         {categories?.map((category) => (
           <div key={category.id} className="flex items-center gap-2 h-8">
             <CategoryBadge categoryId={category.id} />
-            <div className="font-medium text-sm">{category.name}</div>
+            <div className="font-medium text-sm flex-1">{category.name}</div>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4 text-muted-foreground" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => categoriesCollection.delete(category.id)}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ))}
       </div>
