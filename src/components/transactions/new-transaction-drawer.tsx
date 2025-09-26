@@ -46,9 +46,8 @@ import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { AmountInput } from "../ui/amount-input";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import type { Transaction } from "@/data/transactions";
-import { CategoryTypeBadge } from "../category-type-badge";
-import dayjs from "dayjs";
 import { PlacesInput } from "../places/places-input";
+import { TransactionHeader } from "./transaction-header";
 
 const createTransactionSchema = z.object({
   title: z.string("Name is required.").min(1, "Name is required."),
@@ -165,7 +164,7 @@ export const NewTransactionDrawer = ({
     >
       <DrawerTrigger asChild>
         {children ?? (
-          <Button size="icon">
+          <Button size="icon" variant="ghost">
             <Plus className="size-5" />
           </Button>
         )}
@@ -367,26 +366,7 @@ export const NewTransactionDrawer = ({
             </Form>
           ) : (
             <div>
-              <div className="flex flex-col w-full justify-center items-center py-6 gap-1">
-                <CategoryTypeBadge
-                  categoryType={createdTransaction.type}
-                  className="size-16 text-3xl"
-                />
-                <div className="text-center">
-                  <div className="text-lg font-medium">
-                    {createdTransaction.title}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {dayjs(createdTransaction.date).format("DD/MM/YYYY")}
-                  </div>
-                </div>
-                <div className="font-mono">
-                  {createdTransaction.amount.toLocaleString(undefined, {
-                    style: "currency",
-                    currency: createdTransaction.currency,
-                  })}
-                </div>
-              </div>
+              <TransactionHeader transaction={createdTransaction} />
               <div className="h-px bg-border" />
               <Form {...completeTransactionForm}>
                 <form

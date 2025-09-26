@@ -3,6 +3,8 @@ import { CategoryBadge } from "./category-badge";
 import { CategoryTypeBadge } from "./category-type-badge";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { placesCollection } from "@/store/collections";
+import { Link } from "@tanstack/react-router";
+import { TransactionDrawer } from "./transactions/transaction-drawer";
 
 export const TransactionRow = ({
   transaction,
@@ -19,27 +21,29 @@ export const TransactionRow = ({
   const transactionPlace = places[0];
 
   return (
-    <div className="flex items-center gap-4 h-10 rounded bg-subtle px-3">
-      {transaction.category ? (
-        <CategoryBadge categoryId={transaction.category} />
-      ) : (
-        <CategoryTypeBadge categoryType={transaction.type} />
-      )}
-      <div className="text-xs font-medium text-foreground">
-        {transaction.title}
-      </div>
-      {transactionPlace && (
-        <div className="text-xs text-muted-foreground">
-          {transactionPlace.name}
+    <TransactionDrawer transaction={transaction}>
+      <div className="flex items-center gap-4 h-10 rounded bg-subtle px-3">
+        {transaction.category ? (
+          <CategoryBadge categoryId={transaction.category} />
+        ) : (
+          <CategoryTypeBadge categoryType={transaction.type} />
+        )}
+        <div className="text-xs font-medium text-foreground">
+          {transaction.title}
         </div>
-      )}
-      <div className="flex-1" />
-      <div className="text-xs font-mono text-foreground">
-        {transaction.amount.toLocaleString(undefined, {
-          style: "currency",
-          currency: transaction.currency,
-        })}
+        {transactionPlace && (
+          <div className="text-xs text-muted-foreground">
+            {transactionPlace.name}
+          </div>
+        )}
+        <div className="flex-1" />
+        <div className="text-xs font-mono text-foreground">
+          {transaction.amount.toLocaleString(undefined, {
+            style: "currency",
+            currency: transaction.currency,
+          })}
+        </div>
       </div>
-    </div>
+    </TransactionDrawer>
   );
 };

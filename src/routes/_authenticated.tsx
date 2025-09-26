@@ -14,9 +14,13 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
 
-    const { travelsCollection } = await import("@/store/collections");
+    const { travelsCollection, transactionsCollection } = await import(
+      "@/store/collections"
+    );
     await travelsCollection.preload();
+    await transactionsCollection.preload();
     await travelsCollection.stateWhenReady();
+    await transactionsCollection.stateWhenReady();
 
     return {
       session: res.data,

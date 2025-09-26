@@ -10,7 +10,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <>
-      <div className="px-5 pb-6">
+      <div className="px-5 py-6">
         <div className="font-semibold text-xl">Settings</div>
         <div className="text-muted-foreground text-sm mt-1">
           Control your travel experience easily from here.

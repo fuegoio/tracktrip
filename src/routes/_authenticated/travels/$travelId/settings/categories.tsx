@@ -31,7 +31,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="px-1 mb-4">
+      <div className="px-1 py-4">
         <Button variant="ghost" asChild className="text-subtle-foreground">
           <Link from={Route.fullPath} to="..">
             <ChevronLeft className="h-4 w-4" />
