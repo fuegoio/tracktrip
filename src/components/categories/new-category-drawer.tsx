@@ -33,7 +33,7 @@ import { categoriesCollection } from "@/store/collections";
 import {
   CategoryTypes,
   categoryTypeToColor,
-  categoryTypeToName,
+  categoryTypeToDefaultName,
   categoryTypeToEmoji,
   type CategoryType,
 } from "@/data/categories";
@@ -186,7 +186,9 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                       <FormLabel className="opacity-0">Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={categoryTypeToName[form.watch("type")]}
+                          placeholder={
+                            categoryTypeToDefaultName[form.watch("type")]
+                          }
                           {...field}
                           className="h-10"
                         />
