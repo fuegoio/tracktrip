@@ -28,7 +28,7 @@ export const TransactionRow = ({
       <div className="text-xs font-medium text-foreground">
         {transaction.title}
       </div>
-      {transaction.place && (
+      {transactionPlace && (
         <div className="text-xs text-muted-foreground">
           {transactionPlace.name}
         </div>
