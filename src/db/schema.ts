@@ -133,6 +133,9 @@ export const transactionsTable = pgTable("transactions", {
   title: text().notNull(),
   description: text(),
   type: categoryTypesEnum().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 
   /*
    * Optional fields

@@ -25,11 +25,11 @@ export const categoryTypeToColor: Record<CategoryType, string> = {
 };
 
 export const categoryTypeToDefaultName: Record<CategoryType, string> = {
-  food: "Food",
-  accommodation: "Accommodation",
-  transport: "Transport",
-  activity: "Activity",
-  other: "Other",
+  food: "Restaurant",
+  accommodation: "Hotel",
+  transport: "Train",
+  activity: "Bar / Coffee",
+  other: "Shopping",
 };
 
 export type Category = {

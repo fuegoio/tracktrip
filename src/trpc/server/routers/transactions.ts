@@ -37,6 +37,7 @@ export const transactionsRouter = router({
       createInsertSchema(transactionsTable)
         .omit({
           id: true,
+          createdAt: true,
         })
         .extend({
           id: z.uuid().optional(),
@@ -110,6 +111,7 @@ export const transactionsRouter = router({
         data: createUpdateSchema(transactionsTable).omit({
           id: true,
           travel: true,
+          createdAt: true,
         }),
       }),
     )

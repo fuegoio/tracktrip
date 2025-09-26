@@ -92,7 +92,7 @@ export function AmountInput({
         </PopoverTrigger>
         <PopoverContent className="w-[180px] p-0">
           <Command>
-            <CommandInput placeholder="Search currency..." />
+            <CommandInput placeholder="Change currency to..." />
             <CommandList>
               <CommandEmpty>No currency found.</CommandEmpty>
               <CommandGroup>

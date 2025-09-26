@@ -9,6 +9,11 @@ export const TransactionsGroup = ({
   date: Date;
   transactions: Transaction[];
 }) => {
+  // Sort the transactions in descending order
+  const sortedTransactions = transactions.sort((a, b) => {
+    return dayjs(b.createdAt).unix() - dayjs(a.createdAt).unix();
+  });
+
   return (
     <div className="mt-4">
       <div className="px-2 text-subtle-foreground text-xs mb-2">
@@ -16,7 +21,7 @@ export const TransactionsGroup = ({
       </div>
 
       <div className="space-y-1">
-        {transactions.map((transaction) => (
+        {sortedTransactions.map((transaction) => (
           <TransactionRow key={transaction.id} transaction={transaction} />
         ))}
       </div>

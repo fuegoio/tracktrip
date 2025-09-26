@@ -9,6 +9,7 @@ export type Transaction = {
   date: Date;
   currency: string;
   type: CategoryType;
+  createdAt: Date;
 
   category: string | null;
   description: string | null;

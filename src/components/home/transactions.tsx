@@ -20,10 +20,9 @@ export const Transactions = ({
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travelId)),
   );
-
   const travel = useTravel({ id: travelId });
 
-  const transactionsGroupedByDate = transactions.data.reduce(
+  const transactionsGroupedByDate = transactions.data?.reduce(
     (acc, transaction) => {
       const date = dayjs(transaction.date).format("YYYY-MM-DD");
       if (!acc[date]) {
@@ -33,6 +32,13 @@ export const Transactions = ({
       return acc;
     },
     {} as Record<string, Transaction[]>,
+  );
+
+  // Sort the dates in descending order
+  const sortedDates = Object.keys(transactionsGroupedByDate || {}).sort(
+    (a, b) => {
+      return dayjs(b).unix() - dayjs(a).unix();
+    },
   );
 
   return (
@@ -50,12 +56,11 @@ export const Transactions = ({
           <ArrowRight className="size-4" />
         </Button>
       </div>
-
-      {Object.entries(transactionsGroupedByDate).map(([date, transactions]) => (
+      {sortedDates.map((date) => (
         <TransactionsGroup
           key={date}
           date={new Date(date)}
-          transactions={transactions}
+          transactions={transactionsGroupedByDate[date]}
         />
       ))}
     </div>

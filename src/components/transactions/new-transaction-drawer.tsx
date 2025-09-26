@@ -42,10 +42,13 @@ import {
   categoriesCollection,
   transactionsCollection,
 } from "@/store/collections";
-import { eq, useLiveQuery } from "@tanstack/react-db";
+import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { AmountInput } from "../ui/amount-input";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import type { Transaction } from "@/data/transactions";
+import { CategoryTypeBadge } from "../category-type-badge";
+import dayjs from "dayjs";
+import { PlacesInput } from "../places/places-input";
 
 const createTransactionSchema = z.object({
   title: z.string("Name is required.").min(1, "Name is required."),
@@ -53,10 +56,10 @@ const createTransactionSchema = z.object({
   date: z.date(),
   user: z.string(),
   amount: z.coerce
-    .number<number>("Number is required")
+    .number<number>("Amount is required")
     .positive("Amount must be positive."),
   currency: z.string(),
-  type: z.enum(CategoryTypes),
+  type: z.enum(CategoryTypes, "Type is required."),
 });
 
 const completeTransactionSchema = z.object({
@@ -75,6 +78,7 @@ export const NewTransactionDrawer = ({
   userId: string;
   children?: React.ReactNode;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [createdTransaction, setCreatedTransaction] =
     useState<Transaction | null>(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -106,6 +110,7 @@ export const NewTransactionDrawer = ({
       ...values,
       travel: travel.id,
       description: values.description ?? null,
+      createdAt: new Date(),
 
       category: null,
       place: null,
@@ -124,25 +129,37 @@ export const NewTransactionDrawer = ({
     if (!createdTransaction) return;
 
     transactionsCollection.update(createdTransaction.id, (transaction) => {
-      return {
-        ...transaction,
-        ...values,
-      };
+      transaction.category = values.category ?? null;
+      transaction.place = values.place ?? null;
+      transaction.days = values.days ?? null;
+      transaction.meals = values.meals ?? null;
     });
 
+    setIsOpen(false);
     completeTransactionForm.reset();
+    setCreatedTransaction(null);
   };
 
-  const { data: categories } = useLiveQuery((q) =>
-    q
-      .from({ categories: categoriesCollection })
-      .where(({ categories }) => eq(categories.travel, travel.id)),
+  const { data: categories } = useLiveQuery(
+    (q) =>
+      q
+        .from({ categories: categoriesCollection })
+        .where(({ categories }) =>
+          and(
+            eq(categories.travel, travel.id),
+            eq(categories.type, createdTransaction?.type),
+          ),
+        ),
+    [createdTransaction],
   );
 
   return (
     <Drawer
+      open={isOpen}
+      onOpenChange={setIsOpen}
       onClose={() => {
         createTransactionForm.reset();
+        completeTransactionForm.reset();
         setCreatedTransaction(null);
       }}
     >
@@ -349,79 +366,98 @@ export const NewTransactionDrawer = ({
               </form>
             </Form>
           ) : (
-            <Form {...completeTransactionForm}>
-              <form
-                onSubmit={completeTransactionForm.handleSubmit(
-                  onSubmitCompleteTransaction,
-                )}
-                className="space-y-4 mt-6"
-              >
-                <FormField
-                  control={completeTransactionForm.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl className="w-full">
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
+            <div>
+              <div className="flex flex-col w-full justify-center items-center py-6 gap-1">
+                <CategoryTypeBadge
+                  categoryType={createdTransaction.type}
+                  className="size-16 text-3xl"
+                />
+                <div className="text-center">
+                  <div className="text-lg font-medium">
+                    {createdTransaction.title}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {dayjs(createdTransaction.date).format("DD/MM/YYYY")}
+                  </div>
+                </div>
+                <div className="font-mono">
+                  {createdTransaction.amount.toLocaleString(undefined, {
+                    style: "currency",
+                    currency: createdTransaction.currency,
+                  })}
+                </div>
+              </div>
+              <div className="h-px bg-border" />
+              <Form {...completeTransactionForm}>
+                <form
+                  onSubmit={completeTransactionForm.handleSubmit(
+                    onSubmitCompleteTransaction,
+                  )}
+                  className="space-y-4 mt-6"
+                >
+                  <FormField
+                    control={completeTransactionForm.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl className="w-full">
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories.map((category) => (
+                              <SelectItem key={category.id} value={category.id}>
+                                {category.emoji}{" "}
+                                <span className="capitalize">
+                                  {category.name}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={completeTransactionForm.control}
+                    name="place"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Place</FormLabel>
+                        <FormControl>
+                          <PlacesInput {...field} travelId={travel.id} />
                         </FormControl>
-                        <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.emoji}{" "}
-                              <span className="capitalize">
-                                {category.name}
-                              </span>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={completeTransactionForm.control}
-                  name="place"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Place</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Restaurant"
-                          {...field}
-                          className="h-10"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <div className="h-px bg-border" />
 
-                <DrawerClose asChild>
                   <Button type="submit" className="w-full" size="lg">
                     Complete transaction
                   </Button>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <Button
-                    type="button"
-                    className="w-full"
-                    size="lg"
-                    variant="secondary"
-                  >
-                    Skip
-                  </Button>
-                </DrawerClose>
-              </form>
-            </Form>
+                  <DrawerClose asChild>
+                    <Button
+                      type="button"
+                      className="w-full"
+                      size="lg"
+                      variant="secondary"
+                    >
+                      Skip
+                    </Button>
+                  </DrawerClose>
+                </form>
+              </Form>
+            </div>
           )}
         </div>
       </DrawerContent>
