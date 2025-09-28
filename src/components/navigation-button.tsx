@@ -17,7 +17,7 @@ export const NavigationButton = ({
 }) => {
   const location = useRouterState({ select: (s) => s.location });
   const travelId = location.pathname.split("/")[2];
-  if (!travelId) throw new Error("Travel ID not found");
+  if (!travelId) return null;
 
   const Icon = icon;
   return (

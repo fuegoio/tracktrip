@@ -1,6 +1,5 @@
 import { TransactionsGroup } from "@/components/transactions-group";
 import type { Transaction } from "@/data/transactions";
-import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
@@ -19,7 +18,6 @@ function RouteComponent() {
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travelId)),
   );
-  const travel = useTravel({ id: travelId });
 
   const transactionsGroupedByDate = transactions.data?.reduce(
     (acc, transaction) => {

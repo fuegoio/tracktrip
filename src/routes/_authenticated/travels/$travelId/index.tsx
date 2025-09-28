@@ -1,7 +1,11 @@
 import { Budgets } from "@/components/home/budgets";
 import { Transactions } from "@/components/home/transactions";
 import { useTravel } from "@/lib/params";
+import { transactionsCollection } from "@/store/collections";
+import { and, eq, gt, lt, sum, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
+import { endOfDay, startOfDay } from "date-fns";
+import dayjs from "dayjs";
 
 export const Route = createFileRoute("/_authenticated/travels/$travelId/")({
   component: TravelIndex,
@@ -14,6 +18,50 @@ function TravelIndex() {
   const { session } = Route.useRouteContext();
   const userId = session.user.id;
 
+  const transactionsSum =
+    useLiveQuery((q) =>
+      q
+        .from({ transactions: transactionsCollection })
+        .where(({ transactions }) => eq(transactions.travel, params.travelId))
+        .select(({ transactions }) => ({
+          totalAmount: sum(transactions.amount),
+        })),
+    ).data.at(0)?.totalAmount ?? 0;
+
+  const today = new Date();
+
+  const todayTransactionsSum =
+    useLiveQuery((q) =>
+      q
+        .from({ transactions: transactionsCollection })
+        .where(({ transactions }) =>
+          and(
+            eq(transactions.travel, params.travelId),
+            gt(transactions.date, startOfDay(today)),
+            lt(transactions.date, endOfDay(today)),
+          ),
+        )
+        .select(({ transactions }) => ({
+          totalAmount: sum(transactions.amount),
+        })),
+    ).data.at(0)?.totalAmount ?? 0;
+
+  const travelersCount = travel.users.length;
+  const travelersCost = transactionsSum / travelersCount;
+
+  const travelProgressInDays = dayjs(today).diff(
+    dayjs(travel.startDate),
+    "day",
+  );
+  const travelDurationInDays = dayjs(travel.endDate).diff(
+    dayjs(travel.startDate),
+    "day",
+  );
+  const travelForecast =
+    today <= travel.endDate
+      ? transactionsSum * (travelDurationInDays / travelProgressInDays)
+      : undefined;
+
   return (
     <>
       <div className="px-5 py-6">
@@ -25,27 +73,43 @@ function TravelIndex() {
         <div className="mt-6">
           <div className="text-subtle-foreground">Total travel cost</div>
           <div className="text-5xl text-foreground font-mono mt-1">
-            8405.30€
+            {transactionsSum.toLocaleString(undefined, {
+              style: "currency",
+              currency: travel.currency,
+            })}
           </div>
         </div>
 
         <div className="grid grid-cols-3 mt-6">
           <div className="border-l-2 border-foreground px-4">
             <div className="text-sm text-subtle-foreground">Today cost</div>
-            <div className="text-foreground font-mono font-semibold">5.30€</div>
+            <div className="text-foreground font-mono font-semibold">
+              {todayTransactionsSum.toLocaleString(undefined, {
+                style: "currency",
+                currency: travel.currency,
+              })}
+            </div>
           </div>
           <div className="border-l-2 border-muted-foreground px-4">
             <div className="text-sm text-subtle-foreground">Per people</div>
             <div className="text-foreground font-mono font-semibold">
-              4045.30€
+              {travelersCost.toLocaleString(undefined, {
+                style: "currency",
+                currency: travel.currency,
+              })}
             </div>
           </div>
-          <div className="border-l-2 border-border px-4">
-            <div className="text-sm text-subtle-foreground">Forecast</div>
-            <div className="text-subtle-foreground font-mono font-semibold">
-              12905.30€
+          {travelForecast !== undefined && (
+            <div className="border-l-2 border-border px-4">
+              <div className="text-sm text-subtle-foreground">Forecast</div>
+              <div className="text-subtle-foreground font-mono font-semibold">
+                {travelForecast.toLocaleString(undefined, {
+                  style: "currency",
+                  currency: travel.currency,
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
