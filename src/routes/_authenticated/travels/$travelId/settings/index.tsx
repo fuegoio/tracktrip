@@ -28,6 +28,7 @@ function RouteComponent() {
         {travelLinks.map((link) => (
           <Link
             from={Route.fullPath}
+            key={link.path}
             to={link.path}
             className="w-full h-10 flex items-center font-medium gap-2"
           >

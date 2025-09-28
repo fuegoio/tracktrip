@@ -1,5 +1,6 @@
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerTitle,
@@ -10,7 +11,11 @@ import type { ReactNode } from "react";
 import { TransactionHeader } from "./transaction-header";
 import { Label } from "../ui/label";
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import { categoriesCollection, placesCollection } from "@/store/collections";
+import {
+  categoriesCollection,
+  placesCollection,
+  transactionsCollection,
+} from "@/store/collections";
 import { Button } from "../ui/button";
 import { useTravel } from "@/lib/params";
 
@@ -46,6 +51,10 @@ export const TransactionDrawer = ({
     [transaction.place],
   );
   const transactionPlace = places[0];
+
+  const deleteTransaction = () => {
+    transactionsCollection.delete(transaction.id);
+  };
 
   return (
     <Drawer>
@@ -106,14 +115,17 @@ export const TransactionDrawer = ({
 
           <div className="h-px bg-border" />
 
-          <Button
-            type="button"
-            className="w-full mt-6"
-            size="lg"
-            variant="secondary"
-          >
-            Edit
-          </Button>
+          <DrawerClose asChild>
+            <Button
+              type="button"
+              className="w-full mt-6"
+              size="lg"
+              variant="secondary"
+              onClick={deleteTransaction}
+            >
+              Delete
+            </Button>
+          </DrawerClose>
         </div>
       </DrawerContent>
     </Drawer>
