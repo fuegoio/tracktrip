@@ -8,7 +8,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [
     tanstackStart({
-      customViteReactPlugin: true,
       spa: {
         enabled: true,
       },

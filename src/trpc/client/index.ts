@@ -4,10 +4,14 @@ import {
   httpSubscriptionLink,
   splitLink,
 } from "@trpc/client";
+import { QueryClient } from "@tanstack/react-query";
+import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 
-export const trpc = createTRPCProxyClient<AppRouter>({
+export const queryClient = new QueryClient();
+
+export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
     splitLink({
       // uses the httpSubscriptionLink for subscriptions
@@ -22,4 +26,9 @@ export const trpc = createTRPCProxyClient<AppRouter>({
       }),
     }),
   ],
+});
+
+export const trpc = createTRPCOptionsProxy<AppRouter>({
+  client: trpcClient,
+  queryClient,
 });
