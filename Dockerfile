@@ -27,10 +27,10 @@ FROM oven/bun:1 AS release
 WORKDIR /usr/src/app
 COPY ./package.json .
 COPY ./server.ts .
+COPY ./drizzle.config.ts .
 # Copy only production node_modules
 COPY --from=prod-deps /temp/node_modules node_modules
 # Copy built files and server entrypoint
 COPY --from=build /temp/dist ./dist
-USER bun
 EXPOSE 3000/tcp
 ENTRYPOINT ["bun", "run", "server.ts"]
