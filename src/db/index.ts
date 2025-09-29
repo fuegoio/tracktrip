@@ -40,7 +40,10 @@ const getPoolAndDrizzleDB = () => {
   const db = drizzle(pool, { schema });
 
   console.log("[Database] Running migrations...");
-  migrate(db, { migrationsFolder: "./src/db/out" });
+  migrate(db, { migrationsFolder: "./src/db/out" }).catch(() => {
+    console.error("[Database] Error running migrations");
+  });
+
   return { pool, db };
 };
 
