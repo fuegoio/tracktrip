@@ -11,6 +11,7 @@ RUN mkdir -p /temp
 COPY package.json pnpm-lock.yaml /temp/
 WORKDIR /temp
 RUN pnpm install --frozen-lockfile
+
 COPY . .
 ENV NODE_ENV=production
 RUN npm run build
@@ -25,12 +26,17 @@ RUN pnpm install --frozen-lockfile --prod
 # Stage 4: Serve with Bun
 FROM oven/bun:1 AS release
 WORKDIR /usr/src/app
+
 COPY ./package.json .
 COPY ./server.ts .
 COPY ./drizzle.config.ts .
+COPY ./src ./src
+
 # Copy only production node_modules
 COPY --from=prod-deps /temp/node_modules node_modules
+
 # Copy built files and server entrypoint
 COPY --from=build /temp/dist ./dist
+
 EXPOSE 3000/tcp
 ENTRYPOINT ["bun", "run", "server.ts"]
