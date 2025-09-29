@@ -1,5 +1,5 @@
 # Stage 1: Install all dependencies with pnpm (using Node image)
-FROM node:20-alpine AS base
+FROM node:22 AS base
 WORKDIR /usr/src/app
 ENV PNPM_HOME=/pnpm
 ENV PATH="$PNPM_HOME:$PATH"
