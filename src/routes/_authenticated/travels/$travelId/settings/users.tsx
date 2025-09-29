@@ -1,6 +1,4 @@
-import { trpc } from "@/trpc/client";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
 import { useTravel } from "@/lib/params";
@@ -27,7 +25,7 @@ function RouteComponent() {
   const { travelId } = Route.useParams();
   const travel = useTravel({ id: travelId });
 
-  const deleteUser = (userId: string) => {};
+  const deleteUser = (_userId: string) => {};
 
   return (
     <>

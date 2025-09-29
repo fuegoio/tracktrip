@@ -1,18 +1,18 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import pg from "pg";
+import { Pool } from "pg";
 
 import { env } from "@/env";
 
 import * as schema from "./schema";
 
 const globalForDrizzle = globalThis as unknown as {
-  pool: pg.Pool | undefined;
+  pool: Pool | undefined;
 };
 
 export type DbType = NodePgDatabase<typeof schema>;
 
 const createPool = () => {
-  const pool = new pg.Pool({
+  const pool = new Pool({
     connectionString: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
     max: env.POSTGRES_MAX_CONNECTIONS,
     idleTimeoutMillis: env.POSTGRES_IDLE_TIMEOUT,
@@ -27,7 +27,7 @@ const createPool = () => {
 };
 
 const getPoolAndDrizzleDB = () => {
-  let pool: pg.Pool;
+  let pool: Pool;
 
   if (globalForDrizzle.pool) {
     pool = globalForDrizzle.pool;
