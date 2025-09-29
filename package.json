@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "migrate": "drizzle-kit migrate",
     "migrate:generate": "drizzle-kit generate",
     "typecheck": "tsc -b",
     "start": "bun ./server.ts"

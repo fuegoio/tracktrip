@@ -64,6 +64,8 @@
  */
 
 import path from "node:path";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
+import { db } from "./src/db";
 
 // Configuration
 const SERVER_PORT = Number(process.env.PORT ?? 3000);
@@ -503,6 +505,15 @@ async function initializeStaticRoutes(
  */
 async function initializeServer() {
   log.header("Starting Production Server");
+
+  try {
+    log.info("Running database migrations...");
+    await migrate(db, { migrationsFolder: "./migrations" });
+    log.success("Database migrations completed successfully");
+  } catch (error) {
+    log.error(`[Database] Error running migrations: ${String(error)}`);
+    process.exit(1);
+  }
 
   // Load TanStack Start server handler
   let handler: { fetch: (request: Request) => Response | Promise<Response> };

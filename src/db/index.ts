@@ -1,5 +1,4 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
 import { env } from "@/env";
@@ -38,11 +37,6 @@ const getPoolAndDrizzleDB = () => {
   }
 
   const db = drizzle(pool, { schema });
-
-  console.log("[Database] Running migrations...");
-  migrate(db, { migrationsFolder: "./migrations" }).catch(() => {
-    console.error("[Database] Error running migrations");
-  });
 
   return { pool, db };
 };

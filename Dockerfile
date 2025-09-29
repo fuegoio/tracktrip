@@ -30,6 +30,7 @@ WORKDIR /usr/src/app
 COPY ./package.json .
 COPY ./server.ts .
 COPY ./migrations ./migrations
+COPY ./src ./src
 
 # Copy only production node_modules
 COPY --from=prod-deps /temp/node_modules node_modules
