@@ -1,4 +1,5 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
 import { env } from "@/env";
@@ -12,6 +13,7 @@ const globalForDrizzle = globalThis as unknown as {
 export type DbType = NodePgDatabase<typeof schema>;
 
 const createPool = () => {
+  console.log("[Database] Connecting to database...");
   const pool = new Pool({
     connectionString: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
     max: env.POSTGRES_MAX_CONNECTIONS,
@@ -36,6 +38,9 @@ const getPoolAndDrizzleDB = () => {
   }
 
   const db = drizzle(pool, { schema });
+
+  console.log("[Database] Running migrations...");
+  migrate(db, { migrationsFolder: "./src/db/out" });
   return { pool, db };
 };
 
