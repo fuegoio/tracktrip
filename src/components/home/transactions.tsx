@@ -19,12 +19,11 @@ export const Transactions = ({
     q
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travelId))
-      .orderBy(({ transactions }) => transactions.date, "desc")
-      .limit(20),
-  );
+      .orderBy(({ transactions }) => transactions.date, "desc"),
+  ).data.slice(0, 10);
   const travel = useTravel({ id: travelId });
 
-  const transactionsGroupedByDate = transactions.data?.reduce(
+  const transactionsGroupedByDate = transactions.reduce(
     (acc, transaction) => {
       const date = dayjs(transaction.date).format("YYYY-MM-DD");
       if (!acc[date]) {
