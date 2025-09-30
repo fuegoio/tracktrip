@@ -18,15 +18,15 @@ function TravelIndex() {
   const { session } = Route.useRouteContext();
   const userId = session.user.id;
 
-  const transactionsSum =
-    useLiveQuery((q) =>
-      q
-        .from({ transactions: transactionsCollection })
-        .where(({ transactions }) => eq(transactions.travel, params.travelId))
-        .select(({ transactions }) => ({
-          totalAmount: sum(transactions.amount),
-        })),
-    ).data.at(0)?.totalAmount ?? 0;
+  const { data: travelTransactions } = useLiveQuery((q) =>
+    q
+      .from({ transactions: transactionsCollection })
+      .where(({ transactions }) => eq(transactions.travel, params.travelId)),
+  );
+  const transactionsSum = travelTransactions.reduce(
+    (acc, transaction) => acc + transaction.amount,
+    0,
+  );
 
   const today = new Date();
 
