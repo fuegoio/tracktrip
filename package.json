@@ -52,7 +52,7 @@
     "superjson": "^2.2.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
-    "trpc-db-collection": "0.0.3",
+    "trpc-db-collection": "^0.0.5",
     "vaul": "^1.1.2",
     "zod": "^4.1.5"
   },
