@@ -27,7 +27,7 @@ function Index() {
     <div className="p-5 pt-10">
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-semibold text-2xl">Your travels</div>
+          <div className="font-semibold text-2xl">Your travels a</div>
           <div className="text-muted-foreground text-sm">
             Find all your travels here.
           </div>
