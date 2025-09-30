@@ -1,6 +1,6 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function Update() {
   const { updateServiceWorker } = useRegisterSW({
