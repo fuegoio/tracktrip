@@ -41,7 +41,7 @@
         "superjson": "^2.2.2",
         "tailwind-merge": "^3.3.1",
         "tailwindcss": "^4.1.12",
-        "trpc-db-collection": "^0.0.2",
+        "trpc-db-collection": "0.0.3",
         "vaul": "^1.1.2",
         "zod": "^4.1.5",
       },
@@ -1456,7 +1456,7 @@
 
     "tr46": ["tr46@1.0.1", "", { "dependencies": { "punycode": "^2.1.0" } }, "sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA=="],
 
-    "trpc-db-collection": ["trpc-db-collection@0.0.2", "", { "peerDependencies": { "@tanstack/react-db": "^0.1.21", "@tanstack/store": "^0.7.5", "@trpc/server": "^11.4.3" } }, "sha512-cavoVgI5Hsp2cKMiTK6AO0tRsi6sg5MRr9/Axt7QpF3P+m1uEZWnDrPhun6wZrkhZTMgxa7GeArbXmfWE9pDjA=="],
+    "trpc-db-collection": ["trpc-db-collection@0.0.3", "", { "peerDependencies": { "@tanstack/react-db": "^0.1.24", "@tanstack/store": "^0.7.5", "@trpc/server": "^11.4.3" } }, "sha512-fMhp/JHm8UyxsMaAhXpzW6YV7eImE6huX/uHMP4NjvaD/EgsJMVjr6llsBMA+/yMUh9rzvCm2bIgauPYRgj5tg=="],
 
     "ts-api-utils": ["ts-api-utils@2.1.0", "", { "peerDependencies": { "typescript": ">=4.8.4" } }, "sha512-CUgTZL1irw8u29bzrOD/nH85jqyc74D6SshFgujOIA7osm2Rz7dYH77agkx7H4FBNxDq7Cjf+IjaX/8zwFW+ZQ=="],
 

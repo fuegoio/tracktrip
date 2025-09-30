@@ -8,7 +8,6 @@ import {
   eventsTable,
   travelsTable,
   travelsUsersTable,
-  usersTable,
 } from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
