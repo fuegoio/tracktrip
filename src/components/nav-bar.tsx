@@ -37,7 +37,7 @@ export const NavBar = () => {
       role="navigation"
       aria-label="navigation"
       data-slot="navigation"
-      className="w-full py-5 px-6 rounded-t-2xl shadow-up flex items-center justify-between fixed bottom-0 bg-white"
+      className="w-full py-5 px-6 rounded-t-2xl shadow-up flex items-center justify-between fixed bottom-0 bg-white max-w-md"
     >
       {navItems.map((item, index) => (
         <NavigationButton
