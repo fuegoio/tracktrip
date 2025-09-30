@@ -13,8 +13,6 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as ApiAuthRouteImport } from './routes/api/auth'
-import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc/$'
 import { Route as AuthenticatedTravelsNewRouteImport } from './routes/_authenticated/travels/new'
 import { Route as AuthenticatedTravelsTravelIdRouteImport } from './routes/_authenticated/travels/$travelId'
 import { Route as AuthenticatedTravelsTravelIdIndexRouteImport } from './routes/_authenticated/travels/$travelId/index'
@@ -42,16 +40,6 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
-} as any)
-const ApiAuthRoute = ApiAuthRouteImport.update({
-  id: '/api/auth',
-  path: '/api/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
-  id: '/api/trpc/$',
-  path: '/api/trpc/$',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedTravelsNewRoute = AuthenticatedTravelsNewRouteImport.update({
   id: '/travels/new',
@@ -104,11 +92,9 @@ const AuthenticatedTravelsTravelIdSettingsBudgetsRoute =
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/api/auth': typeof ApiAuthRoute
   '/': typeof AuthenticatedIndexRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/travels/new': typeof AuthenticatedTravelsNewRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
   '/travels/$travelId/settings/budgets': typeof AuthenticatedTravelsTravelIdSettingsBudgetsRoute
   '/travels/$travelId/settings/categories': typeof AuthenticatedTravelsTravelIdSettingsCategoriesRoute
@@ -119,10 +105,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/api/auth': typeof ApiAuthRoute
   '/': typeof AuthenticatedIndexRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdIndexRoute
   '/travels/$travelId/settings/budgets': typeof AuthenticatedTravelsTravelIdSettingsBudgetsRoute
   '/travels/$travelId/settings/categories': typeof AuthenticatedTravelsTravelIdSettingsCategoriesRoute
@@ -135,11 +119,9 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/api/auth': typeof ApiAuthRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/_authenticated/travels/new': typeof AuthenticatedTravelsNewRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/_authenticated/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
   '/_authenticated/travels/$travelId/settings/budgets': typeof AuthenticatedTravelsTravelIdSettingsBudgetsRoute
   '/_authenticated/travels/$travelId/settings/categories': typeof AuthenticatedTravelsTravelIdSettingsCategoriesRoute
@@ -152,11 +134,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/login'
     | '/signup'
-    | '/api/auth'
     | '/'
     | '/travels/$travelId'
     | '/travels/new'
-    | '/api/trpc/$'
     | '/travels/$travelId/'
     | '/travels/$travelId/settings/budgets'
     | '/travels/$travelId/settings/categories'
@@ -167,10 +147,8 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/signup'
-    | '/api/auth'
     | '/'
     | '/travels/new'
-    | '/api/trpc/$'
     | '/travels/$travelId'
     | '/travels/$travelId/settings/budgets'
     | '/travels/$travelId/settings/categories'
@@ -182,11 +160,9 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/signup'
-    | '/api/auth'
     | '/_authenticated/'
     | '/_authenticated/travels/$travelId'
     | '/_authenticated/travels/new'
-    | '/api/trpc/$'
     | '/_authenticated/travels/$travelId/'
     | '/_authenticated/travels/$travelId/settings/budgets'
     | '/_authenticated/travels/$travelId/settings/categories'
@@ -199,8 +175,6 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
-  ApiAuthRoute: typeof ApiAuthRoute
-  ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,20 +206,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
-    }
-    '/api/auth': {
-      id: '/api/auth'
-      path: '/api/auth'
-      fullPath: '/api/auth'
-      preLoaderRoute: typeof ApiAuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/trpc/$': {
-      id: '/api/trpc/$'
-      path: '/api/trpc/$'
-      fullPath: '/api/trpc/$'
-      preLoaderRoute: typeof ApiTrpcSplatRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/travels/new': {
       id: '/_authenticated/travels/new'
@@ -357,18 +317,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
-  ApiAuthRoute: ApiAuthRoute,
-  ApiTrpcSplatRoute: ApiTrpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
