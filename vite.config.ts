@@ -38,12 +38,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         ignoreURLParametersMatching: [/^v$/],
-        runtimeCaching: [
-          {
-            urlPattern: /^https?.*\/api\/.*/,
-            handler: "NetworkOnly",
-          },
-        ],
+        navigateFallbackDenylist: [/^\/api/],
       },
       manifest: {
         name: "Voyage",
