@@ -60,7 +60,8 @@ export function AnimatedCircularProgressBar({
             style={
               {
                 stroke: gaugeSecondaryColor,
-                "--stroke-percent": 90 - currentPercent,
+                "--stroke-percent":
+                  currentPercent > 0 ? 90 - currentPercent : 100,
                 "--offset-factor-secondary": "calc(1 - var(--offset-factor))",
                 strokeDasharray:
                   "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
@@ -73,30 +74,32 @@ export function AnimatedCircularProgressBar({
             }
           />
         )}
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          strokeWidth="10"
-          strokeDashoffset="0"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="opacity-100"
-          style={
-            {
-              stroke: gaugePrimaryColor,
-              "--stroke-percent": currentPercent,
-              strokeDasharray:
-                "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
-              transition: "all var(--transition-length) ease var(--delay)",
-              transitionProperty: "stroke-dasharray,transform",
-              transform:
-                "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
-              transformOrigin:
-                "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
-            } as React.CSSProperties
-          }
-        />
+        {currentPercent > 0 && (
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            strokeWidth="10"
+            strokeDashoffset="0"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="opacity-100"
+            style={
+              {
+                stroke: gaugePrimaryColor,
+                "--stroke-percent": currentPercent,
+                strokeDasharray:
+                  "calc(var(--stroke-percent) * var(--percent-to-px)) var(--circumference)",
+                transition: "all var(--transition-length) ease var(--delay)",
+                transitionProperty: "stroke-dasharray,transform",
+                transform:
+                  "rotate(calc(-90deg + var(--gap-percent) * var(--offset-factor) * var(--percent-to-deg)))",
+                transformOrigin:
+                  "calc(var(--circle-size) / 2) calc(var(--circle-size) / 2)",
+              } as React.CSSProperties
+            }
+          />
+        )}
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         {children}

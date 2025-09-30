@@ -2,9 +2,8 @@ import { Budgets } from "@/components/home/budgets";
 import { Transactions } from "@/components/home/transactions";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
-import { and, eq, gt, lt, sum, useLiveQuery } from "@tanstack/react-db";
+import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
-import { endOfDay, startOfDay } from "date-fns";
 import dayjs from "dayjs";
 
 export const Route = createFileRoute("/_authenticated/travels/$travelId/")({
@@ -30,21 +29,14 @@ function TravelIndex() {
 
   const today = new Date();
 
-  const todayTransactionsSum =
-    useLiveQuery((q) =>
-      q
-        .from({ transactions: transactionsCollection })
-        .where(({ transactions }) =>
-          and(
-            eq(transactions.travel, params.travelId),
-            gt(transactions.date, startOfDay(today)),
-            lt(transactions.date, endOfDay(today)),
-          ),
-        )
-        .select(({ transactions }) => ({
-          totalAmount: sum(transactions.amount),
-        })),
-    ).data.at(0)?.totalAmount ?? 0;
+  const todayTransactionsSum = travelTransactions
+    .filter((transaction) => dayjs(transaction.date).isSame(today, "day"))
+    .reduce((acc, transaction) => {
+      if (transaction.user === userId) {
+        return acc + transaction.amount;
+      }
+      return acc;
+    }, 0);
 
   const travelersCount = travel.users.length;
   const travelersCost = transactionsSum / travelersCount;

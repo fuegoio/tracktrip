@@ -18,7 +18,9 @@ export const Transactions = ({
   const transactions = useLiveQuery((q) =>
     q
       .from({ transactions: transactionsCollection })
-      .where(({ transactions }) => eq(transactions.travel, travelId)),
+      .where(({ transactions }) => eq(transactions.travel, travelId))
+      .orderBy(({ transactions }) => transactions.date, "desc")
+      .limit(20),
   );
   const travel = useTravel({ id: travelId });
 
