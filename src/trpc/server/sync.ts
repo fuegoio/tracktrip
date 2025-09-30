@@ -4,7 +4,6 @@ import { eventsTable } from "@/db/schema";
 import { db } from "@/db";
 
 export const drizzleEventsAdapter = async <TItem extends TrpcItem>(
-  userId: string,
   router: string,
   event: Omit<TrpcSyncEvent<TItem>, "id">,
 ): Promise<TrpcSyncEvent<TItem>> => {
@@ -12,7 +11,7 @@ export const drizzleEventsAdapter = async <TItem extends TrpcItem>(
     .insert(eventsTable)
     .values({
       router,
-      userId: userId,
+      userId: event.userId,
       action: event.action,
       data: event.data,
     })

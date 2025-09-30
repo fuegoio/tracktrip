@@ -49,7 +49,10 @@ export const travelsRouter = router({
           id: travelUser.users.id,
           name: travelUser.users.name,
           email: travelUser.users.email,
-          role: travel.ownerId === travelUser.users.id ? "owner" : "member",
+          role:
+            travel.ownerId === travelUser.users.id
+              ? ("owner" as const)
+              : ("member" as const),
         })),
       };
     });
@@ -110,8 +113,7 @@ export const travelsRouter = router({
           action: "insert",
           data: travel,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Travel>(ctx.session.user.id, "travels", event),
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
       });
 
       return {
@@ -189,8 +191,7 @@ export const travelsRouter = router({
           action: "update",
           data: travel,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Travel>(ctx.session.user.id, "travels", event),
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
       });
 
       return {
@@ -247,8 +248,7 @@ export const travelsRouter = router({
           action: "delete",
           data: travel,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Travel>(ctx.session.user.id, "travels", event),
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
       });
 
       return {
@@ -364,8 +364,7 @@ export const travelsRouter = router({
           action: "update",
           data: travel,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Travel>(ctx.session.user.id, "travels", event),
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
       });
 
       return {

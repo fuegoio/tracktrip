@@ -85,22 +85,16 @@ export const categoriesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
         .where(eq(travelsUsersTable.travel, input.travel));
 
       const eventId = await categoriesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "insert",
           data: dbCategory,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
-            ctx.session.user.id,
-            "category",
-            event,
-          ),
+        saveEvent: (event) => drizzleEventsAdapter<Category>("category", event),
       });
 
       return {
@@ -159,22 +153,17 @@ export const categoriesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbCategory.categories.travel));
 
       const eventId = await categoriesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "update",
           data: updatedCategory,
         },
         saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
-            ctx.session.user.id,
-            "categories",
-            event,
-          ),
+          drizzleEventsAdapter<Category>("categories", event),
       });
 
       return {
@@ -210,24 +199,19 @@ export const categoriesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbCategory.categories.travel));
 
       await db.delete(categoriesTable).where(eq(categoriesTable.id, input.id));
 
       const eventId = await categoriesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "delete",
           data: dbCategory.categories,
         },
         saveEvent: (event) =>
-          drizzleEventsAdapter<Category>(
-            ctx.session.user.id,
-            "categories",
-            event,
-          ),
+          drizzleEventsAdapter<Category>("categories", event),
       });
 
       return {

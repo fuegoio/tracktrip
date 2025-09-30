@@ -85,18 +85,16 @@ export const budgetsRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
         .where(eq(travelsUsersTable.travel, input.travel));
 
       const eventId = await budgetsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "insert",
           data: dbBudget,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Budget>(ctx.session.user.id, "budget", event),
+        saveEvent: (event) => drizzleEventsAdapter<Budget>("budget", event),
       });
 
       return {
@@ -155,18 +153,16 @@ export const budgetsRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbBudget.travels.id));
 
       const eventId = await budgetsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "update",
           data: updatedBudget,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Budget>(ctx.session.user.id, "budgets", event),
+        saveEvent: (event) => drizzleEventsAdapter<Budget>("budgets", event),
       });
 
       return {
@@ -202,20 +198,18 @@ export const budgetsRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbBudget.travels.id));
 
       await db.delete(budgetsTable).where(eq(budgetsTable.id, input.id));
 
       const eventId = await budgetsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "delete",
           data: dbBudget.budgets,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Budget>(ctx.session.user.id, "budgets", event),
+        saveEvent: (event) => drizzleEventsAdapter<Budget>("budgets", event),
       });
 
       return {

@@ -85,18 +85,16 @@ export const placesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
         .where(eq(travelsUsersTable.travel, input.travel));
 
       const eventId = await placesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "insert",
           data: dbPlace,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Place>(ctx.session.user.id, "place", event),
+        saveEvent: (event) => drizzleEventsAdapter<Place>("place", event),
       });
 
       return {
@@ -155,18 +153,16 @@ export const placesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbPlace.travels.id));
 
       const eventId = await placesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "update",
           data: updatedPlace,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Place>(ctx.session.user.id, "places", event),
+        saveEvent: (event) => drizzleEventsAdapter<Place>("places", event),
       });
 
       return {
@@ -202,20 +198,18 @@ export const placesRouter = router({
       const travelUsers = await db
         .select()
         .from(travelsUsersTable)
-        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
-        .where(eq(travelsUsersTable.travel, input.id));
+        .where(eq(travelsUsersTable.travel, dbPlace.travels.id));
 
       await db.delete(placesTable).where(eq(placesTable.id, input.id));
 
       const eventId = await placesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: travelUsers.map((row) => row.users.id),
+        otherUserIds: travelUsers.map((row) => row.user),
         event: {
           action: "delete",
           data: dbPlace.places,
         },
-        saveEvent: (event) =>
-          drizzleEventsAdapter<Place>(ctx.session.user.id, "places", event),
+        saveEvent: (event) => drizzleEventsAdapter<Place>("places", event),
       });
 
       return {
