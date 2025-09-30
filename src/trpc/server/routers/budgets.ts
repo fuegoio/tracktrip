@@ -82,9 +82,15 @@ export const budgetsRouter = router({
         });
       }
 
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, input.travel));
+
       const eventId = await budgetsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: dbTravel.map((row) => row.travels_users.user),
+        otherUserIds: travelUsers.map((row) => row.users.id),
         event: {
           action: "insert",
           data: dbBudget,
