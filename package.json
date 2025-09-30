@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite",
-    "build:client": "bunx --bun vite build",
+    "dev": "vite",
+    "build:client": "vite build",
     "build:server": "bun build ./src/server.ts --outdir ./dist --target bun",
-    "build": "bun run build:client && bun run build:server",
+    "build": "npm run build:client && npm run build:server",
     "start": "bun ./dist/server.js",
     "lint": "eslint .",
     "migrate": "drizzle-kit migrate",
