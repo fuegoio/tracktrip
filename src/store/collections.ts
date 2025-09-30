@@ -9,30 +9,35 @@ import type { Place } from "@/data/places";
 
 export const transactionsCollection = createCollection(
   trpcCollectionOptions<Transaction>({
+    name: "transactions",
     trpcRouter: trpcClient.transactions,
   }),
 );
 
 export const categoriesCollection = createCollection(
   trpcCollectionOptions<Category>({
+    name: "categories",
     trpcRouter: trpcClient.categories,
   }),
 );
 
 export const travelsCollection = createCollection(
   trpcCollectionOptions<Travel>({
+    name: "travels",
     trpcRouter: trpcClient.travels,
   }),
 );
 
 export const budgetsCollection = createCollection(
   trpcCollectionOptions<Budget>({
+    name: "budgets",
     trpcRouter: trpcClient.budgets,
   }),
 );
 
 export const placesCollection = createCollection(
   trpcCollectionOptions<Place>({
+    name: "places",
     trpcRouter: trpcClient.places,
   }),
 );

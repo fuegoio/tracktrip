@@ -2,6 +2,7 @@ import {
   createTRPCProxyClient,
   httpBatchLink,
   httpSubscriptionLink,
+  loggerLink,
   splitLink,
 } from "@trpc/client";
 import { QueryClient } from "@tanstack/react-query";
@@ -13,6 +14,12 @@ export const queryClient = new QueryClient();
 
 export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
+    loggerLink({
+      enabled: (opts) =>
+        (process.env.NODE_ENV === "development" &&
+          typeof window !== "undefined") ||
+        (opts.direction === "down" && opts.result instanceof Error),
+    }),
     splitLink({
       // uses the httpSubscriptionLink for subscriptions
       condition: (op) => op.type === "subscription",
