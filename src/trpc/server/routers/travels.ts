@@ -12,7 +12,7 @@ import {
 } from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
-import { and, eq, gt } from "drizzle-orm";
+import { and, eq, gt, inArray } from "drizzle-orm";
 
 const travelsRouterSync = new TrpcSync<Travel>();
 
@@ -25,35 +25,34 @@ export const travelsRouter = router({
         travelsUsersTable,
         eq(travelsTable.id, travelsUsersTable.travel),
       )
-      .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
       .where(eq(travelsUsersTable.user, ctx.session.user.id));
 
-    return travels.reduce((acc, row) => {
-      const travel = acc.find((t) => t.id === row.travels.id);
+    const travelsUsers = await db
+      .select()
+      .from(travelsUsersTable)
+      .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+      .where(
+        inArray(
+          travelsUsersTable.travel,
+          travels.map((t) => t.travels.id),
+        ),
+      );
 
-      if (travel) {
-        travel.users.push({
-          id: row.users.id,
-          name: row.users.name,
-          email: row.users.email,
-          role: row.travels.ownerId === row.users.id ? "owner" : "member",
-        });
-      } else {
-        acc.push({
-          ...row.travels,
-          users: [
-            {
-              id: row.users.id,
-              name: row.users.name,
-              email: row.users.email,
-              role: row.travels.ownerId === row.users.id ? "owner" : "member",
-            },
-          ],
-        });
-      }
+    return travels.map(({ travels: travel }) => {
+      const travelUsers = travelsUsers.filter(
+        (user) => user.travels_users.travel === travel.id,
+      );
 
-      return acc;
-    }, [] as Travel[]);
+      return {
+        ...travel,
+        users: travelUsers.map((travelUser) => ({
+          id: travelUser.users.id,
+          name: travelUser.users.name,
+          email: travelUser.users.email,
+          role: travel.ownerId === travelUser.users.id ? "owner" : "member",
+        })),
+      };
+    });
   }),
 
   create: authedProcedure
