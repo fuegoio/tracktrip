@@ -85,7 +85,7 @@ export const transactionsRouter = router({
 
       const eventId = await transactionsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: dbTravel.map((row) => row.travels_users.id),
+        otherUserIds: dbTravel.map((row) => row.travels_users.user),
         event: {
           action: "insert",
           data: dbTransaction,

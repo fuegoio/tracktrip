@@ -84,7 +84,7 @@ export const categoriesRouter = router({
 
       const eventId = await categoriesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: dbTravel.map((row) => row.travels_users.id),
+        otherUserIds: dbTravel.map((row) => row.travels_users.user),
         event: {
           action: "insert",
           data: dbCategory,

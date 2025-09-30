@@ -84,7 +84,7 @@ export const placesRouter = router({
 
       const eventId = await placesRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: dbTravel.map((row) => row.travels_users.id),
+        otherUserIds: dbTravel.map((row) => row.travels_users.user),
         event: {
           action: "insert",
           data: dbPlace,
@@ -251,4 +251,3 @@ export const placesRouter = router({
       });
     }),
 });
-

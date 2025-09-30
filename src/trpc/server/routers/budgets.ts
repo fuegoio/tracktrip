@@ -84,7 +84,7 @@ export const budgetsRouter = router({
 
       const eventId = await budgetsRouterSync.registerEvent({
         currentUserId: ctx.session.user.id,
-        otherUserIds: dbTravel.map((row) => row.travels_users.id),
+        otherUserIds: dbTravel.map((row) => row.travels_users.user),
         event: {
           action: "insert",
           data: dbBudget,
