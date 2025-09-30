@@ -19,7 +19,7 @@ export const TopBar = ({
         </Link>
       </Button>
 
-      <div className="text-3xl leading-none">{travel.emoji}</div>
+      <div className="text-2xl leading-none">{travel.emoji}</div>
 
       <NewTransactionDrawer travel={travel} userId={userId} />
     </div>
