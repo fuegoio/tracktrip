@@ -9,6 +9,7 @@ import {
   sessionsTable,
   verificationsTable,
 } from "@/db/schema";
+import { env } from "@/env";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -23,6 +24,12 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
   },
   plugins: [reactStartCookies()],
 });

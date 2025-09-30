@@ -60,6 +60,14 @@ function RouteComponent() {
     setLoading(false);
   };
 
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    await authClient.signIn.social({
+      provider: "google",
+    });
+    setLoading(false);
+  };
+
   return (
     <div className="p-6 flex flex-col justify-center gap-6 h-full">
       <div>
@@ -116,6 +124,7 @@ function RouteComponent() {
             type="button"
             className="w-full"
             disabled={loading}
+            onClick={handleGoogleLogin}
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path
