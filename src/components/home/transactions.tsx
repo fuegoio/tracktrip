@@ -7,6 +7,7 @@ import type { Transaction } from "@/data/transactions";
 import dayjs from "dayjs";
 import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
 import { useTravel } from "@/lib/params";
+import { Link } from "@tanstack/react-router";
 
 export const Transactions = ({
   travelId,
@@ -53,8 +54,10 @@ export const Transactions = ({
             <Plus className="size-4" />
           </Button>
         </NewTransactionDrawer>
-        <Button variant="secondary" size="icon" className="size-6">
-          <ArrowRight className="size-4" />
+        <Button variant="secondary" size="icon" className="size-6" asChild>
+          <Link to="/travels/$travelId/transactions" params={{ travelId }}>
+            <ArrowRight className="size-4" />
+          </Link>
         </Button>
       </div>
       {sortedDates.map((date) => (

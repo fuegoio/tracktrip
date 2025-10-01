@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { CategoryTypes } from "@/data/categories";
 import { BudgetTypeSummary } from "../budgets/budget-type-summary";
+import { Link } from "@tanstack/react-router";
 
 export const Budgets = ({ travelId }: { travelId: string }) => {
   return (
@@ -13,8 +14,10 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
           </div>
           <div className="text-xs text-subtle-foreground">For today</div>
         </div>
-        <Button variant="secondary" size="icon" className="size-6">
-          <ArrowRight className="size-4" />
+        <Button variant="secondary" size="icon" className="size-6" asChild>
+          <Link to="/travels/$travelId/settings/budgets" params={{ travelId }}>
+            <ArrowRight className="size-4" />
+          </Link>
         </Button>
       </div>
 
