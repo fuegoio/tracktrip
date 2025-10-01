@@ -13,7 +13,6 @@ import { Label } from "../ui/label";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import {
   categoriesCollection,
-  placesCollection,
   transactionsCollection,
 } from "@/store/collections";
 import { Button } from "../ui/button";
@@ -49,15 +48,6 @@ export const TransactionDrawer = ({
         .where(({ categories }) => eq(categories.travel, transaction.travel)),
     [transaction.category],
   );
-
-  const { data: places } = useLiveQuery(
-    (q) =>
-      q
-        .from({ places: placesCollection })
-        .where(({ places }) => eq(places.id, transaction.place)),
-    [transaction.place],
-  );
-  const transactionPlace = places[0];
 
   const deleteTransaction = () => {
     transactionsCollection.delete(transaction.id);
