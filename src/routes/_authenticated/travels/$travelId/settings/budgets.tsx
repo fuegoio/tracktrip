@@ -27,7 +27,7 @@ function RouteComponent() {
           Configure how you want to budget your expenses.
         </div>
       </div>
-      <BudgetSettings travelId={travelId} />;
+      <BudgetSettings travelId={travelId} />
     </>
   );
 }
