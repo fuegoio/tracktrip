@@ -34,7 +34,11 @@ export const BudgetSummary = ({ budget }: { budget: Budget }) => {
     <div className="flex flex-col items-center">
       <AnimatedCircularProgressBar
         className="size-14"
-        value={budget.amount > 0 ? todayTransactionsAmount / budget.amount : 0}
+        value={
+          budget.amount > 0
+            ? (todayTransactionsAmount / budget.amount) * 100
+            : 0
+        }
         gaugePrimaryColor="var(--color-subtle-foreground)"
         gaugeSecondaryColor="var(--color-muted)"
       >
