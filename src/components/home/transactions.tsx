@@ -9,6 +9,8 @@ import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
 import { useTravel } from "@/lib/params";
 import { Link } from "@tanstack/react-router";
 
+const RECENT_TRANSACTIONS_LIMIT = 10;
+
 export const Transactions = ({
   travelId,
   userId,
@@ -16,15 +18,16 @@ export const Transactions = ({
   travelId: string;
   userId: string;
 }) => {
-  const transactions = useLiveQuery((q) =>
+  const { data: transactions } = useLiveQuery((q) =>
     q
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travelId))
       .orderBy(({ transactions }) => transactions.date, "desc"),
-  ).data.slice(0, 10);
+  );
+  const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);
   const travel = useTravel({ id: travelId });
 
-  const transactionsGroupedByDate = transactions.reduce(
+  const transactionsGroupedByDate = recentTransactions.reduce(
     (acc, transaction) => {
       const date = dayjs(transaction.date).format("YYYY-MM-DD");
       if (!acc[date]) {
@@ -44,7 +47,7 @@ export const Transactions = ({
   );
 
   return (
-    <div className="w-full py-4 px-2 rounded-2xl shadow-up">
+    <div className="w-full py-4 px-2 rounded-2xl shadow-up pb-10">
       <div className="flex px-2 items-center gap-3">
         <div className="text-sm font-semibold text-foreground flex-1">
           Recent transactions
@@ -60,6 +63,7 @@ export const Transactions = ({
           </Link>
         </Button>
       </div>
+
       {sortedDates.map((date) => (
         <TransactionsGroup
           key={date}
@@ -67,6 +71,17 @@ export const Transactions = ({
           transactions={transactionsGroupedByDate[date]!}
         />
       ))}
+
+      {transactions.length > RECENT_TRANSACTIONS_LIMIT && (
+        <div className="flex justify-end mt-2">
+          <Button variant="link" asChild>
+            <Link to="/travels/$travelId/transactions" params={{ travelId }}>
+              View all transactions
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
