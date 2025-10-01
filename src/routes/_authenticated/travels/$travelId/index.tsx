@@ -32,10 +32,7 @@ function TravelIndex() {
   const todayTransactionsSum = travelTransactions
     .filter((transaction) => dayjs(transaction.date).isSame(today, "day"))
     .reduce((acc, transaction) => {
-      if (transaction.user === userId) {
-        return acc + transaction.amount;
-      }
-      return acc;
+      return acc + transaction.amount;
     }, 0);
 
   const travelersCount = travel.users.length;
