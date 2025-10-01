@@ -13,22 +13,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { placesCollection } from "@/store/collections";
 
 export function PlacesInput({
+  id,
   travelId,
   onChange,
+  value: externalValue,
   defaultValue,
 }: {
+  id?: string;
   travelId: string;
   disabled?: boolean;
+  value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(defaultValue || "");
+  const [value, setValue] = useState(externalValue || defaultValue || "");
   const [query, setQuery] = useState("");
 
   const { data: places } = useLiveQuery((q) =>
@@ -51,10 +55,15 @@ export function PlacesInput({
     if (onChange) onChange(place.id);
   };
 
+  useEffect(() => {
+    setValue(externalValue ?? "");
+  }, [externalValue]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="secondary"
           role="combobox"
           aria-expanded={open}
