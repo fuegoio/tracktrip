@@ -10,7 +10,7 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
       <div className="flex justify-between px-2 items-center">
         <div>
           <div className="text-sm font-semibold text-foreground">
-            Budgets by category
+            Budgets by type
           </div>
           <div className="text-xs text-subtle-foreground">For today</div>
         </div>
