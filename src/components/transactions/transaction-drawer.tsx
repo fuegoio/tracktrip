@@ -116,12 +116,14 @@ export const TransactionDrawer = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.emoji}{" "}
-                    <span className="capitalize">{category.name}</span>
-                  </SelectItem>
-                ))}
+                {categories
+                  .filter((category) => category.type === transaction.type)
+                  .map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.emoji}{" "}
+                      <span className="capitalize">{category.name}</span>
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
