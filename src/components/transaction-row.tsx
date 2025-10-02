@@ -27,7 +27,7 @@ export const TransactionRow = ({
         ) : (
           <CategoryTypeBadge categoryType={transaction.type} />
         )}
-        <div className="text-xs font-medium text-foreground">
+        <div className="text-xs font-medium text-foreground text-ellipsis min-w-0 overflow-hidden whitespace-nowrap">
           {transaction.title}
         </div>
         {transactionPlace && (
