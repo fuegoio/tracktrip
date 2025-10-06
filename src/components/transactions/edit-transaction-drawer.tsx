@@ -56,11 +56,19 @@ export const EditTransactionDrawer = ({
     if (editTransactionForm.formState.isDirty) {
       transactionsCollection.update(transaction.id, (transaction) => {
         Object.assign(transaction, values);
+
+        editTransactionForm.reset({
+          ...transaction,
+          description: transaction.description ?? "",
+          category: transaction.category ?? undefined,
+          place: transaction.place ?? undefined,
+          days: transaction.days ?? undefined,
+          meals: transaction.meals ?? undefined,
+        });
       });
     }
 
     setIsOpen(false);
-    editTransactionForm.reset();
   };
 
   return (

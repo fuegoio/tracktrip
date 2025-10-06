@@ -18,15 +18,18 @@ import {
 } from "@/store/collections";
 import { Button } from "../ui/button";
 import { useTravel } from "@/lib/params";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { PlacesInput } from "../places/places-input";
 import { EditTransactionDrawer } from "./edit-transaction-drawer";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const TransactionDrawer = ({
   children,
@@ -120,27 +123,48 @@ export const TransactionDrawer = ({
 
           <div className="h-px bg-border my-2" />
 
-          <EditTransactionDrawer transaction={transaction} travel={travel}>
-            <Button
-              type="button"
-              className="w-full mt-2"
-              size="lg"
-              variant="secondary"
-            >
-              Edit
-            </Button>
-          </EditTransactionDrawer>
-          <DrawerClose asChild>
-            <Button
-              type="button"
-              className="w-full mt-2"
-              size="lg"
-              variant="secondary"
-              onClick={deleteTransaction}
-            >
-              Delete
-            </Button>
-          </DrawerClose>
+          <div className="space-y-2">
+            <EditTransactionDrawer transaction={transaction} travel={travel}>
+              <Button
+                type="button"
+                className="w-full mt-2"
+                size="lg"
+                variant="secondary"
+              >
+                Edit
+              </Button>
+            </EditTransactionDrawer>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  className="w-full mt-2"
+                  size="lg"
+                  variant="secondary"
+                >
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this transaction.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <DrawerClose asChild>
+                    <AlertDialogAction onClick={deleteTransaction}>
+                      Delete
+                    </AlertDialogAction>
+                  </DrawerClose>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <DrawerClose asChild></DrawerClose>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
