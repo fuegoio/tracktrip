@@ -1,12 +1,11 @@
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ArrowLeft, CheckCircle, Plus } from "lucide-react";
+import { CheckCircle, Plus, X } from "lucide-react";
 import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
@@ -61,6 +60,7 @@ export const NewTransactionDrawer = ({
     const transaction = {
       id: crypto.randomUUID(),
       ...values,
+      description: values.description ?? null,
       travel: travel.id,
       createdAt: new Date(),
 
@@ -92,16 +92,15 @@ export const NewTransactionDrawer = ({
     setCreatedTransaction(null);
   };
 
+  const closeDrawer = () => {
+    setIsOpen(false);
+    createTransactionForm.reset();
+    completeTransactionForm.reset();
+    setCreatedTransaction(null);
+  };
+
   return (
-    <Drawer
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      onClose={() => {
-        createTransactionForm.reset();
-        completeTransactionForm.reset();
-        setCreatedTransaction(null);
-      }}
-    >
+    <Drawer open={isOpen} onOpenChange={setIsOpen} onClose={closeDrawer}>
       <DrawerTrigger asChild>
         {children ?? (
           <Button size="icon" variant="ghost">
@@ -111,18 +110,18 @@ export const NewTransactionDrawer = ({
       </DrawerTrigger>
       <DrawerContent>
         <div className="px-6 overflow-y-auto py-5">
-          <div className="flex items-center gap-2">
-            <DrawerClose asChild>
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="size-5" />
-              </Button>
-            </DrawerClose>
-            <DrawerTitle className="font-semibold text-lg text-foreground">
-              Add a transaction
-            </DrawerTitle>
-            <DrawerDescription className="sr-only">
-              Add a transaction to your travel.
-            </DrawerDescription>
+          <div className="flex justify-between">
+            <div>
+              <DrawerTitle className="font-semibold text-lg text-foreground">
+                Add a transaction
+              </DrawerTitle>
+              <DrawerDescription>
+                Add a transaction to your travel.
+              </DrawerDescription>
+            </div>
+            <Button variant="ghost" size="icon" onClick={closeDrawer}>
+              <X className="size-5" />
+            </Button>
           </div>
 
           {createdTransaction === null ? (
@@ -148,6 +147,7 @@ export const NewTransactionDrawer = ({
             </Form>
           ) : (
             <div>
+              <div className="h-px bg-border mt-4" />
               <TransactionHeader transaction={createdTransaction} />
               <div className="h-px bg-border" />
               <Form {...completeTransactionForm}>
@@ -168,16 +168,15 @@ export const NewTransactionDrawer = ({
                   <Button type="submit" className="w-full" size="lg">
                     Complete transaction
                   </Button>
-                  <DrawerClose asChild>
-                    <Button
-                      type="button"
-                      className="w-full"
-                      size="lg"
-                      variant="secondary"
-                    >
-                      Skip
-                    </Button>
-                  </DrawerClose>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    size="lg"
+                    variant="secondary"
+                    onClick={closeDrawer}
+                  >
+                    Skip
+                  </Button>
                 </form>
               </Form>
             </div>

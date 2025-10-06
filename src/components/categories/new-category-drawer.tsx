@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
@@ -82,18 +82,20 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
       </DrawerTrigger>
       <DrawerContent>
         <div className="px-6 overflow-y-auto py-5">
-          <div className="flex items-center gap-2">
+          <div className="flex justify-between">
+            <div>
+              <DrawerTitle className="font-semibold text-lg text-foreground">
+                Add a category
+              </DrawerTitle>
+              <DrawerDescription>
+                Add a category to your travel.
+              </DrawerDescription>
+            </div>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon">
-                <ArrowLeft className="size-5" />
+                <X className="size-5" />
               </Button>
             </DrawerClose>
-            <DrawerTitle className="font-semibold text-lg text-foreground">
-              Add a category
-            </DrawerTitle>
-            <DrawerDescription className="sr-only">
-              Add a category to your travel.
-            </DrawerDescription>
           </div>
 
           <Form {...form}>

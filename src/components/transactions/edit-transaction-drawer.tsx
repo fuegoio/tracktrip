@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
@@ -82,18 +82,20 @@ export const EditTransactionDrawer = ({
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <div className="px-6 overflow-y-auto py-5">
-          <div className="flex items-center gap-2">
+          <div className="flex justify-between">
+            <div>
+              <DrawerTitle className="font-semibold text-lg text-foreground">
+                Edit a transaction
+              </DrawerTitle>
+              <DrawerDescription>
+                Edit the transaction {transaction.title}.
+              </DrawerDescription>
+            </div>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon">
-                <ArrowLeft className="size-5" />
+                <X className="size-5" />
               </Button>
             </DrawerClose>
-            <DrawerTitle className="font-semibold text-lg text-foreground">
-              Edit a transaction
-            </DrawerTitle>
-            <DrawerDescription className="sr-only">
-              Edit a transaction in your travel.
-            </DrawerDescription>
           </div>
 
           <Form {...editTransactionForm}>
