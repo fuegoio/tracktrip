@@ -149,6 +149,7 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                       <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Popover
+                          modal={true}
                           open={isEmojiPickerOpen}
                           onOpenChange={setIsEmojiPickerOpen}
                         >
