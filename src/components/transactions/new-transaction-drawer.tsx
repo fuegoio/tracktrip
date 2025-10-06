@@ -104,6 +104,7 @@ export const NewTransactionDrawer = ({
   const onSubmitCreateTransaction = (
     values: z.infer<typeof createTransactionSchema>,
   ) => {
+    console.log("values", values);
     const transaction = {
       id: crypto.randomUUID(),
       ...values,
@@ -342,6 +343,7 @@ export const NewTransactionDrawer = ({
                           <PopoverContent className="w-auto p-0">
                             <Calendar
                               mode="single"
+                              timeZone="UTC"
                               selected={field.value}
                               onSelect={(date) => {
                                 field.onChange(date);
