@@ -4,8 +4,12 @@ import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 
 function Drawer({
+  nested = false,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Root> & { nested?: boolean }) {
+  if (nested) {
+    return <DrawerPrimitive.NestedRoot data-slot="drawer" {...props} />;
+  }
   return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 }
 

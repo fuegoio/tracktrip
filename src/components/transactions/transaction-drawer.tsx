@@ -13,6 +13,7 @@ import { Label } from "../ui/label";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import {
   categoriesCollection,
+  placesCollection,
   transactionsCollection,
 } from "@/store/collections";
 import { Button } from "../ui/button";
@@ -25,6 +26,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { PlacesInput } from "../places/places-input";
+import { EditTransactionDrawer } from "./edit-transaction-drawer";
 
 export const TransactionDrawer = ({
   children,
@@ -41,28 +43,26 @@ export const TransactionDrawer = ({
   );
   if (!transactionUser) throw new Error("User not found");
 
-  const { data: categories } = useLiveQuery(
-    (q) =>
-      q
-        .from({ categories: categoriesCollection })
-        .where(({ categories }) => eq(categories.travel, transaction.travel)),
-    [transaction.category],
-  );
+  const transactionCategory =
+    useLiveQuery(
+      (q) =>
+        q
+          .from({ categories: categoriesCollection })
+          .where(({ categories }) => eq(categories.id, transaction.category)),
+      [transaction.category],
+    ).data.at(0)?.name ?? "No category";
+
+  const transactionPlace =
+    useLiveQuery(
+      (q) =>
+        q
+          .from({ places: placesCollection })
+          .where(({ places }) => eq(places.id, transaction.place)),
+      [transaction.place],
+    ).data.at(0)?.name ?? "No place";
 
   const deleteTransaction = () => {
     transactionsCollection.delete(transaction.id);
-  };
-
-  const updateCategory = (category: string | null) => {
-    transactionsCollection.update(transaction.id, (transaction) => {
-      transaction.category = category;
-    });
-  };
-
-  const updatePlace = (place: string | null) => {
-    transactionsCollection.update(transaction.id, (transaction) => {
-      transaction.place = place;
-    });
   };
 
   return (
@@ -97,49 +97,39 @@ export const TransactionDrawer = ({
             </div>
 
             <div>
+              <Label className="font-semibold">Category</Label>
+              <p className="text-sm text-subtle-foreground capitalize">
+                {transactionCategory}
+              </p>
+            </div>
+
+            <div>
               <Label className="font-semibold">Paid by</Label>
               <p className="text-sm text-subtle-foreground capitalize">
                 {transactionUser.name}
+              </p>
+            </div>
+
+            <div>
+              <Label className="font-semibold">Place</Label>
+              <p className="text-sm text-subtle-foreground capitalize">
+                {transactionPlace}
               </p>
             </div>
           </div>
 
           <div className="h-px bg-border my-2" />
 
-          <div className="grid gap-2 py-2">
-            <Label htmlFor="category">Category</Label>
-            <Select
-              value={transaction.category ?? undefined}
-              onValueChange={updateCategory}
+          <EditTransactionDrawer transaction={transaction} travel={travel}>
+            <Button
+              type="button"
+              className="w-full mt-2"
+              size="lg"
+              variant="secondary"
             >
-              <SelectTrigger id="category" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {categories
-                  .filter((category) => category.type === transaction.type)
-                  .map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.emoji}{" "}
-                      <span className="capitalize">{category.name}</span>
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid gap-2 py-2">
-            <Label htmlFor="place">Place</Label>
-            <PlacesInput
-              id="place"
-              value={transaction.place ?? undefined}
-              onChange={updatePlace}
-              travelId={travel.id}
-            />
-          </div>
-
-          <div className="h-px bg-border my-2" />
-
+              Edit
+            </Button>
+          </EditTransactionDrawer>
           <DrawerClose asChild>
             <Button
               type="button"
