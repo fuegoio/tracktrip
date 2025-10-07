@@ -39,6 +39,15 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         ignoreURLParametersMatching: [/^v$/],
         navigateFallbackDenylist: [/^\/api/],
+        runtimeCaching: [
+          {
+            urlPattern: /\/index\.html$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "html-cache",
+            },
+          },
+        ],
       },
       manifest: {
         name: "Voyage",
