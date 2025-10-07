@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ArrowLeft, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
@@ -44,32 +44,26 @@ export const EditTransactionDrawer = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...transaction,
-      description: transaction.description ?? "",
-      category: transaction.category ?? undefined,
-      place: transaction.place ?? undefined,
-      days: transaction.days ?? undefined,
-      meals: transaction.meals ?? undefined,
     },
   });
 
+  const { isDirty } = editTransactionForm.formState;
+
   const onSubmitEditTransaction = (values: z.infer<typeof formSchema>) => {
-    if (editTransactionForm.formState.isDirty) {
+    if (isDirty) {
       transactionsCollection.update(transaction.id, (transaction) => {
         Object.assign(transaction, values);
 
         editTransactionForm.reset({
           ...transaction,
-          description: transaction.description ?? "",
-          category: transaction.category ?? undefined,
-          place: transaction.place ?? undefined,
-          days: transaction.days ?? undefined,
-          meals: transaction.meals ?? undefined,
         });
       });
     }
 
     setIsOpen(false);
   };
+
+  const transactionType = editTransactionForm.watch("type");
 
   return (
     <Drawer
@@ -105,13 +99,19 @@ export const EditTransactionDrawer = ({
               )}
               className="space-y-4 mt-6"
             >
-              <TransactionBaseForm travel={travel} form={editTransactionForm} />
+              <TransactionBaseForm
+                travel={travel}
+                form={editTransactionForm}
+                onTypeChange={() => {
+                  editTransactionForm.setValue("category", null);
+                }}
+              />
 
               <div className="h-px bg-border" />
 
               <TransactionAdditionalForm
                 travel={travel}
-                transaction={transaction}
+                transactionType={transactionType}
                 form={editTransactionForm}
               />
 

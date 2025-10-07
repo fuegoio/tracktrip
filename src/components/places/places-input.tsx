@@ -27,8 +27,8 @@ export function PlacesInput({
   id?: string;
   travelId: string;
   disabled?: boolean;
-  value?: string;
-  defaultValue?: string;
+  value?: string | null;
+  defaultValue?: string | null;
   onChange?: (value: string) => void;
 }) {
   const [open, setOpen] = useState(false);

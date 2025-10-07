@@ -19,17 +19,17 @@ import {
 import { PlacesInput } from "../places/places-input";
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { categoriesCollection } from "@/store/collections";
-import type { Transaction } from "@/data/transactions";
 import type { additionalTransactionSchema } from "./transaction-schemas";
+import type { CategoryType } from "@/data/categories";
 
 export const TransactionAdditionalForm = ({
   travel,
   form,
-  transaction,
+  transactionType,
 }: {
   travel: Travel;
   form: ReturnType<typeof useForm<z.infer<typeof additionalTransactionSchema>>>;
-  transaction: Transaction;
+  transactionType: CategoryType;
 }) => {
   const { data: categories } = useLiveQuery(
     (q) =>
@@ -38,10 +38,10 @@ export const TransactionAdditionalForm = ({
         .where(({ categories }) =>
           and(
             eq(categories.travel, travel.id),
-            eq(categories.type, transaction.type),
+            eq(categories.type, transactionType),
           ),
         ),
-    [transaction.type],
+    [transactionType],
   );
 
   return (
@@ -52,7 +52,8 @@ export const TransactionAdditionalForm = ({
         render={({ field }) => (
           <FormItem>
             <FormLabel>Category</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            {field.value}
+            <Select onValueChange={field.onChange} value={field.value ?? ""}>
               <FormControl className="w-full">
                 <SelectTrigger>
                   <SelectValue />

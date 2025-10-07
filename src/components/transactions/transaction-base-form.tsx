@@ -34,9 +34,11 @@ import type { baseTransactionSchema } from "./transaction-schemas";
 export const TransactionBaseForm = ({
   travel,
   form,
+  onTypeChange,
 }: {
   travel: Travel;
   form: ReturnType<typeof useForm<z.infer<typeof baseTransactionSchema>>>;
+  onTypeChange?: (type: string) => void;
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -66,7 +68,12 @@ export const TransactionBaseForm = ({
               <span className="text-sm text-muted-foreground">Optional</span>
             </div>
             <FormControl>
-              <Input placeholder="A great place" {...field} className="h-10" />
+              <Input
+                placeholder="A great place"
+                {...field}
+                value={field.value ?? ""}
+                className="h-10"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -100,7 +107,13 @@ export const TransactionBaseForm = ({
         render={({ field }) => (
           <FormItem>
             <FormLabel>Type</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={(value) => {
+                field.onChange(value);
+                onTypeChange?.(value);
+              }}
+              value={field.value}
+            >
               <FormControl className="w-full">
                 <SelectTrigger>
                   <SelectValue />
@@ -126,7 +139,7 @@ export const TransactionBaseForm = ({
         render={({ field }) => (
           <FormItem>
             <FormLabel>Who paid</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select onValueChange={field.onChange} value={field.value}>
               <FormControl className="w-full">
                 <SelectTrigger>
                   <SelectValue />

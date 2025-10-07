@@ -159,7 +159,7 @@ export const NewTransactionDrawer = ({
                 >
                   <TransactionAdditionalForm
                     travel={travel}
-                    transaction={createdTransaction}
+                    transactionType={createdTransaction.type}
                     form={completeTransactionForm}
                   />
 
