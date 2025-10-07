@@ -101,7 +101,6 @@ export const EditTransactionDrawer = ({
             >
               <TransactionBaseForm
                 travel={travel}
-                form={editTransactionForm}
                 onTypeChange={() => {
                   editTransactionForm.setValue("category", null);
                 }}
@@ -112,7 +111,6 @@ export const EditTransactionDrawer = ({
               <TransactionAdditionalForm
                 travel={travel}
                 transactionType={transactionType}
-                form={editTransactionForm}
               />
 
               <div className="h-px bg-border" />

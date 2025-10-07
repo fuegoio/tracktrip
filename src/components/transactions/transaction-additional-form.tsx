@@ -1,6 +1,6 @@
 import type { Travel } from "@/data/travels";
 
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import z from "zod";
 import {
   FormControl,
@@ -24,13 +24,13 @@ import type { CategoryType } from "@/data/categories";
 
 export const TransactionAdditionalForm = ({
   travel,
-  form,
   transactionType,
 }: {
   travel: Travel;
-  form: ReturnType<typeof useForm<z.infer<typeof additionalTransactionSchema>>>;
   transactionType: CategoryType;
 }) => {
+  const form = useFormContext<z.infer<typeof additionalTransactionSchema>>();
+
   const { data: categories } = useLiveQuery(
     (q) =>
       q

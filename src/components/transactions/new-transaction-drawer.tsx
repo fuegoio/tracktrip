@@ -132,10 +132,7 @@ export const NewTransactionDrawer = ({
                 )}
                 className="space-y-4 mt-6"
               >
-                <TransactionBaseForm
-                  travel={travel}
-                  form={createTransactionForm}
-                />
+                <TransactionBaseForm travel={travel} />
 
                 <div className="h-px bg-border" />
 
@@ -160,7 +157,6 @@ export const NewTransactionDrawer = ({
                   <TransactionAdditionalForm
                     travel={travel}
                     transactionType={createdTransaction.type}
-                    form={completeTransactionForm}
                   />
 
                   <div className="h-px bg-border" />

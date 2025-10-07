@@ -2,7 +2,7 @@ import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import z from "zod";
 import { format } from "date-fns";
 import {
@@ -33,13 +33,12 @@ import type { baseTransactionSchema } from "./transaction-schemas";
 
 export const TransactionBaseForm = ({
   travel,
-  form,
   onTypeChange,
 }: {
   travel: Travel;
-  form: ReturnType<typeof useForm<z.infer<typeof baseTransactionSchema>>>;
   onTypeChange?: (type: string) => void;
 }) => {
+  const form = useFormContext<z.infer<typeof baseTransactionSchema>>();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   return (
