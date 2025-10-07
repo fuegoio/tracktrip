@@ -71,6 +71,7 @@ export const placesRouter = router({
           .values({
             id: crypto.randomUUID(),
             ...input,
+            name: input.name.trim(),
           })
           .returning()
       )[0];

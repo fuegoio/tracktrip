@@ -9,26 +9,69 @@ import {
 import { Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { placesCollection } from "@/store/collections";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { eq, useLiveQuery } from "@tanstack/react-db";
+import { useState } from "react";
+
+const formSchema = z.object({
+  name: z.string("Name is required.").min(1, "Name is required."),
+});
 
 export const NewPlaceDrawer = ({ travelId }: { travelId: string }) => {
-  const [newPlaceName, setNewPlaceName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
 
-  const handleAddPlace = () => {
-    if (newPlaceName.trim()) {
-      placesCollection.insert({
-        id: crypto.randomUUID(),
-        name: newPlaceName.trim(),
-        travel: travelId,
+  // Get existing places for this travel
+  const { data: existingPlaces } = useLiveQuery((q) =>
+    q
+      .from({ places: placesCollection })
+      .where(({ places }) => eq(places.travel, travelId)),
+  );
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    // Check if place with same name already exists
+    const placeExists = existingPlaces?.some(
+      (place) => place.name.toLowerCase() === values.name.trim().toLowerCase(),
+    );
+
+    if (placeExists) {
+      form.setError("name", {
+        type: "manual",
+        message: "A place with this name already exists",
       });
-      setNewPlaceName("");
+      return;
     }
+
+    placesCollection.insert({
+      id: crypto.randomUUID(),
+      name: values.name.trim(),
+      travel: travelId,
+    });
+
+    setIsOpen(false);
+    form.reset();
   };
 
   return (
-    <Drawer>
+    <Drawer open={isOpen} onOpenChange={setIsOpen} onClose={() => form.reset()}>
       <DrawerTrigger asChild>
         <Button className="w-full">
           <Plus className="h-4 w-4 mr-2" />
@@ -42,9 +85,7 @@ export const NewPlaceDrawer = ({ travelId }: { travelId: string }) => {
               <DrawerTitle className="font-semibold text-lg text-foreground">
                 Add a place
               </DrawerTitle>
-              <DrawerDescription>
-                Add a place to your travel.
-              </DrawerDescription>
+              <DrawerDescription>Add a place to your travel.</DrawerDescription>
             </div>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon">
@@ -53,25 +94,35 @@ export const NewPlaceDrawer = ({ travelId }: { travelId: string }) => {
             </DrawerClose>
           </div>
 
-          <div className="space-y-4 mt-6">
-            <div className="space-y-2">
-              <Input
-                placeholder="Place name"
-                value={newPlaceName}
-                onChange={(e) => setNewPlaceName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleAddPlace();
-                  }
-                }}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 mt-6"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Place name" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter the name of the place.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <DrawerClose asChild>
-              <Button onClick={handleAddPlace} className="w-full">
+
+              <div className="h-px bg-border" />
+
+              <Button type="submit" className="w-full">
                 Add place
               </Button>
-            </DrawerClose>
-          </div>
+            </form>
+          </Form>
         </div>
       </DrawerContent>
     </Drawer>

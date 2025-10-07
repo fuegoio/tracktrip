@@ -6,7 +6,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ArrowLeft, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
