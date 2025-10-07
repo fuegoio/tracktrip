@@ -41,6 +41,8 @@ export function PlacesInput({
       .where(({ places }) => eq(places.travel, travelId)),
   );
 
+  const querySanitized = query.trim();
+
   const createPlace = () => {
     const place = {
       id: crypto.randomUUID(),
@@ -58,6 +60,10 @@ export function PlacesInput({
   useEffect(() => {
     setValue(externalValue ?? "");
   }, [externalValue]);
+
+  const queryMatchPlace = places.find(
+    (place) => place.name.toLowerCase() === querySanitized.toLowerCase(),
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -87,7 +93,7 @@ export function PlacesInput({
             if (value.startsWith("new:")) return 1;
 
             const place = places.find((place) => place.id === value);
-            if (place?.name.includes(search)) return 1;
+            if (place?.name.includes(search.trim())) return 1;
             return 0;
           }}
         >
@@ -119,10 +125,13 @@ export function PlacesInput({
                   />
                 </CommandItem>
               ))}
-              {query && (
-                <CommandItem value={`new:${query}`} onSelect={createPlace}>
+              {query && !queryMatchPlace && (
+                <CommandItem
+                  value={`new:${querySanitized}`}
+                  onSelect={createPlace}
+                >
                   <Plus className="h-4 w-4" />
-                  Create new place: "{query}"
+                  Create new place: "{querySanitized}"
                 </CommandItem>
               )}
             </CommandGroup>
