@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Gauge, Tag, User } from "lucide-react";
+import { ChevronRight, Gauge, MapPin, Tag, User } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/",
@@ -10,6 +10,7 @@ export const Route = createFileRoute(
 const travelLinks = [
   { name: "People", path: "./users", icon: User },
   { name: "Categories", path: "./categories", icon: Tag },
+  { name: "Places", path: "./places", icon: MapPin },
   { name: "Budgets", path: "./budgets", icon: Gauge },
 ] as const;
 
