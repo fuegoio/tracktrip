@@ -29,7 +29,7 @@ function Index() {
         <div>
           <div className="font-semibold text-2xl">Your travels</div>
           <div className="text-muted-foreground text-sm">
-            Find all your travels here.
+            Find all your travels here. toto
           </div>
         </div>
         <Button size="icon" asChild>

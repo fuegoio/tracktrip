@@ -33,47 +33,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: "prompt",
-      injectRegister: "auto",
-      workbox: {
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
+      injectManifest: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-        ignoreURLParametersMatching: [/^v$/],
-        //navigateFallback: null,
-        //directoryIndex: null,
-        runtimeCaching: [
-          // {
-          //   urlPattern: ({ request }) => request.mode === "navigate",
-          //   handler: "NetworkFirst",
-          //   options: {
-          //     cacheName: "html-cache",
-          //     precacheFallback: {
-          //       fallbackURL: "index.html",
-          //     },
-          //   },
-          // },
-          // Cache Google Fonts
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "StaleWhileRevalidate",
-            options: {
-              cacheName: "google-fonts-stylesheets",
-            },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-webfonts",
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-              },
-            },
-          },
-        ],
       },
       manifest: {
         name: "Voyage",

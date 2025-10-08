@@ -1,24 +1,10 @@
-import { useRegisterSW } from "virtual:pwa-register/react";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
-export function Update() {
-  const { updateServiceWorker } = useRegisterSW({
-    immediate: true,
-    onNeedRefresh() {
-      toast("A new version is available", {
-        action: {
-          label: "Reload",
-          onClick: () => {
-            updateServiceWorker(true);
-          },
-        },
-        duration: Infinity,
-        closeButton: true,
-      });
-    },
-  });
-
+/**
+ * Install toast if we detect that the PWA is ready.
+ */
+export function Install() {
   useEffect(() => {
     if (/Android|iPhone/i.test(navigator.userAgent)) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

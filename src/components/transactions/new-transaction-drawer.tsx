@@ -87,9 +87,7 @@ export const NewTransactionDrawer = ({
       transaction.meals = values.meals ?? null;
     });
 
-    setIsOpen(false);
-    completeTransactionForm.reset();
-    setCreatedTransaction(null);
+    closeDrawer();
   };
 
   const closeDrawer = () => {
