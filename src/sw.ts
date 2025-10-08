@@ -103,14 +103,14 @@ registerRoute(
 registerRoute(
   ({ url }) => url.origin === "https://fonts.googleapis.com",
   new StaleWhileRevalidate({
-    cacheName: "google-fonts-stylesheets",
+    cacheName: "google-fonts",
   }),
 );
 
 registerRoute(
   ({ url }) => url.origin === "https://fonts.gstatic.com",
   new CacheFirst({
-    cacheName: "google-fonts-webfonts",
+    cacheName: "google-fonts",
     plugins: [new CacheableResponsePlugin({ statuses: [0, 200] })],
   }),
 );
