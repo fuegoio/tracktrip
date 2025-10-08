@@ -71,7 +71,7 @@ export const transactionsRouter = router({
           .values({
             id: crypto.randomUUID(),
             ...input,
-            name: input.name.trim(),
+            title: input.title.trim(),
           })
           .returning()
       )[0];

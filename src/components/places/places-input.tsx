@@ -93,7 +93,8 @@ export function PlacesInput({
             if (value.startsWith("new:")) return 1;
 
             const place = places.find((place) => place.id === value);
-            if (place?.name.includes(search.trim())) return 1;
+            if (place?.name.toLowerCase().includes(search.trim().toLowerCase()))
+              return 1;
             return 0;
           }}
         >
