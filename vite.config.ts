@@ -38,15 +38,19 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         ignoreURLParametersMatching: [/^v$/],
-        navigateFallbackDenylist: [/^\/api/],
+        //navigateFallback: null,
+        //directoryIndex: null,
         runtimeCaching: [
-          {
-            urlPattern: /\/index\.html$/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "html-cache",
-            },
-          },
+          // {
+          //   urlPattern: ({ request }) => request.mode === "navigate",
+          //   handler: "NetworkFirst",
+          //   options: {
+          //     cacheName: "html-cache",
+          //     precacheFallback: {
+          //       fallbackURL: "index.html",
+          //     },
+          //   },
+          // },
           // Cache Google Fonts
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

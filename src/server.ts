@@ -22,7 +22,17 @@ const routes = {
     const filePath = new URL(req.url).pathname;
     const file = Bun.file(`./dist${filePath}`);
     if (await file.exists()) {
-      return new Response(file);
+      const response = new Response(file);
+
+      // Add cache headers for files in the assets/ directory
+      if (filePath.startsWith("/assets/")) {
+        response.headers.set(
+          "Cache-Control",
+          "public, max-age=31536000, immutable",
+        );
+      }
+
+      return response;
     }
 
     // If the file doesn't exist, serve the index.html
