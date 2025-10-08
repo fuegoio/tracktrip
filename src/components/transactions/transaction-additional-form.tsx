@@ -52,7 +52,10 @@ export const TransactionAdditionalForm = ({
         render={({ field }) => (
           <FormItem>
             <FormLabel>Category</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value ?? ""}>
+            <Select
+              onValueChange={(value) => field.onChange(value ?? null)}
+              value={field.value ?? ""}
+            >
               <FormControl className="w-full">
                 <SelectTrigger>
                   <SelectValue />

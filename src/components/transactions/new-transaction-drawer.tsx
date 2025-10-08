@@ -52,6 +52,12 @@ export const NewTransactionDrawer = ({
     z.infer<typeof additionalTransactionSchema>
   >({
     resolver: zodResolver(additionalTransactionSchema),
+    defaultValues: {
+      category: null,
+      place: null,
+      days: null,
+      meals: null,
+    },
   });
 
   const onSubmitCreateTransaction = (
@@ -81,10 +87,7 @@ export const NewTransactionDrawer = ({
     if (!createdTransaction) return;
 
     transactionsCollection.update(createdTransaction.id, (transaction) => {
-      transaction.category = values.category ?? null;
-      transaction.place = values.place ?? null;
-      transaction.days = values.days ?? null;
-      transaction.meals = values.meals ?? null;
+      Object.assign(transaction, values);
     });
 
     closeDrawer();
