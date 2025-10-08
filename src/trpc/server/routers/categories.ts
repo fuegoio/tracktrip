@@ -14,6 +14,7 @@ import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
 import { and, eq, gt } from "drizzle-orm";
 import type { Category } from "@/data/categories";
+import { checkTravelPermission } from "./helpers/travels";
 
 const categoriesRouterSync = new TrpcSync<Category>();
 
@@ -43,27 +44,10 @@ export const categoriesRouter = router({
         }),
     )
     .mutation(async ({ input, ctx }) => {
-      const dbTravel = await db
-        .select()
-        .from(travelsTable)
-        .innerJoin(
-          travelsUsersTable,
-          eq(travelsTable.id, travelsUsersTable.travel),
-        )
-        .where(
-          and(
-            eq(travelsTable.id, input.travel),
-            eq(travelsTable.ownerId, ctx.session.user.id),
-          ),
-        )
-        .limit(1);
-
-      if (dbTravel.length === 0) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Travel not found",
-        });
-      }
+      await checkTravelPermission({
+        travelId: input.travel,
+        userId: ctx.session.user.id,
+      });
 
       const dbCategory = (
         await db
@@ -120,10 +104,14 @@ export const categoriesRouter = router({
           .select()
           .from(categoriesTable)
           .innerJoin(travelsTable, eq(categoriesTable.travel, travelsTable.id))
+          .innerJoin(
+            travelsUsersTable,
+            eq(travelsTable.id, travelsUsersTable.travel),
+          )
           .where(
             and(
               eq(categoriesTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)
@@ -181,10 +169,14 @@ export const categoriesRouter = router({
           .select()
           .from(categoriesTable)
           .innerJoin(travelsTable, eq(categoriesTable.travel, travelsTable.id))
+          .innerJoin(
+            travelsUsersTable,
+            eq(travelsTable.id, travelsUsersTable.travel),
+          )
           .where(
             and(
               eq(categoriesTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)

@@ -1,6 +1,6 @@
 {
-  "id": "d00b50a0-4337-4686-9fe3-27f687e4c30d",
-  "prevId": "8a54efa5-4ad6-4a2d-9332-7ca771bd4766",
+  "id": "2e8cc56d-33dd-4604-b858-0b1351833824",
+  "prevId": "4ca51935-6665-4754-a53f-fa35ba99398f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -480,11 +480,31 @@
           "primaryKey": false,
           "notNull": false
         },
+        "type": {
+          "name": "type",
+          "type": "category_types",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "users": {
+          "name": "users",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
         "category": {
           "name": "category",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "place": {
           "name": "place",
@@ -543,7 +563,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "transactions_place_places_id_fk": {
@@ -556,7 +576,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },

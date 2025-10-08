@@ -30,6 +30,16 @@ import {
 import { AmountInput } from "../ui/amount-input";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import type { baseTransactionSchema } from "./transaction-schemas";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UsersDropdown } from "./users-dropdown";
 
 export const TransactionBaseForm = ({
   travel,
@@ -67,11 +77,11 @@ export const TransactionBaseForm = ({
               <span className="text-sm text-muted-foreground">Optional</span>
             </div>
             <FormControl>
-              <Input
+              <Textarea
                 placeholder="A great place"
                 {...field}
                 value={field.value ?? ""}
-                className="h-10"
+                rows={2}
               />
             </FormControl>
             <FormMessage />
@@ -132,30 +142,47 @@ export const TransactionBaseForm = ({
         )}
       />
 
-      <FormField
-        control={form.control}
-        name="user"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Who paid</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
-              <FormControl className="w-full">
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {travel.users.map((user) => (
-                  <SelectItem key={user.id} value={user.id}>
-                    {user.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="flex gap-2">
+        <FormField
+          control={form.control}
+          name="user"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Who paid</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl className="w-full">
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {travel.users.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      {user.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="users"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>For who</FormLabel>
+              <UsersDropdown
+                travel={travel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <FormField
         control={form.control}

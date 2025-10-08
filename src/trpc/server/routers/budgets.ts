@@ -8,12 +8,12 @@ import {
   eventsTable,
   travelsTable,
   travelsUsersTable,
-  usersTable,
 } from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
 import { drizzleEventsAdapter } from "../sync";
 import { and, eq, gt } from "drizzle-orm";
 import type { Budget } from "@/data/budgets";
+import { checkTravelPermission } from "./helpers/travels";
 
 const budgetsRouterSync = new TrpcSync<Budget>();
 
@@ -43,27 +43,10 @@ export const budgetsRouter = router({
         }),
     )
     .mutation(async ({ input, ctx }) => {
-      const dbTravel = await db
-        .select()
-        .from(travelsTable)
-        .innerJoin(
-          travelsUsersTable,
-          eq(travelsTable.id, travelsUsersTable.travel),
-        )
-        .where(
-          and(
-            eq(travelsTable.id, input.travel),
-            eq(travelsTable.ownerId, ctx.session.user.id),
-          ),
-        )
-        .limit(1);
-
-      if (dbTravel.length === 0) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Travel not found",
-        });
-      }
+      await checkTravelPermission({
+        travelId: input.travel,
+        userId: ctx.session.user.id,
+      });
 
       const dbBudget = (
         await db
@@ -119,10 +102,14 @@ export const budgetsRouter = router({
           .select()
           .from(budgetsTable)
           .innerJoin(travelsTable, eq(budgetsTable.travel, travelsTable.id))
+          .innerJoin(
+            travelsUsersTable,
+            eq(travelsTable.id, travelsUsersTable.travel),
+          )
           .where(
             and(
               eq(budgetsTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)
@@ -179,10 +166,14 @@ export const budgetsRouter = router({
           .select()
           .from(budgetsTable)
           .innerJoin(travelsTable, eq(budgetsTable.travel, travelsTable.id))
+          .innerJoin(
+            travelsUsersTable,
+            eq(travelsTable.id, travelsUsersTable.travel),
+          )
           .where(
             and(
               eq(budgetsTable.id, input.id),
-              eq(travelsTable.ownerId, ctx.session.user.id),
+              eq(travelsUsersTable.user, ctx.session.user.id),
             ),
           )
           .limit(1)

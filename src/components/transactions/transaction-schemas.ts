@@ -7,10 +7,11 @@ export const baseTransactionSchema = z.object({
   date: z.date(),
   user: z.string(),
   amount: z.coerce
-    .number<number>("Amount is required")
+    .number<number>("Amount is required.")
     .positive("Amount must be positive."),
   currency: z.string(),
   type: z.enum(CategoryTypes, "Type is required."),
+  users: z.string().array().nonempty().nullable(),
 });
 
 export const additionalTransactionSchema = z.object({

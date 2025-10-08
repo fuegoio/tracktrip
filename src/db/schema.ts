@@ -136,14 +136,15 @@ export const transactionsTable = pgTable("transactions", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
+  users: text().array(),
 
   /*
    * Optional fields
    */
   category: uuid().references(() => categoriesTable.id, {
-    onDelete: "cascade",
+    onDelete: "set null",
   }),
-  place: uuid().references(() => placesTable.id, { onDelete: "cascade" }),
+  place: uuid().references(() => placesTable.id, { onDelete: "set null" }),
   days: integer(),
   meals: integer(),
 });

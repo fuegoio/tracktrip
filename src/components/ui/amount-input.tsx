@@ -22,12 +22,13 @@ export function AmountInput({
   currencyDefaultValue,
   onAmountChange,
   onCurrencyChange,
+  ...props
 }: {
   amountDefaultValue?: number;
   currencyDefaultValue: string;
   onAmountChange: (amount: number) => void;
   onCurrencyChange: (currency: string) => void;
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   const [open, setOpen] = useState(false);
   const [currency, setCurrency] = useState(currencyDefaultValue);
   const [amount, setAmount] = useState(amountDefaultValue?.toString() ?? "");
@@ -60,9 +61,14 @@ export function AmountInput({
 
   return (
     <div
+      data-slot="input"
+      role="group"
       className={cn(
-        "flex items-center rounded-md border border-transparent focus-within:border-ring bg-input/50 focus-within:bg-background ring-offset-background transition-colors focus-within:ring-2 focus-within:ring-ring/50 focus-within:ring-offset-2 h-10",
+        "flex items-center rounded-md border border-transparent focus-within:border-ring bg-secondary focus-within:bg-background transition-colors h-10",
+        "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
       )}
+      {...props}
     >
       <span className="pl-3 pr-1 text-muted-foreground text-sm">
         {selectedCurrency?.symbol}

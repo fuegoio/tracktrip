@@ -1,6 +1,6 @@
 {
-  "id": "c5a01a20-a997-4055-be91-20570d60a335",
-  "prevId": "d00b50a0-4337-4686-9fe3-27f687e4c30d",
+  "id": "4ca51935-6665-4754-a53f-fa35ba99398f",
+  "prevId": "d655c36a-a2a4-4212-8004-6128163fe86a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -486,6 +486,19 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "users": {
+          "name": "users",
+          "type": "uuid[]",
+          "primaryKey": false,
+          "notNull": false
         },
         "category": {
           "name": "category",
