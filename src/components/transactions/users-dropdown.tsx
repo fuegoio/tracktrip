@@ -17,7 +17,7 @@ export const UsersDropdown = ({
 }: {
   travel: Travel;
   value?: string[] | null;
-  onChange: (value: string[]) => void;
+  onChange: (value: string[] | null) => void;
 }) => {
   const [selectedUsers, setSelectedUsers] = useState<string[]>(
     value ?? travel.users.map((user) => user.id),
@@ -38,7 +38,7 @@ export const UsersDropdown = ({
     }
 
     setSelectedUsers(newSelectedUsers);
-    onChange(newSelectedUsers);
+    onChange(newSelectedUsers.length === 0 ? null : newSelectedUsers);
   };
 
   return (

@@ -45,6 +45,7 @@ export const NewTransactionDrawer = ({
       date: new Date(),
       currency: "EUR",
       user: userId,
+      users: null,
     },
   });
 
