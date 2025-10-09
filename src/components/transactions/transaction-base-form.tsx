@@ -2,7 +2,7 @@ import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import z from "zod";
 import { format } from "date-fns";
 import {
@@ -31,14 +31,6 @@ import { AmountInput } from "../ui/amount-input";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import type { baseTransactionSchema } from "./transaction-schemas";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { UsersDropdown } from "./users-dropdown";
 
 export const TransactionBaseForm = ({

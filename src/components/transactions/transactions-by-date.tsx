@@ -4,8 +4,10 @@ import dayjs from "dayjs";
 
 export const TransactionsByDate = ({
   transactions,
+  userId,
 }: {
   transactions: Transaction[];
+  userId: string;
 }) => {
   const transactionsGroupedByDate = transactions.reduce(
     (acc, transaction) => {
@@ -31,6 +33,7 @@ export const TransactionsByDate = ({
       key={date}
       date={new Date(date)}
       transactions={transactionsGroupedByDate[date]!}
+      userId={userId}
     />
   ));
 };

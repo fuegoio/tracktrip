@@ -114,6 +114,26 @@ export const TransactionDrawer = ({
             </div>
 
             <div>
+              <Label className="font-semibold">For who</Label>
+              <p className="text-sm text-subtle-foreground capitalize">
+                {(transaction.users === null ||
+                  transaction.users.length === travel.users.length) &&
+                  "Everyone"}
+
+                {transaction.users?.length === 1 &&
+                  travel.users.length > 1 &&
+                  travel.users.find((user) => user.id === transaction.users![0])
+                    ?.name}
+
+                {transaction.users &&
+                transaction.users.length > 1 &&
+                transaction.users.length < travel.users.length
+                  ? `${transaction.users.length} people`
+                  : ""}
+              </p>
+            </div>
+
+            <div>
               <Label className="font-semibold">Place</Label>
               <p className="text-sm text-subtle-foreground capitalize">
                 {transactionPlace}

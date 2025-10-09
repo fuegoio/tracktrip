@@ -1,9 +1,8 @@
 import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
-import { Button } from "@/components/ui/button";
 import { transactionsCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
-import { ListFilter, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -19,6 +18,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
+  const { session } = Route.useRouteContext();
   const [search, setSearch] = useState("");
 
   const transactions = useLiveQuery((q) =>
@@ -57,7 +57,10 @@ function RouteComponent() {
         </InputGroup>
       </div>
 
-      <TransactionsByDate transactions={filteredTransactions} />
+      <TransactionsByDate
+        transactions={filteredTransactions}
+        userId={session.user.id}
+      />
     </div>
   );
 }

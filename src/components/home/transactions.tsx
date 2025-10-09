@@ -43,7 +43,7 @@ export const Transactions = ({
         </Button>
       </div>
 
-      <TransactionsByDate transactions={recentTransactions} />
+      <TransactionsByDate transactions={recentTransactions} userId={userId} />
 
       {transactions.length > RECENT_TRANSACTIONS_LIMIT && (
         <div className="flex justify-end mt-2">

@@ -4,11 +4,14 @@ import { CategoryTypeBadge } from "./category-type-badge";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { placesCollection } from "@/store/collections";
 import { TransactionDrawer } from "./transactions/transaction-drawer";
+import { cn } from "@/lib/utils";
 
 export const TransactionRow = ({
   transaction,
+  userId,
 }: {
   transaction: Transaction;
+  userId: string;
 }) => {
   const { data: places } = useLiveQuery(
     (q) =>
@@ -19,9 +22,17 @@ export const TransactionRow = ({
   );
   const transactionPlace = places[0];
 
+  const isUserConcerned =
+    transaction.users === null || transaction.users.includes(userId);
+
   return (
     <TransactionDrawer transaction={transaction}>
-      <div className="flex items-center gap-4 h-10 rounded bg-subtle px-3">
+      <div
+        className={cn(
+          "flex items-center gap-4 h-10 rounded bg-subtle px-3",
+          !isUserConcerned && "opacity-50",
+        )}
+      >
         {transaction.category ? (
           <CategoryBadge categoryId={transaction.category} />
         ) : (
