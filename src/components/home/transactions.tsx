@@ -1,13 +1,11 @@
 import { ArrowRight, Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import { TransactionsGroup } from "../transactions-group";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
-import type { Transaction } from "@/data/transactions";
-import dayjs from "dayjs";
 import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
 import { useTravel } from "@/lib/params";
 import { Link } from "@tanstack/react-router";
+import { TransactionsByDate } from "../transactions/transactions-by-date";
 
 const RECENT_TRANSACTIONS_LIMIT = 10;
 
@@ -27,25 +25,6 @@ export const Transactions = ({
   const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);
   const travel = useTravel({ id: travelId });
 
-  const transactionsGroupedByDate = recentTransactions.reduce(
-    (acc, transaction) => {
-      const date = dayjs(transaction.date).format("YYYY-MM-DD");
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push({ ...transaction, date: new Date(transaction.date) });
-      return acc;
-    },
-    {} as Record<string, Transaction[]>,
-  );
-
-  // Sort the dates in descending order
-  const sortedDates = Object.keys(transactionsGroupedByDate || {}).sort(
-    (a, b) => {
-      return dayjs(b).unix() - dayjs(a).unix();
-    },
-  );
-
   return (
     <div className="w-full py-4 px-2 rounded-2xl shadow-up pb-10">
       <div className="flex px-2 items-center gap-3">
@@ -64,13 +43,7 @@ export const Transactions = ({
         </Button>
       </div>
 
-      {sortedDates.map((date) => (
-        <TransactionsGroup
-          key={date}
-          date={new Date(date)}
-          transactions={transactionsGroupedByDate[date]!}
-        />
-      ))}
+      <TransactionsByDate transactions={recentTransactions} />
 
       {transactions.length > RECENT_TRANSACTIONS_LIMIT && (
         <div className="flex justify-end mt-2">
