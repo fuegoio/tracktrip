@@ -30,7 +30,7 @@ function RouteComponent() {
 
         <Outlet />
       </div>
-      <NavBar />
+      <NavBar travel={travel} userId={userId} />
     </>
   );
 }
