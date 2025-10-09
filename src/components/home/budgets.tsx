@@ -6,7 +6,7 @@ import { Link } from "@tanstack/react-router";
 
 export const Budgets = ({ travelId }: { travelId: string }) => {
   return (
-    <div className="w-full py-4 px-2 rounded-2xl shadow-up">
+    <div className="w-full py-4 px-2 shadow-up">
       <div className="flex justify-between px-2 items-center">
         <div>
           <div className="text-sm font-semibold text-foreground">

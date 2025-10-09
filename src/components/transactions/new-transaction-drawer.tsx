@@ -31,7 +31,7 @@ export const NewTransactionDrawer = ({
 }: {
   travel: Travel;
   userId: string;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [createdTransaction, setCreatedTransaction] =
@@ -102,13 +102,7 @@ export const NewTransactionDrawer = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen} onClose={closeDrawer}>
-      <DrawerTrigger asChild>
-        {children ?? (
-          <Button size="icon" variant="ghost">
-            <Plus className="size-5" />
-          </Button>
-        )}
-      </DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <div className="px-6 overflow-y-auto py-5">
           <div className="flex justify-between">

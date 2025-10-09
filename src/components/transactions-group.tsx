@@ -16,7 +16,7 @@ export const TransactionsGroup = ({
 
   return (
     <div className="mt-4">
-      <div className="px-2 text-subtle-foreground text-xs mb-2">
+      <div className="px-2.5 text-subtle-foreground text-xs mb-2">
         {dayjs(date).format("DD MMMM YYYY")}
       </div>
 

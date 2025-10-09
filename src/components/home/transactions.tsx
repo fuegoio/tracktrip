@@ -26,7 +26,7 @@ export const Transactions = ({
   const travel = useTravel({ id: travelId });
 
   return (
-    <div className="w-full py-4 px-2 rounded-2xl shadow-up pb-10">
+    <div className="w-full py-4 px-2 shadow-up pb-10">
       <div className="flex px-2 items-center gap-3">
         <div className="text-sm font-semibold text-foreground flex-1">
           Recent transactions
