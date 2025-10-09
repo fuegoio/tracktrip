@@ -1,27 +1,37 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { travelsCollection } from "@/store/collections";
-import { useEffect } from "react";
 import { ArrowRight, ChevronRight, Plus } from "lucide-react";
 import dayjs from "dayjs";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: Index,
+  loader: () => {
+    const lastTravelId = window.localStorage.getItem("travelId");
+    if (lastTravelId) {
+      throw redirect({
+        to: "/travels/$travelId",
+        params: {
+          travelId: lastTravelId,
+        },
+      });
+    }
+
+    window.localStorage.removeItem("travelId");
+
+    if (travelsCollection.size === 0) {
+      throw redirect({
+        to: "/travels/new",
+      });
+    }
+  },
 });
 
 function Index() {
-  const navigate = Route.useNavigate();
-
   const { data: travels } = useLiveQuery((q) =>
     q.from({ travels: travelsCollection }),
   );
-
-  useEffect(() => {
-    if (travelsCollection.isReady() && travels.length === 0) {
-      navigate({ to: "/travels/new" });
-    }
-  }, [navigate, travels.length]);
 
   return (
     <div className="p-5 pt-10">

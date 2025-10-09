@@ -1,10 +1,19 @@
 import { NavBar } from "@/components/nav-bar";
 import { TopBar } from "@/components/top-bar";
 import { useTravel } from "@/lib/params";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { travelsCollection } from "@/store/collections";
+import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/travels/$travelId")({
   component: RouteComponent,
+  loader: ({ params: { travelId } }) => {
+    const travel = travelsCollection.get(travelId);
+    if (!travel) {
+      throw notFound();
+    }
+
+    window.localStorage.setItem("travelId", travelId);
+  },
 });
 
 function RouteComponent() {
