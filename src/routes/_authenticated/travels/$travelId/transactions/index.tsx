@@ -74,7 +74,7 @@ function RouteComponent() {
           insightsOpen && "-translate-x-1/2",
         )}
       >
-        <div className="w-full py-4 px-2">
+        <div className="w-1/2 py-4 px-2">
           <div className="flex px-2 items-center">
             <div className="text-2xl font-semibold text-foreground flex-1 min-w-0">
               Transactions
@@ -177,7 +177,7 @@ function RouteComponent() {
           )}
         </div>
 
-        <div className="w-full py-4 px-2">
+        <div className="w-1/2 py-4 px-2">
           <Button variant="secondary" onClick={() => setInsightsOpen(false)}>
             <ArrowLeft />
             Transactions
