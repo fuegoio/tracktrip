@@ -2,7 +2,7 @@ import { TransactionsByDate } from "@/components/transactions/transactions-by-da
 import { transactionsCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import { ListFilterPlus, Plus, Search } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -21,6 +21,8 @@ import { List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewTransactionDrawer } from "@/components/transactions/new-transaction-drawer";
 import { useTravel } from "@/lib/params";
+import type { Filter } from "@/data/filters";
+import { TransactionFilter } from "@/components/transactions/transaction-filter";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/transactions/",
@@ -43,8 +45,21 @@ function RouteComponent() {
       .where(({ transactions }) => eq(transactions.travel, travelId)),
   );
 
-  const filteredTransactions = transactions.data.filter((transaction) =>
-    transaction.title.toLowerCase().includes(search.toLowerCase()),
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const addFilter = (filter: Filter) => {
+    setFilters((prev) => [...prev, filter]);
+  };
+
+  const filteredTransactions = transactions.data.filter(
+    (transaction) =>
+      transaction.title.toLowerCase().includes(search.toLowerCase()) &&
+      filters.every((filter) => {
+        if (filter.value === undefined) return true;
+        if (filter.field === "type") {
+          return transaction.type === filter.value;
+        }
+        return true;
+      }),
   );
 
   return (
@@ -57,26 +72,60 @@ function RouteComponent() {
       <div className="h-[1px] bg-border/50 mx-2 my-2" />
       {transactions.data.length > 0 && (
         <>
-          <div className="px-2 py-2">
-            <InputGroup className="h-9">
-              <InputGroupInput
-                name="search-transactions"
-                placeholder="Search..."
-                value={search}
-                className="h-9"
-                onChange={(event) => setSearch(event.target.value)}
-              />
-              <InputGroupAddon>
-                <Search />
-              </InputGroupAddon>
-              {search.length > 0 && (
-                <InputGroupAddon align="inline-end">
-                  {filteredTransactions.length} result
-                  {filteredTransactions.length > 1 ? "s" : ""}
+          <div className="px-2 space-y-2">
+            <div className="flex gap-2">
+              <InputGroup className="h-9 bg-background border-input">
+                <InputGroupInput
+                  name="search-transactions"
+                  placeholder="Search..."
+                  value={search}
+                  className="h-9"
+                  onChange={(event) => setSearch(event.target.value)}
+                />
+                <InputGroupAddon className="text-secondary-foreground">
+                  <Search />
                 </InputGroupAddon>
-              )}
-            </InputGroup>
+                {search.length > 0 && (
+                  <InputGroupAddon align="inline-end">
+                    {filteredTransactions.length} result
+                    {filteredTransactions.length > 1 ? "s" : ""}
+                  </InputGroupAddon>
+                )}
+              </InputGroup>
+              <Button
+                size="icon"
+                variant="outline"
+                className="size-9"
+                onClick={() =>
+                  addFilter({ field: undefined, value: undefined })
+                }
+              >
+                <ListFilterPlus />
+              </Button>
+            </div>
+
+            {filters.length > 0 && (
+              <div className="flex gap-2 flex-wrap">
+                {filters.map((filter, index) => (
+                  <TransactionFilter
+                    key={index}
+                    filter={filter}
+                    onChange={(newFilter) => {
+                      setFilters((previous) =>
+                        previous.map((f) => (f === filter ? newFilter : f)),
+                      );
+                    }}
+                    onDelete={() => {
+                      setFilters((previous) =>
+                        previous.filter((f) => f !== filter),
+                      );
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
+
           <div className="h-[1px] bg-border/50 mx-2 my-2" />
 
           <TransactionsByDate
