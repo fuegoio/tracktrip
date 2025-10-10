@@ -1,4 +1,4 @@
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, List, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
@@ -6,6 +6,14 @@ import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
 import { useTravel } from "@/lib/params";
 import { Link } from "@tanstack/react-router";
 import { TransactionsByDate } from "../transactions/transactions-by-date";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
 
 const RECENT_TRANSACTIONS_LIMIT = 10;
 
@@ -23,19 +31,18 @@ export const Transactions = ({
       .orderBy(({ transactions }) => transactions.date, "desc"),
   );
   const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);
-  const travel = useTravel({ id: travelId });
 
   return (
     <div className="w-full py-4 px-2 shadow-up pb-10">
       <div className="flex px-2 items-center gap-3">
-        <div className="text-sm font-semibold text-foreground flex-1">
-          Recent transactions
+        <div className="flex-1">
+          <div className="text-sm font-semibold text-foreground">
+            Recent transactions
+          </div>
+          <div className="text-xs text-subtle-foreground">
+            Of the last few days
+          </div>
         </div>
-        <NewTransactionDrawer travel={travel} userId={userId}>
-          <Button variant="outline" size="icon" className="size-6">
-            <Plus className="size-4" />
-          </Button>
-        </NewTransactionDrawer>
         <Button variant="secondary" size="icon" className="size-6" asChild>
           <Link to="/travels/$travelId/transactions" params={{ travelId }}>
             <ArrowRight className="size-4" />
@@ -44,6 +51,20 @@ export const Transactions = ({
       </div>
 
       <TransactionsByDate transactions={recentTransactions} userId={userId} />
+
+      {recentTransactions.length === 0 && (
+        <Empty className="py-8">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <List />
+            </EmptyMedia>
+            <EmptyTitle>No transactions yet</EmptyTitle>
+            <EmptyDescription>
+              There is no transaction created for this travel yet.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
 
       {transactions.length > RECENT_TRANSACTIONS_LIMIT && (
         <div className="flex justify-end mt-2">
