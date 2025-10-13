@@ -1,15 +1,11 @@
-import { ArrowLeftRight, Menu } from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
 import { Button } from "./ui/button";
 import type { Travel } from "@/data/travels";
 import { Link } from "@tanstack/react-router";
+import { UserMenu } from "./user-menu";
+import type { User } from "better-auth";
 
-export const TopBar = ({
-  travel,
-  userId,
-}: {
-  travel: Travel;
-  userId: string;
-}) => {
+export const TopBar = ({ travel, user }: { travel: Travel; user: User }) => {
   const clearTravelId = () => {
     localStorage.removeItem("travelId");
   };
@@ -24,7 +20,7 @@ export const TopBar = ({
 
       <div className="text-2xl leading-none">{travel.emoji}</div>
 
-      <div data-slot="notifications" className="w-8"></div>
+      <UserMenu user={user} />
     </div>
   );
 };
