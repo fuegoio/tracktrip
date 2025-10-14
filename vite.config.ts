@@ -43,7 +43,8 @@ export default defineConfig({
         name: "Voyage",
         short_name: "Voyage",
         description: "Voyage is a travel app.",
-        theme_color: "#ffffff",
+        theme_color: "#232323",
+        background_color: "#232323",
         icons: [
           {
             src: "pwa-64x64.png",

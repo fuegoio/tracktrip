@@ -67,15 +67,15 @@ function RouteComponent() {
   );
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full h-full overflow-x-hidden">
       <div
         className={cn(
           "flex w-[200%] h-full transition-transform",
           insightsOpen && "-translate-x-1/2",
         )}
       >
-        <div className="w-1/2 py-4">
-          <div className="flex px-4 items-center dark">
+        <div className="w-1/2 h-full">
+          <div className="flex px-6 py-4 items-center dark top-[56px] absolute w-full">
             <div className="text-2xl font-semibold text-foreground flex-1 min-w-0">
               Transactions
             </div>
@@ -85,7 +85,7 @@ function RouteComponent() {
             </Button>
           </div>
 
-          <div className="rounded-lg bg-background shadow-up mt-6 px-2 py-4 min-h-screen">
+          <div className="rounded-lg bg-background shadow-up px-2 py-4 h-full mt-[128px] translate-y-0">
             {transactions.data.length > 0 && (
               <>
                 <div className="px-2 space-y-2">

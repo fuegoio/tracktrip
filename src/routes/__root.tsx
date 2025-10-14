@@ -8,7 +8,7 @@ import { Install } from "@/components/install";
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="bg-primary min-h-screen w-full max-w-md mx-auto">
+      <main className="bg-primary min-h-screen w-full max-w-md mx-auto h-full relative">
         <Outlet />
       </main>
 

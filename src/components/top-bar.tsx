@@ -11,7 +11,7 @@ export const TopBar = ({ travel, user }: { travel: Travel; user: User }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-4 py-3 border-b-border/50">
+    <div className="w-full flex items-center justify-between px-4 py-3 absolute">
       <Button variant="default" size="icon" asChild onClick={clearTravelId}>
         <Link to="/">
           <ArrowLeftRight className="size-4 text-primary-foreground" />

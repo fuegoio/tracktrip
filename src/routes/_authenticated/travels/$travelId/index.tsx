@@ -53,7 +53,7 @@ function TravelIndex() {
 
   return (
     <>
-      <div className="px-5 py-6 dark">
+      <div className="px-5 py-6 dark absolute top-[56px]">
         <div className="font-semibold text-xl text-foreground">Hi Alexis,</div>
         <div className="mt-1 text-muted-foreground text-sm">
           What are we doing today?
@@ -102,8 +102,10 @@ function TravelIndex() {
         </div>
       </div>
 
-      <Budgets travelId={travel.id} />
-      <Transactions travelId={travel.id} userId={userId} />
+      <div className="overflow-y-auto h-full pt-[324px] flex flex-col">
+        <Budgets travelId={travel.id} />
+        <Transactions travelId={travel.id} userId={userId} />
+      </div>
     </>
   );
 }

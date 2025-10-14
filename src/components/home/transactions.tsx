@@ -30,7 +30,7 @@ export const Transactions = ({
   const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);
 
   return (
-    <div className="w-full py-4 px-2 shadow-up pb-10 bg-background rounded-lg translate-y-0">
+    <div className="w-full py-4 px-2 shadow-up pb-10 bg-background rounded-t-lg flex-1 translate-y-0">
       <div className="flex px-2 items-center gap-3">
         <div className="flex-1">
           <div className="text-sm font-semibold text-foreground">

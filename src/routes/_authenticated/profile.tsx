@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/auth/client";
 import { ArrowLeft, Edit } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { setCachedSession } from "@/auth/cache";
 import { useForm } from "react-hook-form";
@@ -102,11 +101,11 @@ function RouteComponent() {
   };
 
   return (
-    <>
-      <div className="w-full flex items-center justify-between px-4 py-3 border-b-border/50 border-b bg-background">
+    <div className="flex flex-col h-full">
+      <div className="w-full flex items-center justify-between px-4 py-3 dark text-foreground">
         <Button size="icon" variant="ghost" asChild>
           <Link to="/">
-            <ArrowLeft className="size-5 text-subtle-foreground" />
+            <ArrowLeft className="size-5" />
           </Link>
         </Button>
 
@@ -115,60 +114,60 @@ function RouteComponent() {
         <div className="size-8" />
       </div>
 
-      <div className="px-6 py-6 space-y-8">
-        <div className="flex flex-col items-center gap-3">
-          <div className="relative">
-            <Avatar className="size-[72px]">
-              <AvatarImage src={user.image ?? ""} alt={user.name} />
-              <AvatarFallback>{user.name.charAt(0) || "U"}</AvatarFallback>
-            </Avatar>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full absolute -bottom-2 -right-2"
-              onClick={() => imageInputRef.current?.click()}
-            >
-              <Edit className="size-4" />
-            </Button>
-            <input
-              id="image"
-              ref={imageInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <h3 className="text-xl font-semibold">{user.name}</h3>
-            <p className="text-sm text-muted-foreground">{user.email}</p>
-          </div>
+      <div className="flex flex-col items-center gap-3 px-6 py-6">
+        <div className="relative">
+          <Avatar className="size-20">
+            <AvatarImage src={user.image ?? ""} alt={user.name} />
+            <AvatarFallback>{user.name.charAt(0) || "U"}</AvatarFallback>
+          </Avatar>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full absolute -bottom-2 -right-2"
+            onClick={() => imageInputRef.current?.click()}
+          >
+            <Edit className="size-4" />
+          </Button>
+          <input
+            id="image"
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full">
-              Save Changes
-            </Button>
-          </form>
-        </Form>
+        <div className="flex flex-col items-center dark">
+          <h3 className="text-xl font-semibold text-foreground">{user.name}</h3>
+          <p className="text-sm text-muted-foreground">{user.email}</p>
+        </div>
       </div>
+
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 rounded-t-lg bg-background p-6 flex-1 shadow-up"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button type="submit" className="w-full">
+            Save Changes
+          </Button>
+        </form>
+      </Form>
       <canvas ref={canvasRef} style={{ display: "none" }} />
-    </>
+    </div>
   );
 }
-

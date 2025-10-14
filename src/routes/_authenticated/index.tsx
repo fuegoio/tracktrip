@@ -35,11 +35,13 @@ function Index() {
 
   return (
     <div className="p-5 pt-10">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between dark">
         <div>
-          <div className="font-semibold text-2xl">Your travels</div>
+          <div className="font-semibold text-2xl text-foreground">
+            Your travels
+          </div>
           <div className="text-muted-foreground text-sm">
-            Find all your travels here. toto
+            Find all your travels here.
           </div>
         </div>
         <Button size="icon" asChild>
@@ -56,7 +58,7 @@ function Index() {
             params={{
               travelId: travel.id,
             }}
-            className="flex items-center justify-between py-3 px-4 text-foreground border rounded-lg gap-2 text-lg shadow-sm"
+            className="bg-background flex items-center justify-between py-3 px-4 text-foreground border rounded-lg gap-2 text-lg shadow-sm"
             key={travel.id}
           >
             <div>
