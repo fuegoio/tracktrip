@@ -53,7 +53,7 @@ function TravelIndex() {
 
   return (
     <>
-      <div className="px-5 py-6">
+      <div className="px-5 py-6 dark">
         <div className="font-semibold text-xl text-foreground">Hi Alexis,</div>
         <div className="mt-1 text-muted-foreground text-sm">
           What are we doing today?

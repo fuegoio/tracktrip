@@ -2,13 +2,10 @@ import { ArrowRight, List, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
-import { NewTransactionDrawer } from "../transactions/new-transaction-drawer";
-import { useTravel } from "@/lib/params";
 import { Link } from "@tanstack/react-router";
 import { TransactionsByDate } from "../transactions/transactions-by-date";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -33,7 +30,7 @@ export const Transactions = ({
   const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);
 
   return (
-    <div className="w-full py-4 px-2 shadow-up pb-10">
+    <div className="w-full py-4 px-2 shadow-up pb-10 bg-background rounded-lg translate-y-0">
       <div className="flex px-2 items-center gap-3">
         <div className="flex-1">
           <div className="text-sm font-semibold text-foreground">

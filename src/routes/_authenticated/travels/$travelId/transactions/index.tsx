@@ -74,8 +74,8 @@ function RouteComponent() {
           insightsOpen && "-translate-x-1/2",
         )}
       >
-        <div className="w-1/2 py-4 px-2">
-          <div className="flex px-2 items-center">
+        <div className="w-1/2 py-4">
+          <div className="flex px-4 items-center dark">
             <div className="text-2xl font-semibold text-foreground flex-1 min-w-0">
               Transactions
             </div>
@@ -84,97 +84,101 @@ function RouteComponent() {
               Analyse
             </Button>
           </div>
-          <div className="h-[1px] bg-border/50 mx-2 my-2" />
-          {transactions.data.length > 0 && (
-            <>
-              <div className="px-2 space-y-2">
-                <div className="flex gap-2">
-                  <InputGroup className="h-9 bg-background border-input">
-                    <InputGroupInput
-                      name="search-transactions"
-                      placeholder="Search..."
-                      value={search}
-                      className="h-9"
-                      onChange={(event) => setSearch(event.target.value)}
-                    />
-                    <InputGroupAddon className="text-secondary-foreground">
-                      <Search />
-                    </InputGroupAddon>
-                    <InputGroupAddon align="inline-end">
-                      {(search.length > 0 || filters.length > 0) && (
-                        <>
-                          {filteredTransactions.length} result
-                          {filteredTransactions.length > 1 ? "s" : ""}
-                        </>
-                      )}
-                      <InputGroupButton
-                        className="text-secondary-foreground"
-                        onClick={() =>
-                          addFilter({ field: undefined, value: undefined })
-                        }
-                      >
-                        <ListFilterPlus />
-                      </InputGroupButton>
-                    </InputGroupAddon>
-                  </InputGroup>
+
+          <div className="rounded-lg bg-background shadow-up mt-6 px-2 py-4 min-h-screen">
+            {transactions.data.length > 0 && (
+              <>
+                <div className="px-2 space-y-2">
+                  <div className="flex gap-2">
+                    <InputGroup className="h-9 bg-background border-input">
+                      <InputGroupInput
+                        name="search-transactions"
+                        placeholder="Search..."
+                        value={search}
+                        className="h-9"
+                        onChange={(event) => setSearch(event.target.value)}
+                      />
+                      <InputGroupAddon className="text-secondary-foreground">
+                        <Search />
+                      </InputGroupAddon>
+                      <InputGroupAddon align="inline-end">
+                        {(search.length > 0 || filters.length > 0) && (
+                          <>
+                            {filteredTransactions.length} result
+                            {filteredTransactions.length > 1 ? "s" : ""}
+                          </>
+                        )}
+                        <InputGroupButton
+                          className="text-secondary-foreground"
+                          onClick={() =>
+                            addFilter({ field: undefined, value: undefined })
+                          }
+                        >
+                          <ListFilterPlus />
+                        </InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </div>
+
+                  {filters.length > 0 && (
+                    <div className="flex gap-2 flex-wrap">
+                      {filters.map((filter, index) => (
+                        <TransactionFilter
+                          key={index}
+                          filter={filter}
+                          onChange={(newFilter) => {
+                            setFilters((previous) =>
+                              previous.map((f) =>
+                                f === filter ? newFilter : f,
+                              ),
+                            );
+                          }}
+                          onDelete={() => {
+                            setFilters((previous) =>
+                              previous.filter((f) => f !== filter),
+                            );
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                {filters.length > 0 && (
-                  <div className="flex gap-2 flex-wrap">
-                    {filters.map((filter, index) => (
-                      <TransactionFilter
-                        key={index}
-                        filter={filter}
-                        onChange={(newFilter) => {
-                          setFilters((previous) =>
-                            previous.map((f) => (f === filter ? newFilter : f)),
-                          );
-                        }}
-                        onDelete={() => {
-                          setFilters((previous) =>
-                            previous.filter((f) => f !== filter),
-                          );
-                        }}
-                      />
-                    ))}
-                  </div>
+                <div className="h-[1px] bg-border/50 mx-2 my-2" />
+
+                <TransactionsByDate
+                  transactions={filteredTransactions}
+                  userId={session.user.id}
+                />
+              </>
+            )}
+
+            {filteredTransactions.length === 0 && (
+              <Empty className="py-20">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon">
+                    <List />
+                  </EmptyMedia>
+                  <EmptyTitle>No transaction found</EmptyTitle>
+                  <EmptyDescription>
+                    {search.length === 0
+                      ? "There is no transaction created for this travel yet."
+                      : "There isn't any transaction matching your filters."}
+                  </EmptyDescription>
+                </EmptyHeader>
+                {search.length === 0 && (
+                  <EmptyContent>
+                    <NewTransactionDrawer
+                      travel={travel}
+                      userId={session.user.id}
+                    >
+                      <Button>Create transaction</Button>
+                    </NewTransactionDrawer>
+                  </EmptyContent>
                 )}
-              </div>
-
-              <div className="h-[1px] bg-border/50 mx-2 my-2" />
-
-              <TransactionsByDate
-                transactions={filteredTransactions}
-                userId={session.user.id}
-              />
-            </>
-          )}
-
-          {filteredTransactions.length === 0 && (
-            <Empty className="py-20">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <List />
-                </EmptyMedia>
-                <EmptyTitle>No transaction found</EmptyTitle>
-                <EmptyDescription>
-                  {search.length === 0
-                    ? "There is no transaction created for this travel yet."
-                    : "There isn't any transaction matching your filters."}
-                </EmptyDescription>
-              </EmptyHeader>
-              {search.length === 0 && (
-                <EmptyContent>
-                  <NewTransactionDrawer
-                    travel={travel}
-                    userId={session.user.id}
-                  >
-                    <Button>Create transaction</Button>
-                  </NewTransactionDrawer>
-                </EmptyContent>
-              )}
-            </Empty>
-          )}
+              </Empty>
+            )}
+          </div>
         </div>
 
         <div className="w-1/2 py-4 px-2">
