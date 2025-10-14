@@ -15,7 +15,7 @@ const router = createRouter({
   routeTree,
   defaultNotFoundComponent: () => {
     return (
-      <div className="flex flex-col items-center justify-center h-screen w-screen">
+      <div className="flex flex-col items-center justify-center h-full w-full">
         <p className="text-7xl font-bold">404</p>
         <p className="text-xl text-subtle-foreground">
           This page can't be found
