@@ -8,9 +8,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { CircleUser, LogOut } from "lucide-react";
 import { authClient } from "@/auth/client";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 export const UserMenu = ({ user }: { user: User }) => {
   const navigate = useNavigate();
@@ -31,11 +31,9 @@ export const UserMenu = ({ user }: { user: User }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="size-7 rounded-sm">
+        <Avatar className="size-7">
           <AvatarImage src={user.image ?? ""} alt={user.name} />
-          <AvatarFallback className="rounded-sm text-xs">
-            {initials}
-          </AvatarFallback>
+          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -46,11 +44,9 @@ export const UserMenu = ({ user }: { user: User }) => {
       >
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-            <Avatar className="h-8 w-8 rounded-lg">
+            <Avatar className="h-8 w-8">
               <AvatarImage src={user.image ?? ""} alt={user.name} />
-              <AvatarFallback className="rounded-lg text-sm">
-                {initials}
-              </AvatarFallback>
+              <AvatarFallback className="text-sm">{initials}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user.name}</span>
@@ -61,6 +57,12 @@ export const UserMenu = ({ user }: { user: User }) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/profile">
+            <CircleUser />
+            Profile
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>
           <LogOut />
           Log out
