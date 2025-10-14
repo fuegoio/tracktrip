@@ -15,7 +15,7 @@ export const CategoryTypeBadge = ({
   return (
     <div
       className={cn(
-        "rounded-full size-7 flex items-center justify-center text-sm",
+        "rounded-full size-7 flex items-center justify-center text-sm inset-ring-4 inset-ring-white/40",
         categoryTypeToColor[categoryType],
         className,
       )}

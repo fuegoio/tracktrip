@@ -29,7 +29,7 @@ export const TransactionRow = ({
     <TransactionDrawer transaction={transaction}>
       <div
         className={cn(
-          "flex items-center gap-4 h-10 rounded bg-subtle px-3",
+          "flex items-center gap-4 h-10 rounded bg-subtle px-3 inset-ring-2 inset-ring-white/40",
           !isUserConcerned && "opacity-50",
         )}
       >
