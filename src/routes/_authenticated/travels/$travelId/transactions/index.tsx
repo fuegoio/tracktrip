@@ -26,6 +26,8 @@ import type { Filter } from "@/data/filters";
 import { TransactionFilter } from "@/components/transactions/transaction-filter";
 import { TransactionInsights } from "@/components/transactions/transactions-insights";
 import { cn } from "@/lib/utils";
+import { ScreenHeader } from "@/components/layout/screen-header";
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/transactions/",
@@ -75,7 +77,7 @@ function RouteComponent() {
         )}
       >
         <div className="w-1/2 h-full">
-          <div className="flex px-6 py-4 items-center dark top-[56px] absolute w-full">
+          <ScreenHeader className="flex items-center">
             <div className="text-2xl font-semibold text-foreground flex-1 min-w-0">
               Transactions
             </div>
@@ -83,9 +85,9 @@ function RouteComponent() {
               <ChartArea />
               Analyse
             </Button>
-          </div>
+          </ScreenHeader>
 
-          <div className="rounded-lg bg-background shadow-up px-2 py-4 h-full mt-[128px] translate-y-0">
+          <ScreenDrawer>
             {transactions.data.length > 0 && (
               <>
                 <div className="px-2 space-y-2">
@@ -178,7 +180,7 @@ function RouteComponent() {
                 )}
               </Empty>
             )}
-          </div>
+          </ScreenDrawer>
         </div>
 
         <div className="w-1/2 py-4 px-2">

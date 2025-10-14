@@ -5,6 +5,7 @@ import {
   type SessionData,
 } from "@/auth/cache";
 import { authClient } from "@/auth/client";
+import { ScreenLayoutProvider } from "@/components/layout/screen-layout-context";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -54,5 +55,9 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function RouteComponent() {
-  return <Outlet />;
+  return (
+    <ScreenLayoutProvider>
+      <Outlet />
+    </ScreenLayoutProvider>
+  );
 }

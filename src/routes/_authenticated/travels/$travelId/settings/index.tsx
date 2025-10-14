@@ -1,3 +1,5 @@
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight, Gauge, MapPin, Tag, User } from "lucide-react";
 
@@ -17,15 +19,14 @@ const travelLinks = [
 function RouteComponent() {
   return (
     <>
-      <div className="px-5 py-6">
+      <ScreenHeader>
         <div className="font-semibold text-xl">Settings</div>
         <div className="text-muted-foreground text-sm mt-1">
           Control your travel experience easily from here.
         </div>
-      </div>
+      </ScreenHeader>
 
-      <div className="px-5 space-y-2">
-        <div className="text-muted-foreground text-xs font-medium">Travel</div>
+      <ScreenDrawer className="space-y-2 px-5 py-6">
         {travelLinks.map((link) => (
           <Link
             from={Route.fullPath}
@@ -41,7 +42,7 @@ function RouteComponent() {
             <ChevronRight className="size-4 text-muted-foreground" />
           </Link>
         ))}
-      </div>
+      </ScreenDrawer>
     </>
   );
 }

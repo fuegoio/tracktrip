@@ -93,12 +93,12 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
 
   return (
     <>
-      <div className="space-y-6 px-5">
+      <div className="space-y-6 px-3">
         <div>
           {CategoryTypes.map((type: CategoryType) => {
             const budget = existingBudgets.find((b) => b.categoryType === type);
             return (
-              <div key={type} className="space-y-2 border-t py-4">
+              <div key={type} className="space-y-2 border-b py-4">
                 <div className="flex items-center gap-2 justify-between">
                   <div className="flex items-center gap-2">
                     <CategoryTypeBadge categoryType={type} />

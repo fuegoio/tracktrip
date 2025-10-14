@@ -1,5 +1,7 @@
 import { Budgets } from "@/components/home/budgets";
 import { Transactions } from "@/components/home/transactions";
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
@@ -53,7 +55,7 @@ function TravelIndex() {
 
   return (
     <>
-      <div className="px-5 py-6 dark absolute top-[56px]">
+      <ScreenHeader>
         <div className="font-semibold text-xl text-foreground">Hi Alexis,</div>
         <div className="mt-1 text-muted-foreground text-sm">
           What are we doing today?
@@ -100,12 +102,12 @@ function TravelIndex() {
             </div>
           )}
         </div>
-      </div>
+      </ScreenHeader>
 
-      <div className="overflow-y-auto h-full pt-[324px] flex flex-col">
+      <ScreenDrawer asChild>
         <Budgets travelId={travel.id} />
         <Transactions travelId={travel.id} userId={userId} />
-      </div>
+      </ScreenDrawer>
     </>
   );
 }

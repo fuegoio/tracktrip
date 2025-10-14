@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
 import { Badge } from "@/components/ui/badge";
+import { ScreenHeader } from "@/components/layout/screen-header";
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/users",
@@ -29,23 +31,26 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="px-1 py-4">
-        <Button variant="ghost" asChild className="text-subtle-foreground">
-          <Link from={Route.fullPath} to="..">
-            <ChevronLeft className="h-4 w-4" />
-            Back
-          </Link>
-        </Button>
-      </div>
-
-      <div className="px-5 pb-6">
-        <div className="font-semibold text-xl">People</div>
+      <ScreenHeader>
+        <div className="flex items-center">
+          <Button
+            variant="ghost"
+            asChild
+            className="text-subtle-foreground"
+            size="icon"
+          >
+            <Link from={Route.fullPath} to="..">
+              <ChevronLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <div className="ml-2 font-semibold text-xl">People</div>
+        </div>
         <div className="text-muted-foreground text-sm mt-1">
           Who is traveling with you.
         </div>
-      </div>
+      </ScreenHeader>
 
-      <div className="px-5 pb-4 space-y-4">
+      <ScreenDrawer className="px-5 pb-4 space-y-4">
         <InviteUserDrawer travelId={travelId} />
 
         <div className="h-px bg-border" />
@@ -76,7 +81,7 @@ function RouteComponent() {
             </DropdownMenu>
           </div>
         ))}
-      </div>
+      </ScreenDrawer>
     </>
   );
 }
