@@ -23,7 +23,12 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
 
       <div className="flex px-4 justify-between items-center mt-4">
         {CategoryTypes.map((type) => (
-          <BudgetTypeSummary travelId={travelId} type={type} key={type} />
+          <BudgetTypeSummary
+            period="day"
+            travelId={travelId}
+            type={type}
+            key={type}
+          />
         ))}
       </div>
     </div>

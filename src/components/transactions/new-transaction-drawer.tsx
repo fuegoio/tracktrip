@@ -57,7 +57,6 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
-      meals: null,
     },
   });
 
@@ -74,7 +73,6 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
-      meals: null,
     };
     transactionsCollection.insert(transaction);
 

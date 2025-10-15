@@ -16,5 +16,4 @@ export type Transaction = {
   description: string | null;
   place: string | null;
   days: number | null;
-  meals: number | null;
 };

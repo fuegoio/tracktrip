@@ -18,5 +18,4 @@ export const additionalTransactionSchema = z.object({
   category: z.string().nullable(),
   place: z.string().nullable(),
   days: z.number().nullable(),
-  meals: z.number().nullable(),
 });

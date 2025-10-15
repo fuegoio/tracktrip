@@ -7,3 +7,10 @@ export type Budget = {
   category: string | null;
   amount: number;
 };
+
+export type BudgetPeriod =
+  | "day"
+  | "week"
+  | "month"
+  | "travelUntilNow"
+  | "travel";

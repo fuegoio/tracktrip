@@ -1,7 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { BudgetSettings } from "@/components/budgets/budget-settings";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/budgets/configure",
@@ -14,7 +16,19 @@ function RouteComponent() {
   return (
     <>
       <ScreenHeader>
-        <div className="font-semibold text-2xl">Budgets</div>
+        <div className="flex items-center">
+          <Button
+            variant="ghost"
+            asChild
+            className="text-subtle-foreground"
+            size="icon"
+          >
+            <Link from={Route.fullPath} to="..">
+              <ChevronLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <div className="ml-2 font-semibold text-xl">Budget setting</div>
+        </div>
         <div className="text-muted-foreground text-sm mt-1">
           Configure how you want to budget your expenses.
         </div>

@@ -2,13 +2,16 @@ import type { CategoryType } from "@/data/categories";
 import { budgetsCollection } from "@/store/collections";
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { BudgetSummary } from "../budget-summary";
+import type { BudgetPeriod } from "@/data/budgets";
 
 export const BudgetTypeSummary = ({
   type,
   travelId,
+  period,
 }: {
   type: CategoryType;
   travelId: string;
+  period: BudgetPeriod;
 }) => {
   const budget = useLiveQuery(
     (q) =>
@@ -30,9 +33,10 @@ export const BudgetTypeSummary = ({
           category: null,
           amount: 0,
         }}
+        period={period}
       />
     );
   }
 
-  return <BudgetSummary budget={budget} />;
+  return <BudgetSummary budget={budget} period={period} />;
 };

@@ -146,7 +146,6 @@ export const transactionsTable = pgTable("transactions", {
   }),
   place: uuid().references(() => placesTable.id, { onDelete: "set null" }),
   days: integer(),
-  meals: integer(),
 });
 
 export const budgetsTable = pgTable("budgets", {
