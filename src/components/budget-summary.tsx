@@ -10,7 +10,6 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import { ArrowRight, TriangleAlert } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
 
 export const BudgetSummary = ({
   budget,
@@ -40,8 +39,6 @@ export const BudgetSummary = ({
       .where(({ transactions }) =>
         and(
           eq(transactions.travel, travel.id),
-          gt(transactions.date, startOfPeriod.toDate()),
-          lt(transactions.date, endOfPeriod.toDate()),
           budget.categoryType
             ? eq(transactions.type, budget.categoryType)
             : true,
@@ -49,8 +46,30 @@ export const BudgetSummary = ({
         ),
       );
   });
+
   const periodTransactionsAmount = periodTransactions.reduce(
-    (acc, transaction) => acc + transaction.amount,
+    (acc, transaction) => {
+      const transactionDate = transaction.activationDate || transaction.date;
+      const activationStart = dayjs(transactionDate);
+      const activationEnd = activationStart
+        .add((transaction.days ?? 1) - 1, "day")
+        .endOf("day");
+
+      // Calculate overlap with the period
+      const overlapStart =
+        activationStart > startOfPeriod ? activationStart : startOfPeriod;
+      const overlapEnd =
+        activationEnd < endOfPeriod ? activationEnd : endOfPeriod;
+
+      if (overlapStart <= overlapEnd) {
+        const numberOfDaysInPeriod = overlapEnd.diff(overlapStart, "day") + 1;
+        return (
+          acc +
+          (transaction.amount / (transaction.days ?? 1)) * numberOfDaysInPeriod
+        );
+      }
+      return acc;
+    },
     0,
   );
 
