@@ -28,6 +28,7 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
             travelId={travelId}
             type={type}
             key={type}
+            compact
           />
         ))}
       </div>

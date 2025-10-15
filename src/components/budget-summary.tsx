@@ -6,13 +6,20 @@ import { and, eq, gt, lt, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
 import { useTravel } from "@/lib/params";
 import dayjs from "dayjs";
+import { Progress } from "./ui/progress";
+import { Button } from "./ui/button";
+import { ArrowRight, TriangleAlert } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 
 export const BudgetSummary = ({
   budget,
   period,
+  compact = false,
 }: {
   budget: Budget;
   period: BudgetPeriod;
+  compact?: boolean;
 }) => {
   const now = dayjs();
   const travel = useTravel({ id: budget.travel });
@@ -50,15 +57,73 @@ export const BudgetSummary = ({
   const daysOfPeriod = endOfPeriod.diff(startOfPeriod, "day");
   const budgetAmount = budget.amount * daysOfPeriod;
 
+  const budgetPercentage =
+    budget.amount > 0 ? (periodTransactionsAmount / budgetAmount) * 100 : 0;
+
+  if (!compact) {
+    return (
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          {budget.categoryType && (
+            <>
+              <CategoryTypeBadge categoryType={budget.categoryType} />
+              <span className="text-foreground capitalize text-xs font-medium">
+                {budget.categoryType}
+              </span>
+            </>
+          )}
+          {budget.category && <CategoryBadge categoryId={budget.category} />}
+          <div className="flex-1" />
+          {budgetPercentage > 100 && (
+            <div className="text-destructive flex items-center gap-1">
+              <TriangleAlert className="size-4" />
+              <span className="text-xs">
+                +
+                {(budgetPercentage - 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 0,
+                })}
+                %
+              </span>
+            </div>
+          )}
+          <Button size="icon" variant="secondary" className="size-5" asChild>
+            <Link
+              to="/travels/$travelId/transactions"
+              params={{ travelId: travel.id }}
+            >
+              <ArrowRight className="size-3" />
+            </Link>
+          </Button>
+        </div>
+
+        <Progress value={budgetPercentage} />
+        <div className="flex items-center justify-between">
+          <div className="font-mono font-medium text-xs text-foreground mt-1">
+            {periodTransactionsAmount.toLocaleString(undefined, {
+              style: "currency",
+              currency: travel.currency,
+            })}
+          </div>
+          {budgetAmount > 0 ? (
+            <div className="font-mono text-xs text-muted-foreground">
+              {budgetAmount.toLocaleString(undefined, {
+                style: "currency",
+                currency: travel.currency,
+              })}
+            </div>
+          ) : (
+            <div className="font-mono text-xs text-muted-foreground"> - </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center">
       <AnimatedCircularProgressBar
         className="size-14"
-        value={
-          budget.amount > 0
-            ? (periodTransactionsAmount / budgetAmount) * 100
-            : 0
-        }
+        value={budgetPercentage}
         gaugePrimaryColor="var(--color-subtle-foreground)"
         gaugeSecondaryColor="var(--color-muted)"
       >
@@ -66,6 +131,12 @@ export const BudgetSummary = ({
           <CategoryTypeBadge categoryType={budget.categoryType} />
         )}
         {budget.category && <CategoryBadge categoryId={budget.category} />}
+
+        {budgetPercentage > 100 && (
+          <div className="p-0.5 rounded-full bg-background/70 absolute bottom-3 right-3 text-destructive">
+            <TriangleAlert className="size-3" />
+          </div>
+        )}
       </AnimatedCircularProgressBar>
       <div className="font-mono font-medium text-xs text-foreground mt-1">
         {periodTransactionsAmount.toLocaleString(undefined, {

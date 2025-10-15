@@ -25,7 +25,7 @@ export const ScreenDrawer = ({
       ) : (
         <div
           className={cn(
-            "rounded-t-lg bg-background shadow-up translate-y-0 py-4 px-2 flex-1",
+            "rounded-t-lg bg-background shadow-up translate-y-0 pt-4 pb-20 px-2 flex-1",
             className,
           )}
         >

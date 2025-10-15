@@ -8,10 +8,12 @@ export const BudgetTypeSummary = ({
   type,
   travelId,
   period,
+  compact = false,
 }: {
   type: CategoryType;
   travelId: string;
   period: BudgetPeriod;
+  compact?: boolean;
 }) => {
   const budget = useLiveQuery(
     (q) =>
@@ -34,9 +36,10 @@ export const BudgetTypeSummary = ({
           amount: 0,
         }}
         period={period}
+        compact={compact}
       />
     );
   }
 
-  return <BudgetSummary budget={budget} period={period} />;
+  return <BudgetSummary budget={budget} period={period} compact={compact} />;
 };

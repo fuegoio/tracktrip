@@ -2,9 +2,18 @@ import { BudgetTypeSummary } from "@/components/budgets/budget-type-summary";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { BudgetPeriod } from "@/data/budgets";
 import { CategoryTypes } from "@/data/categories";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Cog } from "lucide-react";
+import { CalendarIcon, Cog } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/budgets/",
@@ -37,6 +46,8 @@ const budgetsSummaries = [
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
+  const [selectedPeriod, setSelectedPeriod] = useState<BudgetPeriod>("day");
+
   return (
     <>
       <ScreenHeader>
@@ -55,24 +66,41 @@ function RouteComponent() {
         </div>
       </ScreenHeader>
 
-      <ScreenDrawer className="pb-20 space-y-4 pt-8">
-        {budgetsSummaries.map((budgetSummary) => (
-          <div>
-            <div className="text-xs text-subtle-foreground px-4">
-              {budgetSummary.name}
+      <ScreenDrawer className="space-y-4 px-4">
+        <Select
+          onValueChange={(value: BudgetPeriod) => setSelectedPeriod(value)}
+          value={selectedPeriod}
+        >
+          <SelectTrigger className="w-full bg-background border-input font-semibold">
+            <CalendarIcon />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {budgetsSummaries.map((summary) => (
+              <SelectItem
+                key={summary.period}
+                value={summary.period}
+                textValue={summary.name}
+              >
+                {summary.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <div className="h-px bg-border" />
+
+        <div className="mt-4 space-y-4">
+          {CategoryTypes.map((type) => (
+            <div className="rounded-lg p-4 bg-subtle" key={type}>
+              <BudgetTypeSummary
+                travelId={travelId}
+                type={type}
+                period={selectedPeriod}
+              />
             </div>
-            <div className="flex px-4 justify-between items-center mt-4">
-              {CategoryTypes.map((type) => (
-                <BudgetTypeSummary
-                  travelId={travelId}
-                  type={type}
-                  key={type}
-                  period={budgetSummary.period}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </ScreenDrawer>
     </>
   );
