@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .tanstack
+
+.git
+.github
