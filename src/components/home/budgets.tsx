@@ -15,7 +15,7 @@ export const Budgets = ({ travelId }: { travelId: string }) => {
           <div className="text-xs text-subtle-foreground">For today</div>
         </div>
         <Button variant="secondary" size="icon" className="size-6" asChild>
-          <Link to="/travels/$travelId/settings/budgets" params={{ travelId }}>
+          <Link to="/travels/$travelId/budgets" params={{ travelId }}>
             <ArrowRight className="size-4" />
           </Link>
         </Button>

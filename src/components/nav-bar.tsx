@@ -1,6 +1,7 @@
 import {
   ChartColumn,
   Cog,
+  Gauge,
   Home,
   List,
   Plus,
@@ -14,7 +15,7 @@ import { Button } from "./ui/button";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions" | "/settings";
+  path: "" | "/transactions" | "/settings" | "/budgets";
 };
 
 const navItemsLeft: NavItem[] = [
@@ -23,7 +24,7 @@ const navItemsLeft: NavItem[] = [
 ];
 
 const navItemsRight: NavItem[] = [
-  { icon: ChartColumn, path: "/settings" },
+  { icon: Gauge, path: "/budgets" },
   { icon: Cog, path: "/settings" },
 ];
 

@@ -78,8 +78,11 @@ function RouteComponent() {
       >
         <div className="w-1/2 h-full">
           <ScreenHeader className="flex items-center">
-            <div className="text-2xl font-semibold text-foreground flex-1 min-w-0">
-              Transactions
+            <div className="flex-1 min-w-0">
+              <div className="text-2xl font-semibold">Transactions</div>
+              <div className="text-muted-foreground text-sm mt-1">
+                All your travel expenses.
+              </div>
             </div>
             <Button variant="secondary" onClick={() => setInsightsOpen(true)}>
               <ChartArea />

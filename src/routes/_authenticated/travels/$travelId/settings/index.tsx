@@ -1,7 +1,7 @@
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Gauge, MapPin, Tag, User } from "lucide-react";
+import { ChevronRight, MapPin, Tag, User } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/",
@@ -13,7 +13,6 @@ const travelLinks = [
   { name: "People", path: "./users", icon: User },
   { name: "Categories", path: "./categories", icon: Tag },
   { name: "Places", path: "./places", icon: MapPin },
-  { name: "Budgets", path: "./budgets", icon: Gauge },
 ] as const;
 
 function RouteComponent() {
