@@ -139,11 +139,11 @@ export const TransactionBaseForm = ({
           control={form.control}
           name="user"
           render={({ field }) => (
-            <FormItem className="flex-1">
+            <FormItem className="flex-1 max-w-2/3">
               <FormLabel>Who paid</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl className="w-full">
-                  <SelectTrigger>
+                  <SelectTrigger className="min-w-0 *:data-[slot=select-value]:truncate *:data-[slot=select-value]:inline">
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
@@ -164,7 +164,7 @@ export const TransactionBaseForm = ({
           control={form.control}
           name="users"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex-1 max-w-1/3">
               <FormLabel>For who</FormLabel>
               <UsersDropdown
                 travel={travel}
@@ -197,7 +197,7 @@ export const TransactionBaseForm = ({
                     {field.value ? (
                       format(field.value, "PPP")
                     ) : (
-                      <span>Pick a date</span>
+                      <span>Pick the date it will happen</span>
                     )}
                   </Button>
                 </PopoverTrigger>

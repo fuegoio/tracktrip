@@ -16,4 +16,5 @@ export type Transaction = {
   description: string | null;
   place: string | null;
   days: number | null;
+  activationDate: Date | null;
 };

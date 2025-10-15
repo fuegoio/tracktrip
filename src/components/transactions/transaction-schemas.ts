@@ -17,5 +17,9 @@ export const baseTransactionSchema = z.object({
 export const additionalTransactionSchema = z.object({
   category: z.string().nullable(),
   place: z.string().nullable(),
-  days: z.number().nullable(),
+  days: z
+    .number()
+    .positive("The number of days should be greater than 1.")
+    .nullable(),
+  activationDate: z.date().nullable(),
 });

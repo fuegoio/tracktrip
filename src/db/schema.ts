@@ -145,6 +145,7 @@ export const transactionsTable = pgTable("transactions", {
     onDelete: "set null",
   }),
   place: uuid().references(() => placesTable.id, { onDelete: "set null" }),
+  activationDate: date("activation_date", { mode: "date" }),
   days: integer(),
 });
 

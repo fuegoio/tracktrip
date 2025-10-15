@@ -57,13 +57,14 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
+      activationDate: null,
     },
   });
 
   const onSubmitCreateTransaction = (
     values: z.infer<typeof baseTransactionSchema>,
   ) => {
-    const transaction = {
+    const transaction: Transaction = {
       id: crypto.randomUUID(),
       ...values,
       description: values.description ?? null,
@@ -73,6 +74,7 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
+      activationDate: null,
     };
     transactionsCollection.insert(transaction);
 
@@ -153,7 +155,7 @@ export const NewTransactionDrawer = ({
                     transactionType={createdTransaction.type}
                   />
 
-                  <div className="h-px bg-border" />
+                  <div className="h-px bg-border mt-6" />
 
                   <Button type="submit" className="w-full" size="lg">
                     Complete transaction

@@ -44,19 +44,25 @@ export const UsersDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="lg" className="font-normal">
-          {selectedUsers.length === travel.users.length && "Everyone"}
+        <Button
+          variant="secondary"
+          size="lg"
+          className="font-normal min-w-0 px-4"
+        >
+          <span className="truncate min-w-0">
+            {selectedUsers.length === travel.users.length && "Everyone"}
 
-          {selectedUsers.length === 1 &&
-            travel.users.length > 1 &&
-            travel.users.find((user) => user.id === selectedUsers[0])?.name}
+            {selectedUsers.length === 1 &&
+              travel.users.length > 1 &&
+              travel.users.find((user) => user.id === selectedUsers[0])?.name}
 
-          {selectedUsers.length > 1 &&
-          selectedUsers.length < travel.users.length
-            ? `${selectedUsers.length} people`
-            : ""}
+            {selectedUsers.length > 1 &&
+            selectedUsers.length < travel.users.length
+              ? `${selectedUsers.length} people`
+              : ""}
 
-          {selectedUsers.length === 0 && "No one"}
+            {selectedUsers.length === 0 && "No one"}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
