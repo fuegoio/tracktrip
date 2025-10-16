@@ -32,6 +32,7 @@ import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import type { baseTransactionSchema } from "./transaction-schemas";
 import { Textarea } from "@/components/ui/textarea";
 import { UsersDropdown } from "./users-dropdown";
+import { UserAvatar } from "../users/user-avatar";
 
 export const TransactionBaseForm = ({
   travel,
@@ -143,14 +144,15 @@ export const TransactionBaseForm = ({
               <FormLabel>Who paid</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl className="w-full">
-                  <SelectTrigger className="min-w-0 *:data-[slot=select-value]:truncate *:data-[slot=select-value]:inline">
+                  <SelectTrigger className="min-w-0">
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {travel.users.map((user) => (
                     <SelectItem key={user.id} value={user.id}>
-                      {user.name}
+                      <UserAvatar user={user} className="size-5" />
+                      <span className="truncate">{user.name}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>

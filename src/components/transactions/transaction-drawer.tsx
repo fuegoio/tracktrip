@@ -30,6 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { UserAvatar } from "../users/user-avatar";
 
 export const TransactionDrawer = ({
   children,
@@ -108,9 +109,12 @@ export const TransactionDrawer = ({
 
             <div>
               <Label className="font-semibold">Paid by</Label>
-              <p className="text-sm text-subtle-foreground capitalize">
-                {transactionUser.name}
-              </p>
+              <div className="flex items-center gap-1 mt-2">
+                <UserAvatar user={transactionUser} className="size-5" />
+                <span className="text-sm text-subtle-foreground">
+                  {transactionUser.name}
+                </span>
+              </div>
             </div>
 
             <div>

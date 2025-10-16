@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { UserAvatar } from "@/components/users/user-avatar";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: RouteComponent,
@@ -116,10 +117,7 @@ function RouteComponent() {
 
       <div className="flex flex-col items-center gap-3 px-6 py-6">
         <div className="relative">
-          <Avatar className="size-20">
-            <AvatarImage src={user.image ?? ""} alt={user.name} />
-            <AvatarFallback>{user.name.charAt(0) || "U"}</AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className="size-20" />
           <Button
             variant="outline"
             size="icon"

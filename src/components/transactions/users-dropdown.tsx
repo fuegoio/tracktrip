@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/button";
 import type { Travel } from "@/data/travels";
 import { useState } from "react";
+import { UserAvatar } from "../users/user-avatar";
 
 export const UsersDropdown = ({
   travel,
@@ -77,7 +78,8 @@ export const UsersDropdown = ({
               handleCheckedChange({ checked, userId: user.id })
             }
           >
-            {user.name}
+            <span className="flex-1 truncate">{user.name}</span>
+            <UserAvatar user={user} className="size-5" />
           </DropdownMenuCheckboxItem>
         ))}
       </DropdownMenuContent>

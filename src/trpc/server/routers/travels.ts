@@ -49,6 +49,7 @@ export const travelsRouter = router({
           id: travelUser.users.id,
           name: travelUser.users.name,
           email: travelUser.users.email,
+          image: travelUser.users.image,
           role:
             travel.ownerId === travelUser.users.id
               ? ("owner" as const)
@@ -102,6 +103,7 @@ export const travelsRouter = router({
             id: ctx.session.user.id,
             name: ctx.session.user.name,
             email: ctx.session.user.email,
+            image: ctx.session.user.image ?? null,
             role: "owner" as const,
           },
         ],
@@ -180,6 +182,7 @@ export const travelsRouter = router({
           id: row.users.id,
           name: row.users.name,
           email: row.users.email,
+          image: row.users.image,
           role: updatedTravel.ownerId === row.users.id ? "owner" : "member",
         })),
       };
@@ -235,6 +238,7 @@ export const travelsRouter = router({
           id: row.users.id,
           name: row.users.name,
           email: row.users.email,
+          image: row.users.image,
           role: dbTravel.ownerId === row.users.id ? "owner" : "member",
         })),
       };
@@ -353,6 +357,7 @@ export const travelsRouter = router({
           id: user.id,
           name: user.name,
           email: user.email,
+          image: user.image,
           role: dbTravel.ownerId === user.id ? "owner" : "member",
         })),
       };
