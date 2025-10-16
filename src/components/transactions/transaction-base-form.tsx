@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
-import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import z from "zod";
 
@@ -37,9 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
-
-
-
+import dayjs from "dayjs";
 
 export const TransactionBaseForm = ({
   travel,
@@ -204,7 +201,7 @@ export const TransactionBaseForm = ({
                   >
                     <CalendarIcon />
                     {field.value ? (
-                      format(field.value, "PPP")
+                      dayjs(field.value).format("LL")
                     ) : (
                       <span>Pick the date it will happen</span>
                     )}

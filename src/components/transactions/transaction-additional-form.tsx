@@ -17,7 +17,6 @@ import type { additionalTransactionSchema } from "./transaction-schemas";
 import type { CategoryType } from "@/data/categories";
 import type { Travel } from "@/data/travels";
 
-
 import {
   FormControl,
   FormField,
@@ -33,8 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { categoriesCollection } from "@/store/collections";
-
-
+import dayjs from "dayjs";
 
 export const TransactionAdditionalForm = ({
   travel,
@@ -125,7 +123,7 @@ export const TransactionAdditionalForm = ({
                       >
                         <CalendarIcon />
                         {field.value ? (
-                          format(field.value, "PPP")
+                          dayjs(field.value).format("LL")
                         ) : (
                           <span>Pick a date</span>
                         )}

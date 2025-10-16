@@ -36,6 +36,9 @@ import {
   placesCollection,
   transactionsCollection,
 } from "@/store/collections";
+import { format } from "date-fns";
+import dayjs from "dayjs";
+import { ArrowRight } from "lucide-react";
 
 export const TransactionDrawer = ({
   children,
@@ -142,12 +145,37 @@ export const TransactionDrawer = ({
               </p>
             </div>
 
+            <div className="h-px bg-border mt-2 mb-3" />
+
             <div>
               <Label className="font-semibold">Place</Label>
               <p className="text-sm text-subtle-foreground capitalize">
                 {transactionPlace}
               </p>
             </div>
+
+            {["accommodation", "transport", "activity"].includes(
+              transaction.type,
+            ) && (
+              <div>
+                <Label className="font-semibold">
+                  Date of {transaction.type}
+                </Label>
+                <div className="flex items-center text-sm text-subtle-foreground mt-1">
+                  <div>
+                    {dayjs(
+                      transaction.activationDate || transaction.date,
+                    ).format("LL")}
+                  </div>
+                  <ArrowRight className="mx-2 size-4 flex-1" />
+                  <div>
+                    {dayjs(transaction.activationDate || transaction.date)
+                      .add((transaction.days ?? 1) - 1, "days")
+                      .format("LL")}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="h-px bg-border my-2" />
