@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/chart";
 import type { Transaction } from "@/data/transactions";
 import dayjs from "dayjs";
-import weekOfYear from "dayjs/plugin/weekOfYear";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -14,8 +13,6 @@ import {
   categoryTypeToColor,
   type CategoryType,
 } from "@/data/categories";
-
-dayjs.extend(weekOfYear);
 
 const chartConfig: ChartConfig = {};
 CategoryTypes.forEach((type) => {

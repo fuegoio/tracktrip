@@ -20,18 +20,19 @@ export const BudgetSummary = ({
   period: BudgetPeriod;
   compact?: boolean;
 }) => {
-  const now = dayjs();
+  const now = dayjs.utc();
   const travel = useTravel({ id: budget.travel });
   const startOfTravel = dayjs(travel.startDate).startOf("day");
-  const endOfTravel = dayjs(travel.endDate).endOf("day");
+  const endOfTravel = dayjs(travel.endDate).add(1, "day").startOf("day");
 
   const startOfPeriod =
     period === "travel" || period === "travelUntilNow"
       ? startOfTravel
-      : now.subtract(1, period).endOf("day") > startOfTravel
-        ? now.subtract(1, period).endOf("day")
+      : now.subtract(1, period).add(1, "day").startOf("day") > startOfTravel
+        ? now.subtract(1, period).add(1, "day").startOf("day")
         : startOfTravel;
-  const endOfPeriod = period === "travel" ? endOfTravel : now.endOf("day");
+  const endOfPeriod =
+    period === "travel" ? endOfTravel : now.add(1, "day").startOf("day");
 
   const { data: periodTransactions } = useLiveQuery((q) => {
     return q
@@ -51,9 +52,7 @@ export const BudgetSummary = ({
     (acc, transaction) => {
       const transactionDate = transaction.activationDate || transaction.date;
       const activationStart = dayjs(transactionDate);
-      const activationEnd = activationStart
-        .add((transaction.days ?? 1) - 1, "day")
-        .endOf("day");
+      const activationEnd = activationStart.add(transaction.days ?? 1, "day");
 
       // Calculate overlap with the period
       const overlapStart =
@@ -62,7 +61,10 @@ export const BudgetSummary = ({
         activationEnd < endOfPeriod ? activationEnd : endOfPeriod;
 
       if (overlapStart <= overlapEnd) {
-        const numberOfDaysInPeriod = overlapEnd.diff(overlapStart, "day") + 1;
+        const numberOfDaysInPeriod = Math.ceil(
+          overlapEnd.diff(overlapStart, "day", true),
+        );
+        console.log(numberOfDaysInPeriod);
         return (
           acc +
           (transaction.amount / (transaction.days ?? 1)) * numberOfDaysInPeriod

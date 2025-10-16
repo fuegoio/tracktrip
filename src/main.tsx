@@ -1,14 +1,17 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { Link, RouterProvider, createRouter } from "@tanstack/react-router";
+import { Button } from "./components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
 // Import the CSS file
 import "./assets/index.css";
-import { Button } from "./components/ui/button";
-import { ArrowRight } from "lucide-react";
+
+// Import dayjs configuration
+import "./lib/dayjs";
 
 // Create a new router instance
 const router = createRouter({
