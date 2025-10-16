@@ -2,7 +2,7 @@ import type { Budget, BudgetPeriod } from "@/data/budgets";
 import { CategoryBadge } from "./category-badge";
 import { AnimatedCircularProgressBar } from "./ui/circular-progress";
 import { CategoryTypeBadge } from "./category-type-badge";
-import { and, eq, gt, lt, useLiveQuery } from "@tanstack/react-db";
+import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { transactionsCollection } from "@/store/collections";
 import { useTravel } from "@/lib/params";
 import dayjs from "dayjs";
@@ -64,7 +64,6 @@ export const BudgetSummary = ({
         const numberOfDaysInPeriod = Math.ceil(
           overlapEnd.diff(overlapStart, "day", true),
         );
-        console.log(numberOfDaysInPeriod);
         return (
           acc +
           (transaction.amount / (transaction.days ?? 1)) * numberOfDaysInPeriod
@@ -84,7 +83,7 @@ export const BudgetSummary = ({
   if (!compact) {
     return (
       <div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-3">
           {budget.categoryType && (
             <>
               <CategoryTypeBadge categoryType={budget.categoryType} />
@@ -117,8 +116,8 @@ export const BudgetSummary = ({
           </Button>
         </div>
 
-        <Progress value={budgetPercentage} />
-        <div className="flex items-center justify-between">
+        <Progress value={Math.min(budgetPercentage, 100)} />
+        <div className="flex items-center justify-between mt-1">
           <div className="font-mono font-medium text-xs text-foreground mt-1">
             {periodTransactionsAmount.toLocaleString(undefined, {
               style: "currency",
@@ -133,7 +132,10 @@ export const BudgetSummary = ({
               })}
             </div>
           ) : (
-            <div className="font-mono text-xs text-muted-foreground"> - </div>
+            <div className="font-mono text-xs text-muted-foreground px-1">
+              {" "}
+              -{" "}
+            </div>
           )}
         </div>
       </div>

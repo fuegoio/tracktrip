@@ -92,7 +92,10 @@ function RouteComponent() {
 
         <div className="mt-4 space-y-4">
           {CategoryTypes.map((type) => (
-            <div className="rounded-lg p-4 bg-subtle" key={type}>
+            <div
+              className="rounded-lg p-4 bg-subtle border border-border/50 inset-ring-2 inset-ring-white/40"
+              key={type}
+            >
               <BudgetTypeSummary
                 travelId={travelId}
                 type={type}
