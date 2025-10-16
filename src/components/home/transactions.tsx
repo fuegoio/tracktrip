@@ -1,9 +1,9 @@
-import { ArrowRight, List, Plus } from "lucide-react";
-import { Button } from "../ui/button";
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import { transactionsCollection } from "@/store/collections";
 import { Link } from "@tanstack/react-router";
+import { ArrowRight, List } from "lucide-react";
+
 import { TransactionsByDate } from "../transactions/transactions-by-date";
+import { Button } from "../ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -11,6 +11,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "../ui/empty";
+
+import { transactionsCollection } from "@/store/collections";
 
 const RECENT_TRANSACTIONS_LIMIT = 10;
 

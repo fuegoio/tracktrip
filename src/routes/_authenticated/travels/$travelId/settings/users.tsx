@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
-import { useTravel } from "@/lib/params";
+
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
-import { Badge } from "@/components/ui/badge";
-import { ScreenHeader } from "@/components/layout/screen-header";
-import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { useTravel } from "@/lib/params";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/users",
@@ -27,7 +28,7 @@ function RouteComponent() {
   const { travelId } = Route.useParams();
   const travel = useTravel({ id: travelId });
 
-  const deleteUser = (_userId: string) => {};
+  // TODO: Implement user deletion
 
   return (
     <>
@@ -73,7 +74,7 @@ function RouteComponent() {
               <DropdownMenuContent>
                 <DropdownMenuItem
                   variant="destructive"
-                  onClick={() => deleteUser(user.id)}
+                  // onClick={() => deleteUser(user.id)}
                 >
                   Delete
                 </DropdownMenuItem>

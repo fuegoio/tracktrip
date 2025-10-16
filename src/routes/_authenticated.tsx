@@ -1,3 +1,5 @@
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+
 import {
   getCachedSession,
   isSessionValid,
@@ -6,7 +8,6 @@ import {
 } from "@/auth/cache";
 import { authClient } from "@/auth/client";
 import { ScreenLayoutProvider } from "@/components/layout/screen-layout-context";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
   component: RouteComponent,

@@ -1,13 +1,16 @@
+import dayjs from "dayjs";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+
+import type { Transaction } from "@/data/transactions";
+
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import type { Transaction } from "@/data/transactions";
-import dayjs from "dayjs";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   CategoryTypes,
   categoryTypeToColor,

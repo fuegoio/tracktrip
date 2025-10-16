@@ -1,3 +1,12 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { eq, useLiveQuery } from "@tanstack/react-db";
+import { Plus, X } from "lucide-react";
+import z from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -6,14 +15,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Plus, X } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { placesCollection } from "@/store/collections";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -23,8 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { eq, useLiveQuery } from "@tanstack/react-db";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { placesCollection } from "@/store/collections";
+
+
 
 const formSchema = z.object({
   name: z.string("Name is required.").min(1, "Name is required."),

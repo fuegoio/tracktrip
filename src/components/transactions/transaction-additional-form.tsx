@@ -1,7 +1,23 @@
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+
+import { and, eq, useLiveQuery } from "@tanstack/react-db";
+import { format } from "date-fns";
+import { CalendarIcon, Minus, Plus } from "lucide-react";
+import z from "zod";
+
+import { PlacesInput } from "../places/places-input";
+import { Button } from "../ui/button";
+import { ButtonGroup } from "../ui/button-group";
+import { Calendar } from "../ui/calendar";
+import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+
+import type { additionalTransactionSchema } from "./transaction-schemas";
+import type { CategoryType } from "@/data/categories";
 import type { Travel } from "@/data/travels";
 
-import { useFormContext } from "react-hook-form";
-import z from "zod";
+
 import {
   FormControl,
   FormField,
@@ -16,20 +32,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PlacesInput } from "../places/places-input";
-import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { categoriesCollection } from "@/store/collections";
-import type { additionalTransactionSchema } from "./transaction-schemas";
-import type { CategoryType } from "@/data/categories";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { CalendarIcon, Minus, Plus } from "lucide-react";
-import dayjs from "dayjs";
-import { Calendar } from "../ui/calendar";
-import { format } from "date-fns";
-import { ButtonGroup } from "../ui/button-group";
-import { Input } from "../ui/input";
+
+
 
 export const TransactionAdditionalForm = ({
   travel,

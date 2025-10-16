@@ -1,7 +1,8 @@
-import { ScreenDrawer } from "@/components/layout/screen-drawer";
-import { ScreenHeader } from "@/components/layout/screen-header";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronRight, MapPin, Tag, User } from "lucide-react";
+
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/",

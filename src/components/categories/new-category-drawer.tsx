@@ -1,3 +1,19 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import z from "zod";
+
+import {
+  EmojiPicker,
+  EmojiPickerContent,
+  EmojiPickerFooter,
+  EmojiPickerSearch,
+} from "../ui/emoji-picker";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -6,12 +22,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { X } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -29,7 +39,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categoriesCollection } from "@/store/collections";
 import {
   CategoryTypes,
   categoryTypeToColor,
@@ -37,14 +46,9 @@ import {
   categoryTypeToEmoji,
   type CategoryType,
 } from "@/data/categories";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  EmojiPicker,
-  EmojiPickerContent,
-  EmojiPickerFooter,
-  EmojiPickerSearch,
-} from "../ui/emoji-picker";
-import { useState } from "react";
+import { categoriesCollection } from "@/store/collections";
+
+
 
 const formSchema = z.object({
   name: z.string("Name is required.").min(1, "Name is required."),

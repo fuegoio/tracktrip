@@ -1,3 +1,10 @@
+import { useState } from "react";
+
+import { Button } from "../ui/button";
+import { UserAvatar } from "../users/user-avatar";
+
+import type { Travel } from "@/data/travels";
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,10 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import type { Travel } from "@/data/travels";
-import { useState } from "react";
-import { UserAvatar } from "../users/user-avatar";
 
 export const UsersDropdown = ({
   travel,

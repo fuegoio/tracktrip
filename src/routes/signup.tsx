@@ -1,3 +1,11 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { LoaderCircle } from "lucide-react";
+import z from "zod";
+
 import { authClient } from "@/auth/client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,12 +19,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { LoaderCircle } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
 
 const searchParamsSchema = z.object({
   redirect: z.string().optional(),

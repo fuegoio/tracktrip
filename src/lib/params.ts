@@ -1,5 +1,6 @@
-import { travelsCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
+
+import { travelsCollection } from "@/store/collections";
 
 export const useTravel = ({ id }: { id: string }) => {
   const { data: matchingTravels } = useLiveQuery((q) =>

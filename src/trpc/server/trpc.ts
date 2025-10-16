@@ -1,6 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
-import { auth } from "@/auth";
 import superjson from "superjson";
+
+import { auth } from "@/auth";
 
 export const createContext = async ({ request }: { request: Request }) => {
   const session = await auth.api.getSession({

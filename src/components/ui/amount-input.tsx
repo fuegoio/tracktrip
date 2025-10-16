@@ -1,6 +1,7 @@
 import { useState } from "react";
+
 import { Check, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 
 import {
   Command,
@@ -10,12 +11,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export function AmountInput({
   amountDefaultValue,
@@ -45,7 +46,7 @@ export function AmountInput({
         })
           .formatToParts(1)
           .find((part) => part.type === "currency")?.value || code;
-    } catch (e) {
+    } catch {
       symbol = code;
     }
 

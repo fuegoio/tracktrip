@@ -1,6 +1,8 @@
-import type { Transaction } from "@/data/transactions";
-import { TransactionRow } from "./transaction-row";
 import dayjs from "dayjs";
+
+import { TransactionRow } from "./transaction-row";
+
+import type { Transaction } from "@/data/transactions";
 
 export const TransactionsGroup = ({
   date,

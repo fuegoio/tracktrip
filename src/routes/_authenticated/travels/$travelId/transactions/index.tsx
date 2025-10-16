@@ -1,15 +1,20 @@
-import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
-import { transactionsCollection } from "@/store/collections";
+import { useState } from "react";
+
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, ChartArea, ListFilterPlus, Search } from "lucide-react";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { useState } from "react";
+import { List } from "lucide-react";
+
+
+import type { Filter } from "@/data/filters";
+
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
+import { NewTransactionDrawer } from "@/components/transactions/new-transaction-drawer";
+import { TransactionFilter } from "@/components/transactions/transaction-filter";
+import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
+import { TransactionInsights } from "@/components/transactions/transactions-insights";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -18,16 +23,15 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { List } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { NewTransactionDrawer } from "@/components/transactions/new-transaction-drawer";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { useTravel } from "@/lib/params";
-import type { Filter } from "@/data/filters";
-import { TransactionFilter } from "@/components/transactions/transaction-filter";
-import { TransactionInsights } from "@/components/transactions/transactions-insights";
 import { cn } from "@/lib/utils";
-import { ScreenHeader } from "@/components/layout/screen-header";
-import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { transactionsCollection } from "@/store/collections";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/transactions/",

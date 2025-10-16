@@ -1,9 +1,10 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { auth } from "./auth";
-import { createContext } from "./trpc/server/trpc";
-import { appRouter } from "./trpc/server/router";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
+
+import { auth } from "./auth";
 import { db } from "./db";
+import { appRouter } from "./trpc/server/router";
+import { createContext } from "./trpc/server/trpc";
 
 const routes = {
   "/api/auth/*": (req: Request) => {

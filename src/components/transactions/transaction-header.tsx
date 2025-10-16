@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
-import { CategoryTypeBadge } from "../category-type-badge";
-import type { Transaction } from "@/data/transactions";
+
 import { CategoryBadge } from "../category-badge";
+import { CategoryTypeBadge } from "../category-type-badge";
+
+import type { Transaction } from "@/data/transactions";
 
 export const TransactionHeader = ({
   transaction,

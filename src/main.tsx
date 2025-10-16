@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
-import ReactDOM from "react-dom/client";
-import { Link, RouterProvider, createRouter } from "@tanstack/react-router";
-import { Button } from "./components/ui/button";
-import { ArrowRight } from "lucide-react";
 
-// Import the generated route tree
+import { Link, RouterProvider, createRouter } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import ReactDOM from "react-dom/client";
+
+import { Button } from "./components/ui/button";
 import { routeTree } from "./routeTree.gen";
 
 // Import the CSS file

@@ -1,8 +1,10 @@
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { CategoryTypes } from "@/data/categories";
-import { BudgetTypeSummary } from "../budgets/budget-type-summary";
 import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+
+import { BudgetTypeSummary } from "../budgets/budget-type-summary";
+import { Button } from "../ui/button";
+
+import { CategoryTypes } from "@/data/categories";
 
 export const Budgets = ({ travelId }: { travelId: string }) => {
   return (

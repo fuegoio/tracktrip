@@ -1,8 +1,8 @@
+import { budgetsRouter } from "./routers/budgets";
 import { categoriesRouter } from "./routers/categories";
+import { placesRouter } from "./routers/places";
 import { transactionsRouter } from "./routers/transactions";
 import { travelsRouter } from "./routers/travels";
-import { placesRouter } from "./routers/places";
-import { budgetsRouter } from "./routers/budgets";
 import { router } from "./trpc";
 
 export const appRouter = router({

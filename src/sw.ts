@@ -1,8 +1,9 @@
 /// <reference lib="webworker" />
 
+import { CacheableResponsePlugin } from "workbox-cacheable-response";
 import { registerRoute } from "workbox-routing";
 import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
-import { CacheableResponsePlugin } from "workbox-cacheable-response";
+
 import type { ManifestEntry } from "workbox-build";
 
 declare let self: ServiceWorkerGlobalScope;
@@ -75,7 +76,7 @@ registerRoute(
         cache.put("/index.html", networkResponse.clone());
       }
       return networkResponse;
-    } catch (error) {
+    } catch {
       const cached = await cache.match("/index.html");
       return cached || Response.error();
     }

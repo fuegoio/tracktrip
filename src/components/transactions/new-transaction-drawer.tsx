@@ -1,3 +1,22 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckCircle, X } from "lucide-react";
+import z from "zod";
+
+import { TransactionAdditionalForm } from "./transaction-additional-form";
+import { TransactionBaseForm } from "./transaction-base-form";
+import { TransactionHeader } from "./transaction-header";
+import {
+  additionalTransactionSchema,
+  baseTransactionSchema,
+} from "./transaction-schemas";
+
+import type { Transaction } from "@/data/transactions";
+import type { Travel } from "@/data/travels";
+
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -5,24 +24,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { CheckCircle, Plus, X } from "lucide-react";
-import type { Travel } from "@/data/travels";
-
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
-import { useState } from "react";
 import { transactionsCollection } from "@/store/collections";
-import type { Transaction } from "@/data/transactions";
-import { TransactionBaseForm } from "./transaction-base-form";
-import { TransactionAdditionalForm } from "./transaction-additional-form";
-import { TransactionHeader } from "./transaction-header";
-import {
-  additionalTransactionSchema,
-  baseTransactionSchema,
-} from "./transaction-schemas";
+
+
 
 export const NewTransactionDrawer = ({
   travel,

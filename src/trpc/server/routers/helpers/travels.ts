@@ -1,7 +1,8 @@
-import { db } from "@/db";
-import { travelsUsersTable } from "@/db/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
+
+import { db } from "@/db";
+import { travelsUsersTable } from "@/db/schema";
 
 export const getTravelUser = async ({
   travelId,

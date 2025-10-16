@@ -1,24 +1,16 @@
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import type { Transaction } from "@/data/transactions";
 import type { ReactNode } from "react";
-import { TransactionHeader } from "./transaction-header";
-import { Label } from "../ui/label";
+
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import {
-  categoriesCollection,
-  placesCollection,
-  transactionsCollection,
-} from "@/store/collections";
+
 import { Button } from "../ui/button";
-import { useTravel } from "@/lib/params";
+import { Label } from "../ui/label";
+import { UserAvatar } from "../users/user-avatar";
+
 import { EditTransactionDrawer } from "./edit-transaction-drawer";
+import { TransactionHeader } from "./transaction-header";
+
+import type { Transaction } from "@/data/transactions";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +22,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UserAvatar } from "../users/user-avatar";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useTravel } from "@/lib/params";
+import {
+  categoriesCollection,
+  placesCollection,
+  transactionsCollection,
+} from "@/store/collections";
 
 export const TransactionDrawer = ({
   children,

@@ -1,7 +1,18 @@
-import { FilterFields, type Filter, type FilterField } from "@/data/filters";
-import { ButtonGroup } from "../ui/button-group";
+import { useState } from "react";
+
+import { SelectTrigger } from "@radix-ui/react-select";
+import { X } from "lucide-react";
+
 import { Button } from "../ui/button";
-import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
+import { ButtonGroup } from "../ui/button-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectValue,
+} from "../ui/select";
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -11,16 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
-import { X } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectValue,
-} from "../ui/select";
-import { SelectTrigger } from "@radix-ui/react-select";
+import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
+import { FilterFields, type Filter, type FilterField } from "@/data/filters";
 
 export const TransactionFilter = ({
   filter,
@@ -108,7 +111,7 @@ export const TransactionFilter = ({
                 size="sm"
                 className="border-dashed font-normal"
               >
-                {categoryTypeToEmoji[filter.value]}{" "}
+                {filter.value && categoryTypeToEmoji[filter.value]}{" "}
                 <span className="capitalize">{filter.value}</span>
               </Button>
             </DropdownMenuTrigger>

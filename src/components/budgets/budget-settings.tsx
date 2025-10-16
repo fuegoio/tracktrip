@@ -1,7 +1,9 @@
 import { useState } from "react";
+
+import { useLiveQuery, eq } from "@tanstack/react-db";
+
+import { CategoryTypeBadge } from "../category-type-badge";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import {
   Drawer,
   DrawerContent,
@@ -10,13 +12,17 @@ import {
   DrawerDescription,
   DrawerFooter,
 } from "../ui/drawer";
-import { CategoryTypes, type CategoryType } from "@/data/categories";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+
 import type { Budget } from "@/data/budgets";
-import { useLiveQuery, eq } from "@tanstack/react-db";
+
+import { CategoryTypes, type CategoryType } from "@/data/categories";
+import { useTravel } from "@/lib/params";
 import { budgetsCollection } from "@/store/collections";
 import { trpcClient } from "@/trpc/client";
-import { CategoryTypeBadge } from "../category-type-badge";
-import { useTravel } from "@/lib/params";
+
+
 
 interface BudgetSettingsProps {
   travelId: string;

@@ -1,8 +1,10 @@
-import { ArrowLeftRight } from "lucide-react";
-import { Button } from "./ui/button";
-import type { Travel } from "@/data/travels";
 import { Link } from "@tanstack/react-router";
+import { ArrowLeftRight } from "lucide-react";
+
+import { Button } from "./ui/button";
 import { UserMenu } from "./user-menu";
+
+import type { Travel } from "@/data/travels";
 import type { User } from "better-auth";
 
 export const TopBar = ({ travel, user }: { travel: Travel; user: User }) => {

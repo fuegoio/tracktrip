@@ -1,4 +1,6 @@
-import type { User } from "better-auth";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { CircleUser, LogOut } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,10 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { CircleUser, LogOut } from "lucide-react";
-import { authClient } from "@/auth/client";
-import { Link, useNavigate } from "@tanstack/react-router";
 import { UserAvatar } from "./users/user-avatar";
+
+import type { User } from "better-auth";
+
+import { authClient } from "@/auth/client";
+
+
 
 export const UserMenu = ({ user }: { user: User }) => {
   const navigate = useNavigate();

@@ -1,5 +1,6 @@
-import { toast } from "sonner";
 import { useEffect } from "react";
+
+import { toast } from "sonner";
 
 /**
  * Install toast if we detect that the PWA is ready.

@@ -1,12 +1,13 @@
+import { eq, useLiveQuery } from "@tanstack/react-db";
+import { createFileRoute } from "@tanstack/react-router";
+import dayjs from "dayjs";
+
 import { Budgets } from "@/components/home/budgets";
 import { Transactions } from "@/components/home/transactions";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
-import { eq, useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute } from "@tanstack/react-router";
-import dayjs from "dayjs";
 
 export const Route = createFileRoute("/_authenticated/travels/$travelId/")({
   component: TravelIndex,

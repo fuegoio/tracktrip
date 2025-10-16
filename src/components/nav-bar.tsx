@@ -1,5 +1,5 @@
+import { useRouterState } from "@tanstack/react-router";
 import {
-  ChartColumn,
   Cog,
   Gauge,
   Home,
@@ -7,11 +7,12 @@ import {
   Plus,
   type LucideIcon,
 } from "lucide-react";
+
 import { NavigationButton } from "./navigation-button";
-import { useRouterState } from "@tanstack/react-router";
 import { NewTransactionDrawer } from "./transactions/new-transaction-drawer";
-import type { Travel } from "@/data/travels";
 import { Button } from "./ui/button";
+
+import type { Travel } from "@/data/travels";
 
 export type NavItem = {
   icon: LucideIcon;

@@ -1,8 +1,11 @@
-import type { CategoryType } from "@/data/categories";
-import { budgetsCollection } from "@/store/collections";
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
+
 import { BudgetSummary } from "../budget-summary";
+
 import type { BudgetPeriod } from "@/data/budgets";
+import type { CategoryType } from "@/data/categories";
+
+import { budgetsCollection } from "@/store/collections";
 
 export const BudgetTypeSummary = ({
   type,

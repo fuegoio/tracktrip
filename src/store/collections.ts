@@ -1,12 +1,14 @@
 import { createCollection } from "@tanstack/react-db";
-import { trpcCollectionOptions } from "trpc-db-collection";
-import { trpcClient } from "@/trpc/client";
-import type { Travel } from "@/data/travels";
-import type { Transaction } from "@/data/transactions";
-import type { Category } from "@/data/categories";
-import type { Budget } from "@/data/budgets";
-import type { Place } from "@/data/places";
 import SuperJSON from "superjson";
+import { trpcCollectionOptions } from "trpc-db-collection";
+
+import type { Budget } from "@/data/budgets";
+import type { Category } from "@/data/categories";
+import type { Place } from "@/data/places";
+import type { Transaction } from "@/data/transactions";
+import type { Travel } from "@/data/travels";
+
+import { trpcClient } from "@/trpc/client";
 
 export const transactionsCollection = createCollection(
   trpcCollectionOptions<Transaction>({

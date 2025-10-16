@@ -1,5 +1,6 @@
-import { CategoryTypes } from "@/data/categories";
 import { z } from "zod";
+
+import { CategoryTypes } from "@/data/categories";
 
 export const baseTransactionSchema = z.object({
   title: z.string("Name is required.").min(1, "Name is required."),

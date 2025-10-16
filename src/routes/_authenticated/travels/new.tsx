@@ -1,10 +1,20 @@
-import { Button } from "@/components/ui/button";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, CalendarIcon } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
+import { ArrowLeft, ArrowRight, CalendarIcon } from "lucide-react";
+import z from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  EmojiPicker,
+  EmojiPickerSearch,
+  EmojiPickerContent,
+  EmojiPickerFooter,
+} from "@/components/ui/emoji-picker";
 import {
   Form,
   FormControl,
@@ -14,19 +24,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  EmojiPicker,
-  EmojiPickerSearch,
-  EmojiPickerContent,
-  EmojiPickerFooter,
-} from "@/components/ui/emoji-picker";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -79,6 +81,7 @@ function NewTravel() {
           id: session.user.id,
           name: session.user.name,
           email: session.user.email,
+          image: session.user.image ?? null,
           role: "owner",
         },
       ],

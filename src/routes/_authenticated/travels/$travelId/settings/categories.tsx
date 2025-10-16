@@ -1,18 +1,20 @@
-import { NewCategoryDrawer } from "@/components/categories/new-category-drawer";
-import { CategoryBadge } from "@/components/category-badge";
-import { Button } from "@/components/ui/button";
-import { categoriesCollection } from "@/store/collections";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft, EllipsisVertical } from "lucide-react";
+
+import { NewCategoryDrawer } from "@/components/categories/new-category-drawer";
+import { CategoryBadge } from "@/components/category-badge";
+import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { ScreenHeader } from "@/components/layout/screen-header";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ScreenHeader } from "@/components/layout/screen-header";
-import { ScreenDrawer } from "@/components/layout/screen-drawer";
+import { categoriesCollection } from "@/store/collections";
+
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/settings/categories",

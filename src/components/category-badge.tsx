@@ -1,6 +1,7 @@
+import { eq, useLiveQuery } from "@tanstack/react-db";
+
 import { cn } from "@/lib/utils";
 import { categoriesCollection } from "@/store/collections";
-import { eq, useLiveQuery } from "@tanstack/react-db";
 
 export const CategoryBadge = ({
   categoryId,

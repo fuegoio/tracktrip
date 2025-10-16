@@ -1,9 +1,10 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { travelsCollection } from "@/store/collections";
-import { ArrowRight, ChevronRight, Plus } from "lucide-react";
 import dayjs from "dayjs";
+import { ArrowRight, ChevronRight, Plus } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { travelsCollection } from "@/store/collections";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: Index,

@@ -1,20 +1,23 @@
-import { router, authedProcedure } from "@/trpc/server/trpc";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { and, eq, gt } from "drizzle-orm";
 import { TrpcSync } from "trpc-db-collection/server";
+import { z } from "zod";
+
+import { drizzleEventsAdapter } from "../sync";
+
+import { checkTravelPermission } from "./helpers/travels";
+
+import type { Category } from "@/data/categories";
+
 import { db } from "@/db";
 import {
   categoriesTable,
   eventsTable,
   travelsTable,
   travelsUsersTable,
-  usersTable,
 } from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
-import { drizzleEventsAdapter } from "../sync";
-import { and, eq, gt } from "drizzle-orm";
-import type { Category } from "@/data/categories";
-import { checkTravelPermission } from "./helpers/travels";
+import { router, authedProcedure } from "@/trpc/server/trpc";
 
 const categoriesRouterSync = new TrpcSync<Category>();
 

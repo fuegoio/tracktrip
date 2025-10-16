@@ -1,15 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useRef, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { authClient } from "@/auth/client";
+import { useForm } from "react-hook-form";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Edit } from "lucide-react";
 import { toast } from "sonner";
-import { setCachedSession } from "@/auth/cache";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+
+import { setCachedSession } from "@/auth/cache";
+import { authClient } from "@/auth/client";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { UserAvatar } from "@/components/users/user-avatar";
 
 export const Route = createFileRoute("/_authenticated/profile")({

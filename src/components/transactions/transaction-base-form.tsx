@@ -1,10 +1,20 @@
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import z from "zod";
+
+import { AmountInput } from "../ui/amount-input";
+import { UserAvatar } from "../users/user-avatar";
+
+import { UsersDropdown } from "./users-dropdown";
+
+import type { baseTransactionSchema } from "./transaction-schemas";
 import type { Travel } from "@/data/travels";
 
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
-import { useFormContext } from "react-hook-form";
-import z from "zod";
-import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 import {
   FormControl,
   FormField,
@@ -13,13 +23,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -27,12 +35,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AmountInput } from "../ui/amount-input";
-import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
-import type { baseTransactionSchema } from "./transaction-schemas";
 import { Textarea } from "@/components/ui/textarea";
-import { UsersDropdown } from "./users-dropdown";
-import { UserAvatar } from "../users/user-avatar";
+import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
+
+
+
 
 export const TransactionBaseForm = ({
   travel,

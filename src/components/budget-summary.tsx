@@ -1,15 +1,22 @@
-import type { Budget, BudgetPeriod } from "@/data/budgets";
-import { CategoryBadge } from "./category-badge";
-import { AnimatedCircularProgressBar } from "./ui/circular-progress";
-import { CategoryTypeBadge } from "./category-type-badge";
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
-import { transactionsCollection } from "@/store/collections";
-import { useTravel } from "@/lib/params";
-import dayjs from "dayjs";
-import { Progress } from "./ui/progress";
-import { Button } from "./ui/button";
-import { ArrowRight, TriangleAlert } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import dayjs from "dayjs";
+import { ArrowRight, TriangleAlert } from "lucide-react";
+
+import { CategoryBadge } from "./category-badge";
+import { CategoryTypeBadge } from "./category-type-badge";
+import { Button } from "./ui/button";
+import { AnimatedCircularProgressBar } from "./ui/circular-progress";
+import { Progress } from "./ui/progress";
+
+import type { Budget, BudgetPeriod } from "@/data/budgets";
+
+
+import { useTravel } from "@/lib/params";
+import { transactionsCollection } from "@/store/collections";
+
+
+
 
 export const BudgetSummary = ({
   budget,

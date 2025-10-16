@@ -1,10 +1,13 @@
-import type { Transaction } from "@/data/transactions";
+import { eq, useLiveQuery } from "@tanstack/react-db";
+
 import { CategoryBadge } from "./category-badge";
 import { CategoryTypeBadge } from "./category-type-badge";
-import { eq, useLiveQuery } from "@tanstack/react-db";
-import { placesCollection } from "@/store/collections";
 import { TransactionDrawer } from "./transactions/transaction-drawer";
+
+import type { Transaction } from "@/data/transactions";
+
 import { cn } from "@/lib/utils";
+import { placesCollection } from "@/store/collections";
 
 export const TransactionRow = ({
   transaction,

@@ -1,6 +1,8 @@
-import type { Transaction } from "@/data/transactions";
-import { TransactionsGroup } from "../transactions-group";
 import dayjs from "dayjs";
+
+import { TransactionsGroup } from "../transactions-group";
+
+import type { Transaction } from "@/data/transactions";
 
 export const TransactionsByDate = ({
   transactions,

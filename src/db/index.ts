@@ -1,9 +1,10 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
+import * as schema from "./schema";
+
 import { env } from "@/env";
 
-import * as schema from "./schema";
 
 const globalForDrizzle = globalThis as unknown as {
   pool: Pool | undefined;

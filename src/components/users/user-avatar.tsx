@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
 import { cn } from "@/lib/utils";
 
 export const UserAvatar = ({
@@ -13,9 +14,9 @@ export const UserAvatar = ({
   className?: string;
 }) => {
   const initials = user.name
-    .match(/(\b\S)?/g)
+    .match(/(\b\S)?/g)!
     .join("")
-    .match(/(^\S|\S$)?/g)
+    .match(/(^\S|\S$)?/g)!
     .join("")
     .toUpperCase();
 

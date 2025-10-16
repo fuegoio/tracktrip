@@ -1,9 +1,10 @@
+import { spawn } from "child_process";
 import path from "path";
-import { defineConfig, type ViteDevServer } from "vite";
-import react from "@vitejs/plugin-react-swc";
+
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import { spawn } from "child_process";
+import react from "@vitejs/plugin-react-swc";
+import { defineConfig, type ViteDevServer } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 const bunServerPlugin = {

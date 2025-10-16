@@ -1,7 +1,8 @@
-import type { TrpcSyncEvent } from "trpc-db-collection/server";
 import type { TrpcItem } from "trpc-db-collection";
-import { eventsTable } from "@/db/schema";
+import type { TrpcSyncEvent } from "trpc-db-collection/server";
+
 import { db } from "@/db";
+import { eventsTable } from "@/db/schema";
 
 export const drizzleEventsAdapter = async <TItem extends TrpcItem>(
   router: string,

@@ -1,8 +1,12 @@
-import { router, authedProcedure } from "@/trpc/server/trpc";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { and, eq, gt, inArray } from "drizzle-orm";
 import { TrpcSync } from "trpc-db-collection/server";
+import { z } from "zod";
+
+import { drizzleEventsAdapter } from "../sync";
+
 import type { Travel } from "@/data/travels";
+
 import { db } from "@/db";
 import {
   eventsTable,
@@ -11,8 +15,7 @@ import {
   usersTable,
 } from "@/db/schema";
 import { createInsertSchema, createUpdateSchema } from "@/db/zod";
-import { drizzleEventsAdapter } from "../sync";
-import { and, eq, gt, inArray } from "drizzle-orm";
+import { router, authedProcedure } from "@/trpc/server/trpc";
 
 const travelsRouterSync = new TrpcSync<Travel>();
 

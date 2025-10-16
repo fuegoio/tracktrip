@@ -1,6 +1,8 @@
-import { cn } from "@/lib/utils";
 import { useEffect, useRef, type ReactNode } from "react";
+
 import { useScreenLayoutContext } from "./screen-layout-context";
+
+import { cn } from "@/lib/utils";
 
 const TOP_NAV_HEIGHT = 56;
 

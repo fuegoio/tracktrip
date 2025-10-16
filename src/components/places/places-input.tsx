@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
+
+import { eq, useLiveQuery } from "@tanstack/react-db";
 import { Check, ChevronsUpDown, MapPin, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -13,8 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useEffect, useState } from "react";
-import { eq, useLiveQuery } from "@tanstack/react-db";
+import { cn } from "@/lib/utils";
 import { placesCollection } from "@/store/collections";
 
 export function PlacesInput({

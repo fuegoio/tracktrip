@@ -1,4 +1,3 @@
-import { CategoryTypes } from "@/data/categories";
 import {
   boolean,
   pgTable,
@@ -12,6 +11,8 @@ import {
   pgEnum,
   real,
 } from "drizzle-orm/pg-core";
+
+import { CategoryTypes } from "@/data/categories";
 
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),
