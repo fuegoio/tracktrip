@@ -83,69 +83,95 @@ export const BudgetSummary = ({
   const budgetPercentage =
     budget.amount > 0 ? (periodTransactionsAmount / budgetAmount) * 100 : 0;
 
+  const amountLeft = budgetAmount - periodTransactionsAmount;
+
   if (!compact) {
     return (
-      <div>
-        <div className="flex items-center gap-2 mb-3">
-          {budget.categoryType && (
-            <>
-              <CategoryTypeBadge categoryType={budget.categoryType} />
-              <span className="text-foreground capitalize text-xs font-medium">
+      <div className="flex gap-3">
+        <CategoryTypeBadge
+          categoryType={budget.categoryType}
+          className="size-10 text-lg rounded-lg"
+        />
+
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            {budget.categoryType && (
+              <span className="text-subtle-foreground capitalize text-xs">
                 {budget.categoryType}
               </span>
-            </>
-          )}
-          {budget.category && <CategoryBadge categoryId={budget.category} />}
-          <div className="flex-1" />
-          {budgetPercentage > 100 && (
-            <div className="text-destructive flex items-center gap-1">
-              <TriangleAlert className="size-4" />
-              <span className="text-xs">
-                +
-                {(budgetPercentage - 100).toLocaleString(undefined, {
-                  maximumFractionDigits: 0,
-                })}
-                %
-              </span>
-            </div>
-          )}
+            )}
+            {budget.category && <CategoryBadge categoryId={budget.category} />}
+            <div className="flex-1" />
+            {budgetPercentage > 100 && (
+              <div className="text-destructive flex items-center gap-1">
+                <TriangleAlert className="size-4" />
+                <span className="text-xs">
+                  +
+                  {(budgetPercentage - 100).toLocaleString(undefined, {
+                    maximumFractionDigits: 0,
+                  })}
+                  %
+                </span>
+              </div>
+            )}
 
-          {budget.categoryType && (
-            <Button size="icon" variant="secondary" className="size-5" asChild>
-              <Link
-                to="/travels/$travelId/categories/$categoryType"
-                params={{
-                  travelId: travel.id,
-                  categoryType: budget.categoryType,
-                }}
+            {budget.categoryType && (
+              <Button
+                size="icon"
+                variant="secondary"
+                className="size-5"
+                asChild
               >
-                <ArrowRight className="size-3" />
-              </Link>
-            </Button>
-          )}
-        </div>
+                <Link
+                  to="/travels/$travelId/categories/$categoryType"
+                  params={{
+                    travelId: travel.id,
+                    categoryType: budget.categoryType,
+                  }}
+                >
+                  <ArrowRight className="size-3" />
+                </Link>
+              </Button>
+            )}
+          </div>
 
-        <Progress value={Math.min(budgetPercentage, 100)} />
-        <div className="flex items-center justify-between mt-1">
-          <div className="font-mono font-medium text-xs text-foreground mt-1">
+          <div className="font-mono font-medium text-sm text-foreground mb-2">
             {periodTransactionsAmount.toLocaleString(undefined, {
               style: "currency",
               currency: travel.currency,
             })}
           </div>
-          {budgetAmount > 0 ? (
-            <div className="font-mono text-xs text-muted-foreground">
-              {budgetAmount.toLocaleString(undefined, {
-                style: "currency",
-                currency: travel.currency,
-              })}
+
+          <Progress value={Math.min(budgetPercentage, 100)} />
+
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-muted-foreground mt-1">
+              {budgetAmount > 0 && (
+                <>
+                  Amount left:{" "}
+                  <span className="font-mono">
+                    {amountLeft.toLocaleString(undefined, {
+                      style: "currency",
+                      currency: travel.currency,
+                    })}
+                  </span>
+                </>
+              )}
             </div>
-          ) : (
-            <div className="font-mono text-xs text-muted-foreground px-1">
-              {" "}
-              -{" "}
-            </div>
-          )}
+            {budgetAmount > 0 ? (
+              <div className="font-mono text-xs text-subtle-foreground">
+                {budgetAmount.toLocaleString(undefined, {
+                  style: "currency",
+                  currency: travel.currency,
+                })}
+              </div>
+            ) : (
+              <div className="font-mono text-xs text-muted-foreground px-1">
+                {" "}
+                -{" "}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
