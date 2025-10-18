@@ -70,31 +70,39 @@ function RouteComponent() {
       </ScreenHeader>
 
       <ScreenDrawer className="space-y-2 px-4">
-        <Select
-          onValueChange={(value: BudgetPeriod) => setSelectedPeriod(value)}
-          value={selectedPeriod}
-        >
-          <SelectTrigger
-            className="w-full bg-background border-input font-semibold"
-            size="sm"
+        <div className="flex items-center justify-between">
+          <div className="px-1">
+            <div className="text-sm font-semibold text-foreground">
+              Budgets by type
+            </div>
+            <div className="text-xs text-subtle-foreground">
+              The base of your budget.
+            </div>
+          </div>
+          <Select
+            onValueChange={(value: BudgetPeriod) => setSelectedPeriod(value)}
+            value={selectedPeriod}
           >
-            <CalendarIcon />
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {budgetsSummaries.map((summary) => (
-              <SelectItem
-                key={summary.period}
-                value={summary.period}
-                textValue={summary.name}
-              >
-                {summary.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <div className="h-px bg-border" />
+            <SelectTrigger
+              className="bg-background border-input font-semibold"
+              size="sm"
+            >
+              <CalendarIcon />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {budgetsSummaries.map((summary) => (
+                <SelectItem
+                  key={summary.period}
+                  value={summary.period}
+                  textValue={summary.name}
+                >
+                  {summary.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className="mt-4 space-y-4">
           {CategoryTypes.map((type) => (
