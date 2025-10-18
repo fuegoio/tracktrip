@@ -11,12 +11,8 @@ import { Progress } from "./ui/progress";
 
 import type { Budget, BudgetPeriod } from "@/data/budgets";
 
-
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
-
-
-
 
 export const BudgetSummary = ({
   budget,
@@ -113,14 +109,20 @@ export const BudgetSummary = ({
               </span>
             </div>
           )}
-          <Button size="icon" variant="secondary" className="size-5" asChild>
-            <Link
-              to="/travels/$travelId/transactions"
-              params={{ travelId: travel.id }}
-            >
-              <ArrowRight className="size-3" />
-            </Link>
-          </Button>
+
+          {budget.categoryType && (
+            <Button size="icon" variant="secondary" className="size-5" asChild>
+              <Link
+                to="/travels/$travelId/categories/$categoryType"
+                params={{
+                  travelId: travel.id,
+                  categoryType: budget.categoryType,
+                }}
+              >
+                <ArrowRight className="size-3" />
+              </Link>
+            </Button>
+          )}
         </div>
 
         <Progress value={Math.min(budgetPercentage, 100)} />

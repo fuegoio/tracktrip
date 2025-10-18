@@ -6,6 +6,9 @@ export const CategoryTypes = [
   "other",
 ] as const;
 
+export const isCategoryType = (value: string): value is CategoryType =>
+  CategoryTypes.includes(value as CategoryType);
+
 export type CategoryType = (typeof CategoryTypes)[number];
 
 export const categoryTypeToEmoji: Record<CategoryType, string> = {
