@@ -7,13 +7,17 @@ dayjs.extend(localizedFormat);
 dayjs.extend(utc);
 dayjs.extend(weekOfYear);
 
-export function getWeeksBetweenDates(startDate: Dayjs, endDate: Dayjs) {
+export function getIntervalsBetweenDates(
+  startDate: Dayjs,
+  endDate: Dayjs,
+  period: "week" | "day" = "week",
+) {
   const weeks: string[] = [];
   let currentDate = dayjs(startDate);
   const end = dayjs(endDate);
 
   while (currentDate.isBefore(end) || currentDate.isSame(end, "day")) {
-    const week = currentDate.startOf("week").format("YYYY-MM-DD");
+    const week = currentDate.startOf(period).format("YYYY-MM-DD");
     if (!weeks.includes(week)) {
       weeks.push(week);
     }

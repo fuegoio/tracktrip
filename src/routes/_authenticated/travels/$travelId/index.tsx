@@ -8,7 +8,7 @@ import { Transactions } from "@/components/home/transactions";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { ChartContainer } from "@/components/ui/chart";
-import { getWeeksBetweenDates } from "@/lib/dayjs";
+import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
 
@@ -35,7 +35,7 @@ function TravelIndex() {
 
   function sumTransactionsByWeek() {
     const startOfTravel = dayjs(travel.startDate).startOf("day");
-    const periodsSinceStart = getWeeksBetweenDates(startOfTravel, dayjs());
+    const periodsSinceStart = getIntervalsBetweenDates(startOfTravel, dayjs());
     const result = periodsSinceStart.map((week) => ({
       week: dayjs(week).startOf("week").format("YYYY-MM-DD"),
       sum: 0,
