@@ -1,10 +1,11 @@
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
 import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, TriangleAlert } from "lucide-react";
+import { ArrowRight, ArrowUp, TriangleAlert } from "lucide-react";
 
 import { CategoryBadge } from "./category-badge";
 import { CategoryTypeBadge } from "./category-type-badge";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { AnimatedCircularProgressBar } from "./ui/circular-progress";
 import { Progress } from "./ui/progress";
@@ -83,37 +84,56 @@ export const BudgetSummary = ({
   const budgetPercentage =
     budget.amount > 0 ? (periodTransactionsAmount / budgetAmount) * 100 : 0;
 
-  const amountLeft = budgetAmount - periodTransactionsAmount;
+  const amountLeft = Math.max(budgetAmount - periodTransactionsAmount, 0);
+
+  // Average computation
+  const totalAmount = periodTransactions.reduce((acc, transaction) => {
+    const transactionDate = transaction.activationDate || transaction.date;
+    const activationStart = dayjs(transactionDate);
+    const activationEnd = activationStart.add(transaction.days ?? 1, "day");
+    const overlapStart =
+      activationStart > startOfTravel ? activationStart : startOfTravel;
+    const overlapEnd = activationEnd < now ? activationEnd : now;
+    if (overlapStart <= overlapEnd) {
+      const numberOfDaysInPeriod = Math.ceil(
+        overlapEnd.diff(overlapStart, "day", true),
+      );
+      return (
+        acc +
+        (transaction.amount / (transaction.days ?? 1)) * numberOfDaysInPeriod
+      );
+    }
+    return acc;
+  }, 0);
+
+  const totalDays = now.diff(startOfTravel, "day");
+  const averageTransactionPerDay = totalDays > 0 ? totalAmount / totalDays : 0;
+  const averagePeriodAmount = averageTransactionPerDay * daysOfPeriod;
 
   if (!compact) {
     return (
       <div className="flex gap-3">
-        <CategoryTypeBadge
-          categoryType={budget.categoryType}
-          className="size-10 text-lg rounded-lg"
-        />
+        <Link
+          to="/travels/$travelId/categories/$categoryType"
+          params={{
+            travelId: travel.id,
+            categoryType: budget.categoryType,
+          }}
+        >
+          <CategoryTypeBadge
+            categoryType={budget.categoryType}
+            className="size-10 text-lg rounded-lg"
+          />
+        </Link>
 
         <div className="flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between">
             {budget.categoryType && (
               <span className="text-subtle-foreground capitalize text-xs">
                 {budget.categoryType}
               </span>
             )}
             {budget.category && <CategoryBadge categoryId={budget.category} />}
-            <div className="flex-1" />
-            {budgetPercentage > 100 && (
-              <div className="text-destructive flex items-center gap-1">
-                <TriangleAlert className="size-4" />
-                <span className="text-xs">
-                  +
-                  {(budgetPercentage - 100).toLocaleString(undefined, {
-                    maximumFractionDigits: 0,
-                  })}
-                  %
-                </span>
-              </div>
-            )}
 
             {budget.categoryType && (
               <Button
@@ -135,11 +155,52 @@ export const BudgetSummary = ({
             )}
           </div>
 
-          <div className="font-mono font-medium text-sm text-foreground mb-2">
-            {periodTransactionsAmount.toLocaleString(undefined, {
-              style: "currency",
-              currency: travel.currency,
-            })}
+          <div className="flex items-center pb-2 pt-1">
+            <div className="font-mono font-medium text-base text-foreground">
+              {periodTransactionsAmount.toLocaleString(undefined, {
+                style: "currency",
+                currency: travel.currency,
+              })}
+            </div>
+            {periodTransactionsAmount > 0 && (
+              <>
+                {periodTransactionsAmount > averagePeriodAmount && (
+                  <Badge className="ml-2" variant="secondary">
+                    <ArrowUp className="size-3 text-rose-400" />+
+                    {(
+                      (periodTransactionsAmount - averagePeriodAmount) /
+                      averagePeriodAmount
+                    ).toLocaleString(undefined, {
+                      style: "percent",
+                      maximumFractionDigits: 0,
+                    })}
+                  </Badge>
+                )}
+                {periodTransactionsAmount < averagePeriodAmount && (
+                  <Badge className="ml-2" variant="secondary">
+                    <ArrowUp className="size-3 rotate-180 text-emerald-400" />-
+                    {(
+                      (averagePeriodAmount - periodTransactionsAmount) /
+                      averagePeriodAmount
+                    ).toLocaleString(undefined, {
+                      style: "percent",
+                      maximumFractionDigits: 0,
+                    })}
+                  </Badge>
+                )}
+              </>
+            )}
+
+            <div className="flex-1" />
+            {budgetPercentage > 100 && (
+              <Badge className="ml-2 bg-rose-100 border-transparent text-rose-400">
+                <TriangleAlert className="size-3" />+
+                {(budgetPercentage - 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 0,
+                })}
+                %
+              </Badge>
+            )}
           </div>
 
           <Progress value={Math.min(budgetPercentage, 100)} />
