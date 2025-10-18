@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/select";
 import { CategoryTypes } from "@/data/categories";
 
-
-
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/budgets/",
 )({
@@ -71,12 +69,15 @@ function RouteComponent() {
         </div>
       </ScreenHeader>
 
-      <ScreenDrawer className="space-y-4 px-4">
+      <ScreenDrawer className="space-y-2 px-4">
         <Select
           onValueChange={(value: BudgetPeriod) => setSelectedPeriod(value)}
           value={selectedPeriod}
         >
-          <SelectTrigger className="w-full bg-background border-input font-semibold">
+          <SelectTrigger
+            className="w-full bg-background border-input font-semibold"
+            size="sm"
+          >
             <CalendarIcon />
             <SelectValue />
           </SelectTrigger>
