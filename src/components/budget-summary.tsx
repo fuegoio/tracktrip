@@ -84,7 +84,7 @@ export const BudgetSummary = ({
   const budgetPercentage =
     budget.amount > 0 ? (periodTransactionsAmount / budgetAmount) * 100 : 0;
 
-  const amountLeft = Math.max(budgetAmount - periodTransactionsAmount, 0);
+  const amountLeft = budgetAmount - periodTransactionsAmount;
 
   // Average computation
   const totalAmount = periodTransactions.reduce((acc, transaction) => {
@@ -209,9 +209,9 @@ export const BudgetSummary = ({
             <div className="text-xs text-muted-foreground mt-1">
               {budgetAmount > 0 && (
                 <>
-                  Amount left:{" "}
+                  {amountLeft >= 0 ? "Amount left:" : "Over budget:"}{" "}
                   <span className="font-mono">
-                    {amountLeft.toLocaleString(undefined, {
+                    {Math.abs(amountLeft).toLocaleString(undefined, {
                       style: "currency",
                       currency: travel.currency,
                     })}
