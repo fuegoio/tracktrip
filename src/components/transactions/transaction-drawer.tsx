@@ -1,15 +1,14 @@
-import type { ReactNode } from "react";
-
 import { eq, useLiveQuery } from "@tanstack/react-db";
+import dayjs from "dayjs";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { UserAvatar } from "../users/user-avatar";
 
 import { EditTransactionDrawer } from "./edit-transaction-drawer";
+import { useTransactionDrawerStore } from "./transaction-drawer-store";
 import { TransactionHeader } from "./transaction-header";
-
-import type { Transaction } from "@/data/transactions";
 
 import {
   AlertDialog,
@@ -28,7 +27,6 @@ import {
   DrawerContent,
   DrawerDescription,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useTravel } from "@/lib/params";
 import {
@@ -36,18 +34,32 @@ import {
   placesCollection,
   transactionsCollection,
 } from "@/store/collections";
-import { format } from "date-fns";
-import dayjs from "dayjs";
-import { ArrowRight } from "lucide-react";
 
-export const TransactionDrawer = ({
-  children,
-  transaction,
-}: {
-  children: ReactNode;
-  transaction: Transaction;
-}) => {
-  const travel = useTravel({ id: transaction.travel });
+export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
+  const { isOpen, transaction, closeDrawer } = useTransactionDrawerStore();
+
+  // Move all hook calls before any early returns
+  const travel = useTravel({ id: travelId });
+
+  const transactionCategoryQuery = useLiveQuery(
+    (q) =>
+      q
+        .from({ categories: categoriesCollection })
+        .where(({ categories }) =>
+          eq(categories.id, transaction?.category ?? ""),
+        ),
+    [transaction?.category],
+  );
+
+  const transactionPlaceQuery = useLiveQuery(
+    (q) =>
+      q
+        .from({ places: placesCollection })
+        .where(({ places }) => eq(places.id, transaction?.place ?? "")),
+    [transaction?.place],
+  );
+
+  if (!transaction) return null;
   if (!travel) throw new Error("Travel not found");
 
   const transactionUser = travel.users.find(
@@ -56,30 +68,15 @@ export const TransactionDrawer = ({
   if (!transactionUser) throw new Error("User not found");
 
   const transactionCategory =
-    useLiveQuery(
-      (q) =>
-        q
-          .from({ categories: categoriesCollection })
-          .where(({ categories }) => eq(categories.id, transaction.category)),
-      [transaction.category],
-    ).data.at(0)?.name ?? "No category";
-
-  const transactionPlace =
-    useLiveQuery(
-      (q) =>
-        q
-          .from({ places: placesCollection })
-          .where(({ places }) => eq(places.id, transaction.place)),
-      [transaction.place],
-    ).data.at(0)?.name ?? "No place";
+    transactionCategoryQuery.data.at(0)?.name ?? "No category";
+  const transactionPlace = transactionPlaceQuery.data.at(0)?.name ?? "No place";
 
   const deleteTransaction = () => {
     transactionsCollection.delete(transaction.id);
   };
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Drawer open={isOpen} onOpenChange={closeDrawer}>
       <DrawerContent>
         <div className="px-6 overflow-y-auto pt-2 pb-6">
           <DrawerTitle>

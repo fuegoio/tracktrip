@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import { CalendarIcon, Minus, Plus } from "lucide-react";
 import z from "zod";
 
@@ -32,7 +32,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { categoriesCollection } from "@/store/collections";
-import dayjs from "dayjs";
 
 export const TransactionAdditionalForm = ({
   travel,

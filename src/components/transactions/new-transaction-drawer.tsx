@@ -7,6 +7,7 @@ import z from "zod";
 
 import { TransactionAdditionalForm } from "./transaction-additional-form";
 import { TransactionBaseForm } from "./transaction-base-form";
+import { useTransactionDrawerStore } from "./transaction-drawer-store";
 import { TransactionHeader } from "./transaction-header";
 import {
   additionalTransactionSchema,
@@ -27,8 +28,6 @@ import {
 import { Form } from "@/components/ui/form";
 import { transactionsCollection } from "@/store/collections";
 
-
-
 export const NewTransactionDrawer = ({
   travel,
   userId,
@@ -38,6 +37,8 @@ export const NewTransactionDrawer = ({
   userId: string;
   children: React.ReactNode;
 }) => {
+  const { openDrawer } = useTransactionDrawerStore();
+
   const [isOpen, setIsOpen] = useState(false);
   const [createdTransaction, setCreatedTransaction] =
     useState<Transaction | null>(null);
@@ -97,6 +98,7 @@ export const NewTransactionDrawer = ({
     });
 
     closeDrawer();
+    openDrawer(createdTransaction);
   };
 
   const closeDrawer = () => {

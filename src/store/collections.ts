@@ -8,6 +8,8 @@ import type { Place } from "@/data/places";
 import type { Transaction } from "@/data/transactions";
 import type { Travel } from "@/data/travels";
 
+import { getCachedSession } from "@/auth/cache";
+import { sendTransactionNotification } from "@/components/transactions/transaction-notification";
 import { trpcClient } from "@/trpc/client";
 
 export const transactionsCollection = createCollection(
@@ -16,6 +18,32 @@ export const transactionsCollection = createCollection(
     trpcRouter: trpcClient.transactions,
     localStorage: true,
     serializer: SuperJSON,
+    onEvent: (event) => {
+      const cachedSession = getCachedSession();
+      if (!cachedSession) {
+        return;
+      }
+
+      // It's the current user, no notification
+      if (event.userId === cachedSession.user.id) {
+        return;
+      }
+
+      if (event.action === "insert") {
+        const travelId = event.data.travel;
+        const travel = travelsCollection.get(travelId);
+        if (!travel) {
+          return;
+        }
+
+        const user = travel.users.find((user) => user.id === event.userId);
+        if (!user) {
+          return;
+        }
+
+        sendTransactionNotification(event.data, user);
+      }
+    },
   }),
 );
 

@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 
 import { NavBar } from "@/components/nav-bar";
 import { TopBar } from "@/components/top-bar";
+import { TransactionDrawer } from "@/components/transactions/transaction-drawer";
 import { useTravel } from "@/lib/params";
 import { travelsCollection } from "@/store/collections";
 
@@ -32,6 +33,7 @@ function RouteComponent() {
         <Outlet />
       </div>
       <NavBar travel={travel} userId={userId} />
+      <TransactionDrawer travelId={params.travelId} />
     </>
   );
 }

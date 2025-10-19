@@ -3,7 +3,7 @@ import { useState } from "react";
 import { eq, and, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
@@ -17,7 +17,6 @@ import { categoryTypeToEmoji, isCategoryType } from "@/data/categories";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
-import type { BudgetPeriod } from "@/data/budgets";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/categories/$categoryType",
