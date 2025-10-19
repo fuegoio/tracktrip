@@ -106,7 +106,7 @@ export const BudgetSummary = ({
     return acc;
   }, 0);
 
-  const totalDays = now.diff(startOfTravel, "day");
+  const totalDays = Math.ceil(now.diff(startOfTravel, "day", true));
   const averageTransactionPerDay = totalDays > 0 ? totalAmount / totalDays : 0;
   const averagePeriodAmount = averageTransactionPerDay * daysOfPeriod;
 
@@ -162,7 +162,7 @@ export const BudgetSummary = ({
                 currency: travel.currency,
               })}
             </div>
-            {periodTransactionsAmount > 0 && (
+            {periodTransactionsAmount > 0 && period !== "travel" && (
               <>
                 {periodTransactionsAmount > averagePeriodAmount && (
                   <Badge className="ml-2" variant="secondary">
