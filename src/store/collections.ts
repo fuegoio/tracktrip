@@ -31,6 +31,10 @@ export const transactionsCollection = createCollection(
 
       if (event.action === "insert") {
         const travelId = event.data.travel;
+        if (!window.location.pathname.includes(travelId)) {
+          return;
+        }
+
         const travel = travelsCollection.get(travelId);
         if (!travel) {
           return;
