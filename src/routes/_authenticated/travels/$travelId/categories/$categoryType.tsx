@@ -99,17 +99,15 @@ function RouteComponent() {
           A summary of your {categoryType} expenses for this travel.
         </div>
 
-        <div className="my-2 relative z-0">
-          <div className="relative z-10 from-card bg-gradient-to-r to-transparent from-50% to-100% h-full py-4">
-            <div className="text-subtle-foreground text-sm">
-              Total {categoryType} cost
-            </div>
-            <div className="text-3xl text-foreground font-mono mt-1">
-              {transactionsSum.toLocaleString(undefined, {
-                style: "currency",
-                currency: travel.currency,
-              })}
-            </div>
+        <div className="mt-6 mb-2">
+          <div className="text-subtle-foreground text-sm">
+            Total {categoryType} cost
+          </div>
+          <div className="text-3xl text-foreground font-mono mt-1">
+            {transactionsSum.toLocaleString(undefined, {
+              style: "currency",
+              currency: travel.currency,
+            })}
           </div>
         </div>
       </ScreenHeader>
@@ -145,7 +143,7 @@ function RouteComponent() {
             config={{
               sum: {
                 label: "Expense",
-                color: "var(--foreground)",
+                color: "var(--subtle-foreground)",
               },
             }}
             className="aspect-auto h-[200px] w-full"
