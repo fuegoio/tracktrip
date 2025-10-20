@@ -36,7 +36,7 @@ export const TransactionRow = ({
         "flex items-center gap-4 h-10 rounded-lg bg-subtle px-3 inset-ring-2 inset-ring-white/40 border border-border/20",
         !isUserConcerned && "opacity-50",
       )}
-      onClick={() => openDrawer(transaction)}
+      onClick={() => openDrawer(transaction.id)}
     >
       {transaction.category ? (
         <CategoryBadge categoryId={transaction.category} />

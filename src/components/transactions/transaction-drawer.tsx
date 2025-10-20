@@ -36,10 +36,16 @@ import {
 } from "@/store/collections";
 
 export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
-  const { isOpen, transaction, closeDrawer } = useTransactionDrawerStore();
+  const { isOpen, transactionId, closeDrawer } = useTransactionDrawerStore();
 
-  // Move all hook calls before any early returns
   const travel = useTravel({ id: travelId });
+  const transaction = useLiveQuery(
+    (q) =>
+      q
+        .from({ transactions: transactionsCollection })
+        .where(({ transactions }) => eq(transactions.id, transactionId ?? "")),
+    [transactionId],
+  ).data[0];
 
   const transactionCategoryQuery = useLiveQuery(
     (q) =>
@@ -71,7 +77,8 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
   const transactionPlace = transactionPlaceQuery.data.at(0)?.name ?? "No place";
 
   const deleteTransaction = () => {
-    transactionsCollection.delete(transaction.id);
+    closeDrawer();
+    setTimeout(() => transactionsCollection.delete(transaction.id), 300);
   };
 
   return (

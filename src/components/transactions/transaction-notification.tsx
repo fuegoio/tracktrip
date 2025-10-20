@@ -42,7 +42,7 @@ const TransactionNotificationAction = ({
     <Button
       variant="secondary"
       size="icon"
-      onClick={() => openDrawer(transaction)}
+      onClick={() => openDrawer(transaction.id)}
       className="size-6"
       data-button="true"
       data-action="true"

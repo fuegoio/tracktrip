@@ -1,23 +1,20 @@
 import { create } from "zustand";
 
-import type { Transaction } from "@/data/transactions";
-
 interface TransactionDrawerState {
   isOpen: boolean;
-  transaction: Transaction | null;
-  openDrawer: (transaction: Transaction) => void;
+  transactionId: string | null;
+  openDrawer: (transactionId: string) => void;
   closeDrawer: () => void;
 }
 
 export const useTransactionDrawerStore = create<TransactionDrawerState>(
   (set) => ({
     isOpen: false,
-    transaction: null,
-    openDrawer: (transaction: Transaction) =>
-      set({ isOpen: true, transaction }),
+    transactionId: null,
+    openDrawer: (transactionId: string) => set({ isOpen: true, transactionId }),
     closeDrawer: () => {
       set({ isOpen: false });
-      setTimeout(() => set({ transaction: null }), 300);
+      setTimeout(() => set({ transactionId: null }), 300);
     },
   }),
 );

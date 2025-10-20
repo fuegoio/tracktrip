@@ -98,7 +98,7 @@ export const NewTransactionDrawer = ({
     });
 
     closeDrawer();
-    openDrawer(createdTransaction);
+    openDrawer(createdTransaction.id);
   };
 
   const closeDrawer = () => {
