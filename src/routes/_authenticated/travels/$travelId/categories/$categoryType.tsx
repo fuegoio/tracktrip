@@ -89,19 +89,27 @@ function RouteComponent() {
     return color;
   };
 
-  // Always include a synthetic "No category" category
+  // Always include a synthetic "No category" category and calculate transaction sums
   const allCategories = [
-    ...categories.map((category, index) => ({
-      ...category,
-      color: getCategoryColor(index).toString(),
-    })),
+    ...categories.map((category, index) => {
+      const sum = getCategoryTransactionsSum(category.id);
+      return {
+        ...category,
+        color: getCategoryColor(index).toString(),
+        transactionSum: sum,
+      };
+    }),
     {
       id: "no-category",
       emoji: undefined,
       name: "No category",
       color: "var(--muted-foreground)",
+      transactionSum: getCategoryTransactionsSum("no-category"),
     },
   ];
+
+  // Sort categories by transaction sum (descending)
+  const sortedCategories = [...allCategories].sort((a, b) => b.transactionSum - a.transactionSum);
 
   function sumTransactionsByPeriod() {
     const startOfTravel = dayjs(travel.startDate).startOf("day");
@@ -140,7 +148,7 @@ function RouteComponent() {
   // Create chart config
   const chartConfig: ChartConfig = {};
   if (transactionsByPeriod.length > 0) {
-    allCategories.forEach((category) => {
+    sortedCategories.forEach((category) => {
       chartConfig[`category_${category.id}`] = {
         label: category.name,
         color: category.color,
@@ -174,7 +182,7 @@ function RouteComponent() {
 
         <div className="pt-4 pb-3 relative overflow-hidden">
           <div className="flex gap-4 overflow-x-auto no-scrollbar pr-10">
-            {allCategories.map((category) => (
+            {sortedCategories.map((category) => (
               <div
                 className="border-l-2 px-4"
                 style={{ borderColor: category.color }}
@@ -188,7 +196,7 @@ function RouteComponent() {
                   </div>
                 </div>
                 <div className="text-foreground font-mono font-semibold text-sm">
-                  {getCategoryTransactionsSum(category.id).toLocaleString(
+                  {category.transactionSum.toLocaleString(
                     undefined,
                     {
                       style: "currency",
@@ -278,7 +286,7 @@ function RouteComponent() {
                   }
                 />
 
-                {allCategories.map((category) => {
+                {sortedCategories.map((category) => {
                   const hasData = transactionsByPeriod.some(
                     (periodData) => periodData[`category_${category.id}`] > 0,
                   );
