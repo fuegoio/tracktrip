@@ -22,8 +22,6 @@ import { useTravel } from "@/lib/params";
 import { budgetsCollection } from "@/store/collections";
 import { trpcClient } from "@/trpc/client";
 
-
-
 interface BudgetSettingsProps {
   travelId: string;
 }

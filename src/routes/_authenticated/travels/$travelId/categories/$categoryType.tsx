@@ -5,7 +5,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import Color from "colorjs.io";
 import dayjs from "dayjs";
 import { List } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis } from "recharts";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
@@ -31,7 +31,7 @@ import {
 } from "@/data/categories";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
-import { transactionsCollection } from "@/store/collections";
+import { budgetsCollection, transactionsCollection } from "@/store/collections";
 import { categoriesCollection } from "@/store/collections";
 
 export const Route = createFileRoute(
@@ -168,6 +168,19 @@ function RouteComponent() {
     });
   }
 
+  const budget = useLiveQuery(
+    (q) =>
+      q
+        .from({ budgets: budgetsCollection })
+        .where(({ budgets }) =>
+          and(
+            eq(budgets.travel, travelId),
+            eq(budgets.categoryType, categoryType),
+          ),
+        ),
+    [travelId, categoryType],
+  ).data.at(0);
+
   return (
     <>
       <ScreenHeader>
@@ -236,7 +249,9 @@ function RouteComponent() {
               type="single"
               variant="outline"
               value={period}
-              onValueChange={(value: "day" | "week") => setPeriod(value)}
+              onValueChange={(value: "day" | "week" | "") => {
+                if (value) setPeriod(value);
+              }}
               size="sm"
             >
               <ToggleGroupItem value="day" className="text-sm">
@@ -262,6 +277,14 @@ function RouteComponent() {
                   data={transactionsByPeriod}
                   stackOffset="sign"
                 >
+                  {budget && (
+                    <ReferenceLine
+                      y={budget.amount * (period === "day" ? 1 : 7)}
+                      stroke="var(--color-muted-foreground)"
+                      strokeDasharray="3 3"
+                      opacity={0.3}
+                    />
+                  )}
                   <CartesianGrid vertical={false} />
                   <XAxis
                     dataKey="period"
@@ -280,6 +303,7 @@ function RouteComponent() {
                   <ChartTooltip
                     content={
                       <ChartTooltipContent
+                        className="min-w-[200px]"
                         labelFormatter={(value) => {
                           return new Date(value).toLocaleDateString("en-US", {
                             month: "short",

@@ -181,7 +181,7 @@ function ChartTooltipContent({
       )}
     >
       {!nestLabel ? tooltipLabel : null}
-      <div className="grid gap-1.5">
+      <div className="grid gap-1.5 mt-1">
         {payload
           .filter((item) => item.type !== "none")
           .map((item, index) => {
@@ -250,6 +250,19 @@ function ChartTooltipContent({
               </div>
             );
           })}
+      </div>
+
+      <div className="text-foreground flex basis-full items-center border-t pt-1.5 text-xs font-medium">
+        Total
+        <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+          {valueFormatter
+            ? valueFormatter(
+                payload.reduce((acc, item) => acc + Number(item.value), 0),
+              )
+            : payload
+                .reduce((acc, item) => acc + Number(item.value), 0)
+                .toLocaleString()}{" "}
+        </div>
       </div>
     </div>
   );
