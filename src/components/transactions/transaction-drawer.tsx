@@ -34,6 +34,8 @@ import {
   placesCollection,
   transactionsCollection,
 } from "@/store/collections";
+import { categoryTypeToEmoji } from "@/data/categories";
+import { Link } from "@tanstack/react-router";
 
 export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
   const { isOpen, transactionId, closeDrawer } = useTransactionDrawerStore();
@@ -104,33 +106,50 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
               </div>
             )}
 
-            <div>
-              <Label className="font-semibold">Type</Label>
-              <p className="text-sm text-subtle-foreground capitalize">
-                {transaction.type}
-              </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label className="text-subtle-foreground">Type</Label>
+                <p className="text-sm flex items-center gap-1 mt-1">
+                  {categoryTypeToEmoji[transaction.type]}
+                  <span className="capitalize font-medium">
+                    {transaction.type}
+                  </span>
+                </p>
+              </div>
+              <Button
+                variant="secondary"
+                size="icon"
+                asChild
+                className="size-6"
+                onClick={closeDrawer}
+              >
+                <Link
+                  to="/travels/$travelId/categories/$categoryType"
+                  params={{ travelId, categoryType: transaction.type }}
+                >
+                  <ArrowRight />
+                </Link>
+              </Button>
             </div>
 
             <div>
-              <Label className="font-semibold">Category</Label>
-              <p className="text-sm text-subtle-foreground capitalize">
-                {transactionCategory}
-              </p>
+              <Label className="text-subtle-foreground">Category</Label>
+              <p className="text-sm mt-1 font-medium">{transactionCategory}</p>
             </div>
 
             <div>
-              <Label className="font-semibold">Paid by</Label>
-              <div className="flex items-center gap-1 mt-2">
+              <Label className="text-subtle-foreground">Paid by</Label>
+              <div className="flex items-center gap-1 mt-1">
                 <UserAvatar user={transactionUser} className="size-5" />
-                <span className="text-sm text-subtle-foreground">
+                <span className="text-sm font-medium">
                   {transactionUser.name}
                 </span>
               </div>
             </div>
 
             <div>
-              <Label className="font-semibold">For who</Label>
-              <p className="text-sm text-subtle-foreground capitalize">
+              <Label className="text-subtle-foreground">For who</Label>
+              <p className="text-sm font-medium mt-1">
                 {(transaction.users === null ||
                   transaction.users.length === travel.users.length) &&
                   "Everyone"}
@@ -151,20 +170,18 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
             <div className="h-px bg-border mt-2 mb-3" />
 
             <div>
-              <Label className="font-semibold">Place</Label>
-              <p className="text-sm text-subtle-foreground capitalize">
-                {transactionPlace}
-              </p>
+              <Label className="text-subtle-foreground">Place</Label>
+              <p className="text-sm mt-1 font-medium">{transactionPlace}</p>
             </div>
 
             {["accommodation", "transport", "activity"].includes(
               transaction.type,
             ) && (
               <div>
-                <Label className="font-semibold">
+                <Label className="text-subtle-foreground">
                   Date of {transaction.type}
                 </Label>
-                <div className="flex items-center text-sm text-subtle-foreground mt-1">
+                <div className="flex items-center text-sm font-medium mt-1">
                   <div>
                     {dayjs(
                       transaction.activationDate || transaction.date,
