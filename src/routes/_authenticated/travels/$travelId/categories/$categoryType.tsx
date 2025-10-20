@@ -72,6 +72,12 @@ function RouteComponent() {
     0,
   );
 
+  const getCategoryTransactionsSum = (categoryId: string) => {
+    return travelTransactions
+      .filter((transaction) => transaction.category === categoryId)
+      .reduce((acc, transaction) => acc + transaction.amount, 0);
+  };
+
   const getCategoryColor = (index: number) => {
     const color = new Color(categoryTypeToColorHex[categoryType]);
     color.lch.c = 100;
@@ -81,15 +87,16 @@ function RouteComponent() {
 
   // Always include a synthetic "No category" category
   const allCategories = [
-    {
-      id: "no-category",
-      name: "No category",
-      color: "var(--muted-foreground)",
-    },
     ...categories.map((category, index) => ({
       ...category,
       color: getCategoryColor(index).toString(),
     })),
+    {
+      id: "no-category",
+      emoji: undefined,
+      name: "No category",
+      color: "var(--muted-foreground)",
+    },
   ];
 
   function sumTransactionsByPeriod() {
@@ -149,7 +156,7 @@ function RouteComponent() {
         <div className="text-muted-foreground text-sm mt-1">
           A summary of your {categoryType} expenses for this travel.
         </div>
-        <div className="mt-6 mb-2">
+        <div className="pt-6 pb-2">
           <div className="text-subtle-foreground text-sm">
             Total {categoryType} cost
           </div>
@@ -160,7 +167,38 @@ function RouteComponent() {
             })}
           </div>
         </div>
+
+        <div className="pt-4 pb-3 relative overflow-hidden">
+          <div className="flex gap-4 overflow-x-auto no-scrollbar pr-10">
+            {allCategories.map((category) => (
+              <div
+                className="border-l-2 px-4"
+                style={{ borderColor: category.color }}
+              >
+                <div className="flex items-baseline gap-1">
+                  {category.emoji && (
+                    <div className="text-xs">{category.emoji}</div>
+                  )}
+                  <div className="text-xs text-subtle-foreground align-middle whitespace-nowrap">
+                    {category.name} cost
+                  </div>
+                </div>
+                <div className="text-foreground font-mono font-semibold text-sm">
+                  {getCategoryTransactionsSum(category.id).toLocaleString(
+                    undefined,
+                    {
+                      style: "currency",
+                      currency: travel.currency,
+                    },
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-card to-transparent pointer-events-none"></div>
+        </div>
       </ScreenHeader>
+
       <ScreenDrawer className="space-y-2 px-4">
         <div className="flex items-center justify-between">
           <div>
