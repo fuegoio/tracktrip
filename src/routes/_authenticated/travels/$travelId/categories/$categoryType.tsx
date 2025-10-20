@@ -74,7 +74,11 @@ function RouteComponent() {
 
   const getCategoryTransactionsSum = (categoryId: string) => {
     return travelTransactions
-      .filter((transaction) => transaction.category === categoryId)
+      .filter(
+        (transaction) =>
+          transaction.category ===
+          (categoryId === "no-category" ? null : categoryId),
+      )
       .reduce((acc, transaction) => acc + transaction.amount, 0);
   };
 
