@@ -1,4 +1,5 @@
 import { eq, useLiveQuery } from "@tanstack/react-db";
+import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { ArrowRight } from "lucide-react";
 
@@ -28,14 +29,13 @@ import {
   DrawerDescription,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { categoryTypeToEmoji } from "@/data/categories";
 import { useTravel } from "@/lib/params";
 import {
   categoriesCollection,
   placesCollection,
   transactionsCollection,
 } from "@/store/collections";
-import { categoryTypeToEmoji } from "@/data/categories";
-import { Link } from "@tanstack/react-router";
 
 export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
   const { isOpen, transactionId, closeDrawer } = useTransactionDrawerStore();
@@ -169,9 +169,27 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
 
             <div className="h-px bg-border mt-2 mb-3" />
 
-            <div>
-              <Label className="text-subtle-foreground">Place</Label>
-              <p className="text-sm mt-1 font-medium">{transactionPlace}</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label className="text-subtle-foreground">Place</Label>
+                <p className="text-sm mt-1 font-medium">{transactionPlace}</p>
+              </div>
+              {transaction.place && (
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  asChild
+                  className="size-6"
+                  onClick={closeDrawer}
+                >
+                  <Link
+                    to="/travels/$travelId/places/$placeId"
+                    params={{ travelId, placeId: transaction.place }}
+                  >
+                    <ArrowRight />
+                  </Link>
+                </Button>
+              )}
             </div>
 
             {["accommodation", "transport", "activity"].includes(
