@@ -301,6 +301,7 @@ function RouteComponent() {
                     }}
                   />
                   <ChartTooltip
+                    trigger="click"
                     content={
                       <ChartTooltipContent
                         className="min-w-[200px]"
