@@ -272,11 +272,7 @@ function RouteComponent() {
                 config={chartConfig}
                 className="aspect-auto h-[200px] w-full"
               >
-                <BarChart
-                  accessibilityLayer
-                  data={transactionsByPeriod}
-                  stackOffset="sign"
-                >
+                <BarChart data={transactionsByPeriod}>
                   {budget && (
                     <ReferenceLine
                       y={budget.amount * (period === "day" ? 1 : 7)}
@@ -301,7 +297,7 @@ function RouteComponent() {
                     }}
                   />
                   <ChartTooltip
-                    trigger="click"
+                    trigger="hover"
                     content={
                       <ChartTooltipContent
                         className="min-w-[200px]"
