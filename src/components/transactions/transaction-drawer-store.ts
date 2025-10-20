@@ -15,7 +15,9 @@ export const useTransactionDrawerStore = create<TransactionDrawerState>(
     transaction: null,
     openDrawer: (transaction: Transaction) =>
       set({ isOpen: true, transaction }),
-    closeDrawer: () => set({ isOpen: false, transaction: null }),
+    closeDrawer: () => {
+      set({ isOpen: false });
+      setTimeout(() => set({ transaction: null }), 300);
+    },
   }),
 );
-

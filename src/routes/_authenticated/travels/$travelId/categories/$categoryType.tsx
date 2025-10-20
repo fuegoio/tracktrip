@@ -4,19 +4,27 @@ import { eq, and, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import Color from "colorjs.io";
 import dayjs from "dayjs";
+import { List } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
+import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
-  categoryTypeToColor,
   categoryTypeToColorHex,
   categoryTypeToEmoji,
   isCategoryType,
@@ -43,7 +51,9 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
-  const { categoryType } = Route.useRouteContext();
+  const { categoryType, session } = Route.useRouteContext();
+  const userId = session.user.id;
+
   const [period, setPeriod] = useState<"week" | "day">("day");
   const travel = useTravel({
     id: travelId,
@@ -182,7 +192,7 @@ function RouteComponent() {
           </div>
         </div>
 
-        <div className="pt-4 pb-3 relative overflow-hidden">
+        <div className="pt-4 relative overflow-hidden">
           <div className="flex gap-4 overflow-x-auto no-scrollbar pr-10">
             {sortedCategories.map((category) => (
               <div
@@ -210,97 +220,131 @@ function RouteComponent() {
         </div>
       </ScreenHeader>
 
-      <ScreenDrawer className="space-y-2 px-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-sm font-semibold text-foreground">
-              Expense evolution
+      <ScreenDrawer asChild>
+        <div className="w-full p-4 shadow-up bg-background rounded-t-lg translate-y-4 z-0 pb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-semibold text-foreground">
+                Expense evolution
+              </div>
+              <div className="text-xs text-subtle-foreground">
+                Since the beginning
+              </div>
             </div>
-            <div className="text-xs text-subtle-foreground">
-              Since the beginning
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={period}
+              onValueChange={(value: "day" | "week") => setPeriod(value)}
+              size="sm"
+            >
+              <ToggleGroupItem value="day" className="text-sm">
+                1D
+              </ToggleGroupItem>
+              <ToggleGroupItem value="week" className="text-sm">
+                7D
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <div className="mt-4 space-y-4">
+            {transactionsByPeriod.length === 0 ? (
+              <div className="text-center text-muted-foreground py-8">
+                No transactions found for this category type.
+              </div>
+            ) : (
+              <ChartContainer
+                config={chartConfig}
+                className="aspect-auto h-[200px] w-full"
+              >
+                <BarChart
+                  accessibilityLayer
+                  data={transactionsByPeriod}
+                  stackOffset="sign"
+                >
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="period"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    minTickGap={32}
+                    tickFormatter={(value) => {
+                      const date = new Date(value);
+                      return date.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      });
+                    }}
+                  />
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        labelFormatter={(value) => {
+                          return new Date(value).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          });
+                        }}
+                        valueFormatter={(value) =>
+                          value.toLocaleString(undefined, {
+                            style: "currency",
+                            currency: travel.currency,
+                          })
+                        }
+                      />
+                    }
+                  />
+
+                  {allCategories.map((category) => {
+                    const hasData = transactionsByPeriod.some(
+                      (periodData) => periodData[`category_${category.id}`] > 0,
+                    );
+                    if (!hasData) return null;
+                    return (
+                      <Bar
+                        key={category.id}
+                        dataKey={`category_${category.id}`}
+                        fill={`var(--color-category_${category.id}`}
+                        stackId="a"
+                      />
+                    );
+                  })}
+                </BarChart>
+              </ChartContainer>
+            )}
+          </div>
+        </div>
+
+        <div className="w-full py-4 px-2 shadow-up pb-10 bg-background rounded-t-lg flex-1 translate-y-0">
+          <div className="flex px-2 items-center gap-3">
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-foreground">
+                <span className="capitalize">{categoryType}</span> transactions
+              </div>
+              <div className="text-xs text-subtle-foreground">
+                Since the beginning
+              </div>
             </div>
           </div>
-          <ToggleGroup
-            type="single"
-            variant="outline"
-            value={period}
-            onValueChange={(value: "day" | "week") => setPeriod(value)}
-            size="sm"
-          >
-            <ToggleGroupItem value="day" className="text-sm">
-              1D
-            </ToggleGroupItem>
-            <ToggleGroupItem value="week" className="text-sm">
-              7D
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-        <div className="mt-4 space-y-4">
-          {transactionsByPeriod.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">
-              No transactions found for this category type.
-            </div>
-          ) : (
-            <ChartContainer
-              config={chartConfig}
-              className="aspect-auto h-[200px] w-full"
-            >
-              <BarChart
-                accessibilityLayer
-                data={transactionsByPeriod}
-                stackOffset="sign"
-              >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="period"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  minTickGap={32}
-                  tickFormatter={(value) => {
-                    const date = new Date(value);
-                    return date.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
-                />
-                <ChartTooltip
-                  content={
-                    <ChartTooltipContent
-                      labelFormatter={(value) => {
-                        return new Date(value).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        });
-                      }}
-                      valueFormatter={(value) =>
-                        value.toLocaleString(undefined, {
-                          style: "currency",
-                          currency: travel.currency,
-                        })
-                      }
-                    />
-                  }
-                />
 
-                {allCategories.map((category) => {
-                  const hasData = transactionsByPeriod.some(
-                    (periodData) => periodData[`category_${category.id}`] > 0,
-                  );
-                  if (!hasData) return null;
-                  return (
-                    <Bar
-                      key={category.id}
-                      dataKey={`category_${category.id}`}
-                      fill={`var(--color-category_${category.id}`}
-                      stackId="a"
-                    />
-                  );
-                })}
-              </BarChart>
-            </ChartContainer>
+          <TransactionsByDate
+            transactions={travelTransactions}
+            userId={userId}
+          />
+
+          {travelTransactions.length === 0 && (
+            <Empty className="py-8">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <List />
+                </EmptyMedia>
+                <EmptyTitle>No transactions yet</EmptyTitle>
+                <EmptyDescription>
+                  There is no transaction created of this type yet.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
           )}
         </div>
       </ScreenDrawer>

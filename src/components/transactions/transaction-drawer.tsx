@@ -60,7 +60,6 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
   );
 
   if (!transaction) return null;
-  if (!travel) throw new Error("Travel not found");
 
   const transactionUser = travel.users.find(
     (user) => user.id === transaction.user,
