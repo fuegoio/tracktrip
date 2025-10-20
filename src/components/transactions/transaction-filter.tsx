@@ -128,11 +128,13 @@ export const TransactionFilter = ({
                     <span className="capitalize">{filter.value}</span>
                   </>
                 )}
-                {filter.field === "category" && filter.value && (
+                {filter.field === "category" && (
                   <>
                     {categories.find((c) => c.id === filter.value)?.emoji}{" "}
                     <span className="capitalize">
-                      {categories.find((c) => c.id === filter.value)?.name}
+                      {filter.value === null
+                        ? "No category"
+                        : categories.find((c) => c.id === filter.value)?.name}
                     </span>
                   </>
                 )}
