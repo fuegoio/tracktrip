@@ -1,6 +1,6 @@
 import type { CategoryType } from "./categories";
 
-export const FilterFields = ["type"] as const;
+export const FilterFields = ["type", "category"] as const;
 
 export type FilterField = (typeof FilterFields)[number];
 
@@ -14,4 +14,12 @@ export type TransactionTypeFilter = {
   value: CategoryType | undefined;
 };
 
-export type Filter = UnknownFilter | TransactionTypeFilter;
+export type TransactionCategoryFilter = {
+  field: "category";
+  value: string | undefined | null; // category ID
+};
+
+export type Filter =
+  | UnknownFilter
+  | TransactionTypeFilter
+  | TransactionCategoryFilter;

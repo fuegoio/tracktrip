@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { SelectTrigger } from "@radix-ui/react-select";
+import { useLiveQuery, eq } from "@tanstack/react-db";
 import { X } from "lucide-react";
 
 import { Button } from "../ui/button";
@@ -24,15 +25,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CategoryTypes, categoryTypeToEmoji } from "@/data/categories";
 import { FilterFields, type Filter, type FilterField } from "@/data/filters";
+import { categoriesCollection } from "@/store/collections";
 
 export const TransactionFilter = ({
   filter,
   onChange,
   onDelete,
+  travelId,
 }: {
   filter: Filter;
   onChange: (filter: Filter) => void;
   onDelete: () => void;
+  travelId: string;
 }) => {
   const [fieldDropdownOpen, setFieldDropdownOpen] = useState(
     filter.field === undefined,
@@ -63,6 +67,13 @@ export const TransactionFilter = ({
     setValueDropdownOpen(open);
   };
 
+  // Get categories for the current travel
+  const { data: categories = [] } = useLiveQuery((q) =>
+    q
+      .from({ categories: categoriesCollection })
+      .where(({ categories }) => eq(categories.travel, travelId)),
+  );
+
   return (
     <ButtonGroup>
       <Select
@@ -85,7 +96,7 @@ export const TransactionFilter = ({
         <SelectContent className="w-56" align="start">
           <SelectGroup>
             {FilterFields.map((field) => (
-              <SelectItem key={field} value={field}>
+              <SelectItem key={field} value={field} className="capitalize">
                 {field}
               </SelectItem>
             ))}
@@ -111,34 +122,91 @@ export const TransactionFilter = ({
                 size="sm"
                 className="border-dashed font-normal"
               >
-                {filter.value && categoryTypeToEmoji[filter.value]}{" "}
-                <span className="capitalize">{filter.value}</span>
+                {filter.field === "type" && filter.value && (
+                  <>
+                    {categoryTypeToEmoji[filter.value]}{" "}
+                    <span className="capitalize">{filter.value}</span>
+                  </>
+                )}
+                {filter.field === "category" && filter.value && (
+                  <>
+                    {categories.find((c) => c.id === filter.value)?.emoji}{" "}
+                    <span className="capitalize">
+                      {categories.find((c) => c.id === filter.value)?.name}
+                    </span>
+                  </>
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel className="flex items-center gap-2">
-                Type is ...
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                {CategoryTypes.map((type) => (
-                  <DropdownMenuCheckboxItem
-                    key={type}
-                    checked={filter.value === type}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        onChange({
-                          field: "type",
-                          value: type,
-                        });
-                      }
-                    }}
-                  >
-                    {categoryTypeToEmoji[type]}{" "}
-                    <span className="capitalize">{type}</span>
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuGroup>
+              {filter.field === "type" && (
+                <>
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    Type is ...
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {CategoryTypes.map((type) => (
+                      <DropdownMenuCheckboxItem
+                        key={type}
+                        checked={filter.value === type}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            onChange({
+                              field: "type",
+                              value: type,
+                            });
+                          }
+                        }}
+                      >
+                        {categoryTypeToEmoji[type]}{" "}
+                        <span className="capitalize">{type}</span>
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </>
+              )}
+              {filter.field === "category" && (
+                <>
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    Category is ...
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuCheckboxItem
+                      key="no-category"
+                      checked={filter.value === null}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          onChange({
+                            field: "category",
+                            value: null,
+                          });
+                        }
+                      }}
+                    >
+                      No category
+                    </DropdownMenuCheckboxItem>
+                    {categories.map((category) => (
+                      <DropdownMenuCheckboxItem
+                        key={category.id}
+                        checked={filter.value === category.id}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            onChange({
+                              field: "category",
+                              value: category.id,
+                            });
+                          }
+                        }}
+                      >
+                        {category.emoji}{" "}
+                        <span className="capitalize">{category.name}</span>
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
           <Button

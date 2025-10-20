@@ -68,6 +68,12 @@ function RouteComponent() {
         if (filter.field === "type") {
           return transaction.type === filter.value;
         }
+        if (filter.field === "category") {
+          if (filter.value === null) {
+            return transaction.category === null;
+          }
+          return transaction.category === filter.value;
+        }
         return true;
       }),
   );
@@ -147,6 +153,7 @@ function RouteComponent() {
                               previous.filter((f) => f !== filter),
                             );
                           }}
+                          travelId={travelId}
                         />
                       ))}
                     </div>
