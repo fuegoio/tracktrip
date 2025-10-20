@@ -49,7 +49,7 @@ const budgetsSummaries = [
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
-  const [selectedPeriod, setSelectedPeriod] = useState<BudgetPeriod>("day");
+  const [selectedPeriod, setSelectedPeriod] = useState<BudgetPeriod>("week");
 
   return (
     <>

@@ -196,6 +196,7 @@ function RouteComponent() {
           <div className="flex gap-4 overflow-x-auto no-scrollbar pr-10">
             {sortedCategories.map((category) => (
               <div
+                key={category.id}
                 className="border-l-2 px-4"
                 style={{ borderColor: category.color }}
               >
