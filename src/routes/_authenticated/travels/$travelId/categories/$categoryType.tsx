@@ -109,7 +109,9 @@ function RouteComponent() {
   ];
 
   // Sort categories by transaction sum (descending)
-  const sortedCategories = [...allCategories].sort((a, b) => b.transactionSum - a.transactionSum);
+  const sortedCategories = [...allCategories].sort(
+    (a, b) => b.transactionSum - a.transactionSum,
+  );
 
   function sumTransactionsByPeriod() {
     const startOfTravel = dayjs(travel.startDate).startOf("day");
@@ -148,7 +150,7 @@ function RouteComponent() {
   // Create chart config
   const chartConfig: ChartConfig = {};
   if (transactionsByPeriod.length > 0) {
-    sortedCategories.forEach((category) => {
+    allCategories.forEach((category) => {
       chartConfig[`category_${category.id}`] = {
         label: category.name,
         color: category.color,
@@ -196,13 +198,10 @@ function RouteComponent() {
                   </div>
                 </div>
                 <div className="text-foreground font-mono font-semibold text-sm">
-                  {category.transactionSum.toLocaleString(
-                    undefined,
-                    {
-                      style: "currency",
-                      currency: travel.currency,
-                    },
-                  )}
+                  {category.transactionSum.toLocaleString(undefined, {
+                    style: "currency",
+                    currency: travel.currency,
+                  })}
                 </div>
               </div>
             ))}
@@ -286,7 +285,7 @@ function RouteComponent() {
                   }
                 />
 
-                {sortedCategories.map((category) => {
+                {allCategories.map((category) => {
                   const hasData = transactionsByPeriod.some(
                     (periodData) => periodData[`category_${category.id}`] > 0,
                   );
