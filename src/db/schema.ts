@@ -117,7 +117,6 @@ export const categoriesTable = pgTable("categories", {
   name: text().notNull(),
   type: categoryTypesEnum().notNull(),
   emoji: varchar({ length: 255 }).notNull(),
-  color: varchar({ length: 255 }).notNull(),
 });
 
 export const transactionsTable = pgTable("transactions", {

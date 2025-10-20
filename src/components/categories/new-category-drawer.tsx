@@ -41,20 +41,16 @@ import {
 } from "@/components/ui/select";
 import {
   CategoryTypes,
-  categoryTypeToColor,
   categoryTypeToDefaultName,
   categoryTypeToEmoji,
   type CategoryType,
 } from "@/data/categories";
 import { categoriesCollection } from "@/store/collections";
 
-
-
 const formSchema = z.object({
   name: z.string("Name is required.").min(1, "Name is required."),
   type: z.enum(CategoryTypes),
   emoji: z.string("Emoji is required.").min(1, "Emoji is required."),
-  color: z.string("Color is required.").min(1, "Color is required."),
 });
 
 export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
@@ -64,7 +60,6 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: "food",
-      color: categoryTypeToColor["food"],
       emoji: categoryTypeToEmoji["food"],
     },
   });
@@ -116,7 +111,6 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                     <Select
                       onValueChange={(value: CategoryType) => {
                         field.onChange(value);
-                        form.setValue("color", categoryTypeToColor[value]);
                         form.setValue("emoji", categoryTypeToEmoji[value]);
                       }}
                       defaultValue={field.value}

@@ -2,15 +2,9 @@ import { useState } from "react";
 
 import { eq, and, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import Color from "colorjs.io";
 import dayjs from "dayjs";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  LabelList,
-  Legend,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
@@ -23,6 +17,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   categoryTypeToColor,
+  categoryTypeToColorHex,
   categoryTypeToEmoji,
   isCategoryType,
 } from "@/data/categories";
@@ -77,6 +72,13 @@ function RouteComponent() {
     0,
   );
 
+  const getCategoryColor = (index: number) => {
+    const color = new Color(categoryTypeToColorHex[categoryType]);
+    color.lch.c = 100;
+    color.lch.l = 80 + (index / categories.length) * -50;
+    return color;
+  };
+
   // Always include a synthetic "No category" category
   const allCategories = [
     {
@@ -84,13 +86,11 @@ function RouteComponent() {
       name: "No category",
       color: "var(--muted-foreground)",
     },
-    ...categories.map((category) => ({
+    ...categories.map((category, index) => ({
       ...category,
-      color: `var(--color-${categoryTypeToColor[category.type].replace("bg-", "")})`,
+      color: getCategoryColor(index).toString(),
     })),
   ];
-
-  console.log(allCategories);
 
   function sumTransactionsByPeriod() {
     const startOfTravel = dayjs(travel.startDate).startOf("day");

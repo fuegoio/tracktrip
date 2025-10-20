@@ -27,6 +27,14 @@ export const categoryTypeToColor: Record<CategoryType, string> = {
   other: "bg-gray-100",
 };
 
+export const categoryTypeToColorHex: Record<CategoryType, string> = {
+  food: "#fecdd3",
+  accommodation: "#bbf7d0",
+  transport: "#c7d2fe",
+  activity: "#fef08a",
+  other: "#e5e7eb",
+};
+
 export const categoryTypeToDefaultName: Record<CategoryType, string> = {
   food: "Restaurant",
   accommodation: "Hotel",
@@ -41,5 +49,4 @@ export type Category = {
   type: CategoryType;
   name: string;
   emoji: string;
-  color: string;
 };

@@ -1,5 +1,6 @@
 import { eq, useLiveQuery } from "@tanstack/react-db";
 
+import { categoryTypeToColor } from "@/data/categories";
 import { cn } from "@/lib/utils";
 import { categoriesCollection } from "@/store/collections";
 
@@ -23,7 +24,7 @@ export const CategoryBadge = ({
     <div
       className={cn(
         "rounded-full size-7 flex items-center justify-center text-sm inset-ring-4 inset-ring-white/40",
-        category.color,
+        categoryTypeToColor[category.type],
         className,
       )}
     >
