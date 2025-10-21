@@ -1,5 +1,5 @@
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { ArrowRight, MapPin } from "lucide-react";
 import { capitalize } from "remeda";
@@ -13,6 +13,7 @@ import {
 } from "@/data/categories";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/places/",
@@ -115,84 +116,66 @@ function RouteComponent() {
         </div>
       </ScreenHeader>
 
-      <ScreenDrawer className="px-4">
-        <div className="text-sm font-semibold text-foreground mb-4">
-          Places Overview
+      <ScreenDrawer className="px-4 space-y-2">
+        <div className="px-1">
+          <div className="text-sm font-semibold text-foreground">
+            All places
+          </div>
+          <div className="text-xs text-subtle-foreground">
+            A list of all places and their expenses.
+          </div>
         </div>
 
         {places && places.length > 0 ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {places.map((place) => {
               const placeStats = calculatePlaceStats(place.id);
 
               return (
-                <div key={place.id} className="border rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">📍</span>
-                      <span className="text-lg font-medium">{place.name}</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-muted-foreground">
-                        Total Cost
+                <div key={place.id} className="border-b py-4 px-1">
+                  <div className="flex items-center justify-between">
+                    <div className="text-base font-medium">{place.name}</div>
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="size-5"
+                      asChild
+                    >
+                      <Link
+                        to="/travels/$travelId/places/$placeId"
+                        params={{
+                          travelId: travel.id,
+                          placeId: place.id,
+                        }}
+                      >
+                        <ArrowRight className="size-3" />
+                      </Link>
+                    </Button>
+                  </div>
+
+                  {placeStats.startDate && placeStats.endDate && (
+                    <div className="flex items-center justify-between mt-1">
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <span>
+                            {dayjs(placeStats.startDate).format("MMM D, YYYY")}
+                            <ArrowRight className="inline mx-1 size-3" />
+                            {dayjs(placeStats.endDate).format("MMM D, YYYY")}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1 border-l pl-4">
+                          <span>
+                            {placeStats.days} day
+                            {placeStats.days !== 1 ? "s" : ""}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-lg font-mono font-semibold">
+
+                      <div className="text-base font-mono">
                         {placeStats.totalCost.toLocaleString(undefined, {
                           style: "currency",
                           currency: travel.currency,
                         })}
-                      </div>
-                    </div>
-                  </div>
-
-                  {placeStats.startDate && placeStats.endDate && (
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
-                      <div className="flex items-center gap-1">
-                        <span>📅</span>
-                        <span>
-                          {dayjs(placeStats.startDate).format("MMM D, YYYY")}
-                          <ArrowRight className="inline-block mx-1 size-4" />
-                          {dayjs(placeStats.endDate).format("MMM D, YYYY")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span>⏱️</span>
-                        <span>
-                          {placeStats.days} day
-                          {placeStats.days !== 1 ? "s" : ""}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {placeStats.categoryBreakdown.length > 0 && (
-                    <div className="mt-4">
-                      <div className="text-xs text-muted-foreground mb-2">
-                        Category Breakdown
-                      </div>
-                      <div className="flex gap-4 overflow-x-auto no-scrollbar pr-4">
-                        {placeStats.categoryBreakdown.map((category) => (
-                          <div
-                            key={category.type}
-                            className="border-l-2 px-3 min-w-[120px]"
-                            style={{ borderColor: category.color }}
-                          >
-                            <div className="flex items-baseline gap-1 mb-1">
-                              {category.emoji && (
-                                <div className="text-xs">{category.emoji}</div>
-                              )}
-                              <div className="text-xs text-subtle-foreground whitespace-nowrap">
-                                {category.name}
-                              </div>
-                            </div>
-                            <div className="text-foreground font-mono font-semibold text-sm">
-                              {category.total.toLocaleString(undefined, {
-                                style: "currency",
-                                currency: travel.currency,
-                              })}
-                            </div>
-                          </div>
-                        ))}
                       </div>
                     </div>
                   )}
