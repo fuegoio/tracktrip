@@ -15,8 +15,6 @@ import type { User } from "better-auth";
 
 import { authClient } from "@/auth/client";
 
-
-
 export const UserMenu = ({ user }: { user: User }) => {
   const navigate = useNavigate();
 

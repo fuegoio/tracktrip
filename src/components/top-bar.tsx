@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeftRight } from "lucide-react";
 
+import { TravelMenu } from "./travel-menu";
 import { Button } from "./ui/button";
 import { UserMenu } from "./user-menu";
 
@@ -20,7 +21,7 @@ export const TopBar = ({ travel, user }: { travel: Travel; user: User }) => {
         </Link>
       </Button>
 
-      <div className="text-2xl leading-none">{travel.emoji}</div>
+      <TravelMenu travel={travel} />
 
       <div className="flex items-center gap-2">
         <UserMenu user={user} />
