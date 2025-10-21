@@ -89,12 +89,19 @@ function RouteComponent() {
 
     // Sort transactions by date
     const sortedTransactions = [...placeTransactions].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      (a, b) =>
+        new Date(a.activationDate || a.date).getTime() -
+        new Date(b.activationDate || b.date).getTime(),
     );
 
-    const startDate = sortedTransactions[0]?.date || null;
+    const startDate =
+      sortedTransactions[0]?.activationDate ||
+      sortedTransactions[0]?.date ||
+      null;
     const endDate =
-      sortedTransactions[sortedTransactions.length - 1]?.date || null;
+      sortedTransactions[sortedTransactions.length - 1]?.activationDate ||
+      sortedTransactions[sortedTransactions.length - 1]?.date ||
+      null;
 
     // Calculate number of days (inclusive)
     const days =
