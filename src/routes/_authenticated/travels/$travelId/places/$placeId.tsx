@@ -3,7 +3,7 @@ import { useState } from "react";
 import { eq, and, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { List } from "lucide-react";
+import { ArrowRight, List } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { capitalize } from "remeda";
 
@@ -77,6 +77,40 @@ function RouteComponent() {
       ),
   );
 
+  // Calculate date range and duration for this place
+  const calculatePlaceDateRange = () => {
+    if (placeTransactions.length === 0) {
+      return {
+        startDate: null,
+        endDate: null,
+        days: 0,
+      };
+    }
+
+    // Sort transactions by date
+    const sortedTransactions = [...placeTransactions].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+
+    const startDate = sortedTransactions[0]?.date || null;
+    const endDate =
+      sortedTransactions[sortedTransactions.length - 1]?.date || null;
+
+    // Calculate number of days (inclusive)
+    const days =
+      startDate && endDate
+        ? dayjs(endDate).diff(dayjs(startDate), "day") + 1
+        : 0;
+
+    return {
+      startDate,
+      endDate,
+      days,
+    };
+  };
+
+  const { startDate, endDate, days } = calculatePlaceDateRange();
+
   const transactionsSum = placeTransactions.reduce(
     (acc, transaction) => acc + transaction.amount,
     0,
@@ -114,7 +148,9 @@ function RouteComponent() {
     );
 
     const result = periodsSinceStart.map((periodDate) => {
-      const periodData: Record<string, any> = { period: periodDate };
+      const periodData: Record<string, number | string> = {
+        period: periodDate,
+      };
       allCategoryTypes.forEach((catType) => {
         periodData[`categoryType_${catType.type}`] = 0;
       });
@@ -160,6 +196,24 @@ function RouteComponent() {
         <div className="text-muted-foreground text-sm mt-1">
           A summary of your expenses at {place.name} for this travel.
         </div>
+        {startDate && endDate && (
+          <div className="text-muted-foreground text-sm mt-4 px-1">
+            <div className="flex items-center gap-2">
+              <span>📅</span>
+              <span>
+                {dayjs(startDate).format("MMM D, YYYY")}
+                <ArrowRight className="inline-block mx-1 size-4" />
+                {dayjs(endDate).format("MMM D, YYYY")}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span>⏱️</span>
+              <span>
+                {days} day{days !== 1 ? "s" : ""} at {place.name}
+              </span>
+            </div>
+          </div>
+        )}
         <div className="pt-6 pb-2">
           <div className="text-subtle-foreground text-sm">
             Total cost at {place.name}
@@ -333,4 +387,3 @@ function RouteComponent() {
     </>
   );
 }
-
