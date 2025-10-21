@@ -1,19 +1,22 @@
+import { useState } from "react";
+
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, MapPin } from "lucide-react";
-import { capitalize } from "remeda";
+import { ArrowDownUp, ArrowRight, MapPin } from "lucide-react";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
+import { Button } from "@/components/ui/button";
 import {
-  CategoryTypes,
-  categoryTypeToColorHex,
-  categoryTypeToEmoji,
-} from "@/data/categories";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/places/",
@@ -23,6 +26,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
+  const [sortBy, setSortBy] = useState("name");
 
   const travel = useTravel({
     id: travelId,
@@ -42,19 +46,19 @@ function RouteComponent() {
       .where(({ transactions }) => eq(transactions.travel, travelId)),
   );
 
-  // Calculate place statistics
-  const calculatePlaceStats = (placeId) => {
+  // Calculate place statistics and prepare data for sorting/display
+  const placesWithStats = (places || []).map((place) => {
     const placeTransactions = allTransactions.filter(
-      (transaction) => transaction.place === placeId,
+      (transaction) => transaction.place === place.id,
     );
 
     if (placeTransactions.length === 0) {
       return {
+        ...place,
         startDate: null,
         endDate: null,
         days: 0,
         totalCost: 0,
-        categoryBreakdown: [],
       };
     }
 
@@ -79,29 +83,34 @@ function RouteComponent() {
       0,
     );
 
-    // Calculate category breakdown
-    const categoryBreakdown = CategoryTypes.map((categoryType) => {
-      const sum = placeTransactions
-        .filter((transaction) => transaction.type === categoryType)
-        .reduce((acc, transaction) => acc + transaction.amount, 0);
-
-      return {
-        type: categoryType,
-        emoji: categoryTypeToEmoji[categoryType],
-        name: capitalize(categoryType),
-        color: categoryTypeToColorHex[categoryType],
-        total: sum,
-      };
-    }).filter((item) => item.total > 0);
-
     return {
+      ...place,
       startDate,
       endDate,
       days,
       totalCost,
-      categoryBreakdown,
     };
-  };
+  });
+
+  // Sort places based on the selected criteria
+  const sortedPlaces = [...placesWithStats].sort((a, b) => {
+    switch (sortBy) {
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "date":
+        // Sort by start date (newest first)
+        if (!a.startDate && !b.startDate) return 0;
+        if (!a.startDate) return 1;
+        if (!b.startDate) return -1;
+        return (
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
+      case "cost":
+        return b.totalCost - a.totalCost;
+      default:
+        return 0;
+    }
+  });
 
   return (
     <>
@@ -117,20 +126,31 @@ function RouteComponent() {
       </ScreenHeader>
 
       <ScreenDrawer className="px-4 space-y-2">
-        <div className="px-1">
-          <div className="text-sm font-semibold text-foreground">
-            All places
+        <div className="flex items-center justify-between">
+          <div className="px-1">
+            <div className="text-sm font-semibold text-foreground">
+              All places
+            </div>
+            <div className="text-xs text-subtle-foreground">
+              A list of all places and their expenses.
+            </div>
           </div>
-          <div className="text-xs text-subtle-foreground">
-            A list of all places and their expenses.
-          </div>
+          <Select onValueChange={setSortBy} value={sortBy}>
+            <SelectTrigger className="bg-background border-input" size="sm">
+              <ArrowDownUp className="h-4 w-4" />
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="date">Date</SelectItem>
+              <SelectItem value="cost">Cost</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        {places && places.length > 0 ? (
-          <div className="space-y-4">
-            {places.map((place) => {
-              const placeStats = calculatePlaceStats(place.id);
-
+        {sortedPlaces && sortedPlaces.length > 0 ? (
+          <div className="space-y-4 mt-4">
+            {sortedPlaces.map((place) => {
               return (
                 <div key={place.id} className="border-b py-4 px-1">
                   <div className="flex items-center justify-between">
@@ -153,22 +173,22 @@ function RouteComponent() {
                     </Button>
                   </div>
 
-                  {placeStats.startDate && placeStats.endDate && (
+                  {place.startDate && place.endDate && (
                     <div className="flex items-center justify-between mt-1">
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          {dayjs(placeStats.startDate).format("MMM D, YYYY")}
+                          {dayjs(place.startDate).format("MMM D, YYYY")}
                           <ArrowRight className="inline mx-1 size-3" />
-                          {dayjs(placeStats.endDate).format("MMM D, YYYY")}
+                          {dayjs(place.endDate).format("MMM D, YYYY")}
                         </div>
                         <div className="flex items-center gap-1 border-l pl-4">
-                          {placeStats.days} day
-                          {placeStats.days !== 1 ? "s" : ""}
+                          {place.days} day
+                          {place.days !== 1 ? "s" : ""}
                         </div>
                       </div>
 
                       <div className="text-base font-mono">
-                        {placeStats.totalCost.toLocaleString(undefined, {
+                        {place.totalCost.toLocaleString(undefined, {
                           style: "currency",
                           currency: travel.currency,
                         })}
