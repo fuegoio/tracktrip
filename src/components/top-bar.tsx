@@ -22,7 +22,9 @@ export const TopBar = ({ travel, user }: { travel: Travel; user: User }) => {
 
       <div className="text-2xl leading-none">{travel.emoji}</div>
 
-      <UserMenu user={user} />
+      <div className="flex items-center gap-2">
+        <UserMenu user={user} />
+      </div>
     </div>
   );
 };
