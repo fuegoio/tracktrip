@@ -3,7 +3,7 @@ import { useState } from "react";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowDownUp, ArrowRight, MapPin } from "lucide-react";
+import { ArrowDownUp, ArrowRight } from "lucide-react";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
