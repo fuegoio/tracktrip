@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, Cog, MapPin, Tag, User } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, MapPin, Tag, User } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -14,20 +14,25 @@ import {
 import type { Travel } from "@/data/travels";
 
 const travelLinks = [
-  { name: "People", path: "/users", icon: User },
+  { name: "Peoples", path: "/users", icon: User },
   { name: "Categories", path: "/categories", icon: Tag },
   { name: "Places", path: "/places", icon: MapPin },
 ] as const;
 
 export const TravelMenu = ({ travel }: { travel: Travel }) => {
+  const clearTravelId = () => {
+    localStorage.removeItem("travelId");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="text-2xl leading-none">{travel.emoji}</div>
+        <div className="text-2xl leading-none px-1">{travel.emoji}</div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-60 min-w-56 rounded-lg"
-        align="center"
+        align="start"
+        side="bottom"
         sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">
@@ -55,6 +60,13 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
             </Link>
           </DropdownMenuItem>
         ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild onClick={clearTravelId}>
+          <Link to="/">
+            <ArrowLeftRight />
+            Switch travel
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

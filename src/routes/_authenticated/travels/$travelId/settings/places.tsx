@@ -1,11 +1,10 @@
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronLeft, EllipsisVertical, MapPin } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { EllipsisVertical, MapPin } from "lucide-react";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { NewPlaceDrawer } from "@/components/places/new-place-drawer";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,19 +31,7 @@ function RouteComponent() {
   return (
     <>
       <ScreenHeader>
-        <div className="flex items-center">
-          <Button
-            variant="ghost"
-            asChild
-            className="text-subtle-foreground"
-            size="icon"
-          >
-            <Link from={Route.fullPath} to="..">
-              <ChevronLeft className="h-4 w-4" />
-            </Link>
-          </Button>
-          <div className="ml-2 font-semibold text-xl">Places</div>
-        </div>
+        <div className="font-semibold text-xl">Places</div>
         <div className="text-muted-foreground text-sm mt-1">
           Manage places for your travel expenses.
         </div>
@@ -78,4 +65,3 @@ function RouteComponent() {
     </>
   );
 }
-
