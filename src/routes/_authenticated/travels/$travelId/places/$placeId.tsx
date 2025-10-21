@@ -197,20 +197,17 @@ function RouteComponent() {
           A summary of your expenses at {place.name} for this travel.
         </div>
         {startDate && endDate && (
-          <div className="text-muted-foreground text-sm mt-4 px-1">
-            <div className="flex items-center gap-2">
-              <span>📅</span>
-              <span>
+          <div className="pt-4">
+            <div className="text-subtle-foreground text-xs">Dates</div>
+            <div className="text-muted-foreground text-sm flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 {dayjs(startDate).format("MMM D, YYYY")}
                 <ArrowRight className="inline-block mx-1 size-4" />
                 {dayjs(endDate).format("MMM D, YYYY")}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <span>⏱️</span>
-              <span>
-                {days} day{days !== 1 ? "s" : ""} at {place.name}
-              </span>
+              </div>
+              <div className="border-l pl-4">
+                {days} day{days !== 1 ? "s" : ""}
+              </div>
             </div>
           </div>
         )}

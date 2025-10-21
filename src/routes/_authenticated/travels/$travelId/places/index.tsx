@@ -157,17 +157,13 @@ function RouteComponent() {
                     <div className="flex items-center justify-between mt-1">
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          <span>
-                            {dayjs(placeStats.startDate).format("MMM D, YYYY")}
-                            <ArrowRight className="inline mx-1 size-3" />
-                            {dayjs(placeStats.endDate).format("MMM D, YYYY")}
-                          </span>
+                          {dayjs(placeStats.startDate).format("MMM D, YYYY")}
+                          <ArrowRight className="inline mx-1 size-3" />
+                          {dayjs(placeStats.endDate).format("MMM D, YYYY")}
                         </div>
                         <div className="flex items-center gap-1 border-l pl-4">
-                          <span>
-                            {placeStats.days} day
-                            {placeStats.days !== 1 ? "s" : ""}
-                          </span>
+                          {placeStats.days} day
+                          {placeStats.days !== 1 ? "s" : ""}
                         </div>
                       </div>
 
