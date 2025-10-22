@@ -101,87 +101,92 @@ export const TransactionAdditionalForm = ({
         )}
       />
 
-      {["accommodation", "transport", "activity"].includes(transactionType) && (
-        <>
-          <FormField
-            control={form.control}
-            name="activationDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date of the {transactionType}</FormLabel>
-                <FormControl>
-                  <Popover
-                    open={isDatePickerOpen}
-                    onOpenChange={setIsDatePickerOpen}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="secondary"
-                        data-empty={!field.value}
-                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
-                      >
-                        <CalendarIcon />
-                        {field.value ? (
-                          dayjs(field.value).format("LL")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        timeZone="UTC"
-                        selected={field.value ?? undefined}
-                        onSelect={(date) => {
-                          field.onChange(date ?? null);
-                          setIsDatePickerOpen(false);
-                        }}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="days"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Days of the {transactionType}</FormLabel>
-                <FormControl>
-                  <ButtonGroup className="w-full">
+      {(transactionType === "accommodation" ||
+        transactionType === "transport") && (
+        <FormField
+          control={form.control}
+          name="departureDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {transactionType === "accommodation" && "Day of departure"}
+                {transactionType === "transport" &&
+                  "Last day at the destination"}
+              </FormLabel>
+              <FormControl>
+                <Popover
+                  open={isDatePickerOpen}
+                  onOpenChange={setIsDatePickerOpen}
+                >
+                  <PopoverTrigger asChild>
                     <Button
                       variant="secondary"
-                      className="h-10 shadow-none"
-                      type="button"
-                      onClick={() => field.onChange((field.value ?? 1) - 1)}
+                      data-empty={!field.value}
+                      className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
                     >
-                      <Minus />
+                      <CalendarIcon />
+                      {field.value ? (
+                        dayjs(field.value).format("LL")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
                     </Button>
-                    <Input
-                      {...field}
-                      value={field.value ?? "1"}
-                      className="text-center border-r-0"
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      timeZone="UTC"
+                      selected={field.value ?? undefined}
+                      onSelect={(date) => {
+                        field.onChange(date ?? null);
+                        setIsDatePickerOpen(false);
+                      }}
                     />
-                    <Button
-                      variant="secondary"
-                      className="h-10 shadow-none"
-                      type="button"
-                      onClick={() => field.onChange((field.value ?? 1) + 1)}
-                    >
-                      <Plus />
-                    </Button>
-                  </ButtonGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </>
+                  </PopoverContent>
+                </Popover>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+
+      {["activity", "food", "other"].includes(transactionType) && (
+        <FormField
+          control={form.control}
+          name="days"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Number of days for this expense</FormLabel>
+              <FormControl>
+                <ButtonGroup className="w-full">
+                  <Button
+                    variant="secondary"
+                    className="h-10 shadow-none"
+                    type="button"
+                    onClick={() => field.onChange((field.value ?? 1) - 1)}
+                  >
+                    <Minus />
+                  </Button>
+                  <Input
+                    {...field}
+                    value={field.value ?? "1"}
+                    className="text-center border-r-0"
+                  />
+                  <Button
+                    variant="secondary"
+                    className="h-10 shadow-none"
+                    type="button"
+                    onClick={() => field.onChange((field.value ?? 1) + 1)}
+                  >
+                    <Plus />
+                  </Button>
+                </ButtonGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       )}
     </>
   );

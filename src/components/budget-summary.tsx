@@ -54,7 +54,7 @@ export const BudgetSummary = ({
 
   const periodTransactionsAmount = periodTransactions.reduce(
     (acc, transaction) => {
-      const transactionDate = transaction.activationDate || transaction.date;
+      const transactionDate = transaction.date;
       const activationStart = dayjs(transactionDate);
       const activationEnd = activationStart.add(transaction.days ?? 1, "day");
 
@@ -88,7 +88,7 @@ export const BudgetSummary = ({
 
   // Average computation
   const totalAmount = periodTransactions.reduce((acc, transaction) => {
-    const transactionDate = transaction.activationDate || transaction.date;
+    const transactionDate = transaction.date;
     const activationStart = dayjs(transactionDate);
     const activationEnd = activationStart.add(transaction.days ?? 1, "day");
     const overlapStart =

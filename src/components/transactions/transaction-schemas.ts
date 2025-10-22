@@ -22,5 +22,5 @@ export const additionalTransactionSchema = z.object({
     .number()
     .positive("The number of days should be greater than 1.")
     .nullable(),
-  activationDate: z.date().nullable(),
+  departureDate: z.date().nullable(),
 });

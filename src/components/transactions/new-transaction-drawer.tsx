@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/drawer";
 import { Form } from "@/components/ui/form";
 import { transactionsCollection } from "@/store/collections";
+import dayjs from "dayjs";
 
 export const NewTransactionDrawer = ({
   travel,
@@ -63,7 +64,6 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
-      activationDate: null,
     },
   });
 
@@ -80,8 +80,8 @@ export const NewTransactionDrawer = ({
       category: null,
       place: null,
       days: null,
-      activationDate: null,
     };
+
     transactionsCollection.insert(transaction);
 
     createTransactionForm.reset();
@@ -95,6 +95,17 @@ export const NewTransactionDrawer = ({
 
     transactionsCollection.update(createdTransaction.id, (transaction) => {
       Object.assign(transaction, values);
+
+      if (values.departureDate) {
+        transaction.days =
+          Math.ceil(
+            dayjs(values.departureDate).diff(
+              dayjs(createdTransaction.date),
+              "day",
+              true,
+            ),
+          ) + (transaction.type === "accommodation" ? 0 : 1);
+      }
     });
 
     closeDrawer();
@@ -133,7 +144,7 @@ export const NewTransactionDrawer = ({
                 onSubmit={createTransactionForm.handleSubmit(
                   onSubmitCreateTransaction,
                 )}
-                className="space-y-4 mt-6"
+                className="space-y-4 mt-5"
               >
                 <TransactionBaseForm travel={travel} />
 

@@ -200,15 +200,15 @@ export const TransactionDrawer = ({ travelId }: { travelId: string }) => {
                   Date of {transaction.type}
                 </Label>
                 <div className="flex items-center text-sm font-medium mt-1">
-                  <div>
-                    {dayjs(
-                      transaction.activationDate || transaction.date,
-                    ).format("LL")}
-                  </div>
+                  <div>{dayjs(transaction.date).format("LL")}</div>
                   <ArrowRight className="mx-2 size-4 flex-1" />
                   <div>
-                    {dayjs(transaction.activationDate || transaction.date)
-                      .add((transaction.days ?? 1) - 1, "days")
+                    {dayjs(transaction.date)
+                      .add(
+                        (transaction.days ?? 1) -
+                          (transaction.type === "accommodation" ? 0 : 1),
+                        "days",
+                      )
                       .format("LL")}
                   </div>
                 </div>

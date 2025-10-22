@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import dayjs from "dayjs";
 import { X } from "lucide-react";
 import z from "zod";
 
@@ -27,8 +28,6 @@ import {
 import { Form } from "@/components/ui/form";
 import { transactionsCollection } from "@/store/collections";
 
-
-
 const formSchema = z.object({
   ...baseTransactionSchema.shape,
   ...additionalTransactionSchema.shape,
@@ -49,6 +48,13 @@ export const EditTransactionDrawer = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...transaction,
+      departureDate: dayjs(transaction.date)
+        .add(
+          (transaction.days ?? 1) -
+            (transaction.type === "accommodation" ? 0 : 1),
+          "day",
+        )
+        .toDate(),
     },
   });
 
@@ -58,6 +64,14 @@ export const EditTransactionDrawer = ({
     if (isDirty) {
       transactionsCollection.update(transaction.id, (transaction) => {
         Object.assign(transaction, values);
+
+        if (values.departureDate) {
+          transaction.days =
+            Math.ceil(
+              dayjs(values.departureDate).diff(dayjs(values.date), "day", true),
+            ) + (transaction.type === "accommodation" ? 0 : 1);
+          console.log(transaction.days, values.departureDate, values.date);
+        }
 
         editTransactionForm.reset({
           ...transaction,

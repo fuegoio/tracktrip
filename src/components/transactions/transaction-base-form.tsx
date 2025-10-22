@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import dayjs from "dayjs";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Info } from "lucide-react";
 import z from "zod";
 
 import { AmountInput } from "../ui/amount-input";
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -71,7 +72,9 @@ export const TransactionBaseForm = ({
           <FormItem className="flex-1">
             <div className="flex items-center justify-between">
               <FormLabel>Description</FormLabel>
-              <span className="text-sm text-muted-foreground">Optional</span>
+              <span className="text-sm text-muted-foreground text-xs">
+                Optional
+              </span>
             </div>
             <FormControl>
               <Textarea
@@ -139,6 +142,64 @@ export const TransactionBaseForm = ({
         )}
       />
 
+      <FormField
+        control={form.control}
+        name="date"
+        render={({ field }) => (
+          <FormItem>
+            <div className="flex items-center justify-between">
+              <FormLabel>Date</FormLabel>
+              {["accommodation", "transport", "activity"].includes(
+                form.watch("type"),
+              ) && (
+                <FormDescription className="flex items-center text-xs">
+                  <Info className="size-3 mr-1" />
+                  {form.watch("type") === "accommodation" &&
+                    "The first day of your stay."}
+                  {form.watch("type") === "transport" &&
+                    "The day you will take the transport."}
+                  {form.watch("type") === "activity" &&
+                    "The day you will do the activity."}
+                </FormDescription>
+              )}
+            </div>
+            <FormControl>
+              <Popover
+                open={isDatePickerOpen}
+                onOpenChange={setIsDatePickerOpen}
+              >
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    data-empty={!field.value}
+                    className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
+                  >
+                    <CalendarIcon />
+                    {field.value ? (
+                      dayjs(field.value).format("LL")
+                    ) : (
+                      <span>Pick the date it will happen</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    timeZone="UTC"
+                    selected={field.value}
+                    onSelect={(date) => {
+                      field.onChange(date);
+                      setIsDatePickerOpen(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <div className="flex gap-2">
         <FormField
           control={form.control}
@@ -181,49 +242,6 @@ export const TransactionBaseForm = ({
           )}
         />
       </div>
-
-      <FormField
-        control={form.control}
-        name="date"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Date</FormLabel>
-            <FormControl>
-              <Popover
-                open={isDatePickerOpen}
-                onOpenChange={setIsDatePickerOpen}
-              >
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="secondary"
-                    data-empty={!field.value}
-                    className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
-                  >
-                    <CalendarIcon />
-                    {field.value ? (
-                      dayjs(field.value).format("LL")
-                    ) : (
-                      <span>Pick the date it will happen</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    timeZone="UTC"
-                    selected={field.value}
-                    onSelect={(date) => {
-                      field.onChange(date);
-                      setIsDatePickerOpen(false);
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </>
   );
 };
