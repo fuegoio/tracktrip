@@ -70,7 +70,6 @@ export const EditTransactionDrawer = ({
             Math.ceil(
               dayjs(values.departureDate).diff(dayjs(values.date), "day", true),
             ) + (transaction.type === "accommodation" ? 0 : 1);
-          console.log(transaction.days, values.departureDate, values.date);
         }
 
         editTransactionForm.reset({

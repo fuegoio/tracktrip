@@ -72,9 +72,7 @@ export const TransactionBaseForm = ({
           <FormItem className="flex-1">
             <div className="flex items-center justify-between">
               <FormLabel>Description</FormLabel>
-              <span className="text-sm text-muted-foreground text-xs">
-                Optional
-              </span>
+              <span className="text-muted-foreground text-xs">Optional</span>
             </div>
             <FormControl>
               <Textarea

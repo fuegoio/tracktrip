@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import dayjs from "dayjs";
 import { CheckCircle, X } from "lucide-react";
 import z from "zod";
 
@@ -27,7 +28,6 @@ import {
 } from "@/components/ui/drawer";
 import { Form } from "@/components/ui/form";
 import { transactionsCollection } from "@/store/collections";
-import dayjs from "dayjs";
 
 export const NewTransactionDrawer = ({
   travel,
@@ -63,7 +63,8 @@ export const NewTransactionDrawer = ({
     defaultValues: {
       category: null,
       place: null,
-      days: null,
+      days: 1,
+      departureDate: null,
     },
   });
 
