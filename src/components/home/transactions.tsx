@@ -1,4 +1,4 @@
-import { eq, useLiveQuery } from "@tanstack/react-db";
+import { and, lte, eq, useLiveQuery } from "@tanstack/react-db";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, List } from "lucide-react";
 
@@ -26,7 +26,12 @@ export const Transactions = ({
   const { data: transactions } = useLiveQuery((q) =>
     q
       .from({ transactions: transactionsCollection })
-      .where(({ transactions }) => eq(transactions.travel, travelId))
+      .where(({ transactions }) =>
+        and(
+          eq(transactions.travel, travelId),
+          lte(transactions.date, new Date()),
+        ),
+      )
       .orderBy(({ transactions }) => transactions.date, "desc"),
   );
   const recentTransactions = transactions.slice(0, RECENT_TRANSACTIONS_LIMIT);

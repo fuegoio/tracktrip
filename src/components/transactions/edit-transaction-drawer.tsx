@@ -48,6 +48,7 @@ export const EditTransactionDrawer = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       ...transaction,
+      days: Math.max(transaction.days ?? 1, 1),
       departureDate: dayjs(transaction.date)
         .add(
           (transaction.days ?? 1) -
