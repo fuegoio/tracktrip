@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CategoryTypes } from "@/data/categories";
+import { AllBudgetsSummary } from "@/components/budgets/all-budgets-summary";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/budgets/",
@@ -104,9 +105,11 @@ function RouteComponent() {
           </Select>
         </div>
 
-        <div className="mt-4 space-y-4">
+        <div className="pt-5 space-y-5">
+          <AllBudgetsSummary travelId={travelId} period={selectedPeriod} />
+
           {CategoryTypes.map((type) => (
-            <div className="border-b border-border/50 py-4" key={type}>
+            <div className="border-b border-border/50 pb-5" key={type}>
               <BudgetTypeSummary
                 travelId={travelId}
                 type={type}
