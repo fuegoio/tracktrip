@@ -32,7 +32,6 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
   const [amount, setAmount] = useState<number | "">("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
-
   const budgetsQuery = useLiveQuery(
     (q) =>
       q
@@ -40,19 +39,22 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
         .where(({ budgets }) => eq(budgets.travel, travelId)),
     [travelId],
   );
-
   const existingBudgets = budgetsQuery.data || [];
-
   const travel = useTravel({ id: travelId });
+
+  // Calculate total budget
+  const totalBudget = existingBudgets.reduce(
+    (sum, budget) => sum + budget.amount,
+    0,
+  );
 
   const handleCreateBudget = async () => {
     if (!selectedCategoryType || amount === "") return;
-
     try {
       await trpcClient.budgets.create.mutate({
         travel: travelId,
         categoryType: selectedCategoryType,
-        category: null, // Not implementing category budgets yet
+        category: null,
         amount: Number(amount),
       });
       setSelectedCategoryType(null);
@@ -65,7 +67,6 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
 
   const handleUpdateBudget = async () => {
     if (!editingBudget || amount === "") return;
-
     try {
       await trpcClient.budgets.update.mutate({
         id: editingBudget.id,
@@ -98,6 +99,25 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
   return (
     <>
       <div className="space-y-6 px-3">
+        {/* Total Budget Row */}
+        <div className="space-y-2 border-b py-4">
+          <div className="flex items-center gap-2 justify-between">
+            <div className="flex items-center gap-2">
+              <div className="font-medium text-sm">Total</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="text-sm font-mono">
+                {totalBudget.toLocaleString(undefined, {
+                  style: "currency",
+                  currency: travel.currency,
+                })}{" "}
+                / day
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Category Budget Rows */}
         <div>
           {CategoryTypes.map((type: CategoryType) => {
             const budget = existingBudgets.find((b) => b.categoryType === type);
@@ -108,7 +128,6 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
                     <CategoryTypeBadge categoryType={type} />
                     <div className="font-medium text-sm capitalize">{type}</div>
                   </div>
-
                   <div className="flex items-center gap-2">
                     {budget ? (
                       <div className="text-sm font-mono">
@@ -125,7 +144,6 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
                     )}
                   </div>
                 </div>
-
                 <div className="flex justify-end">
                   {budget ? (
                     <Button
@@ -152,6 +170,7 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
           })}
         </div>
 
+        {/* Drawer for Add/Edit */}
         <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
           <DrawerContent>
             <DrawerHeader>
