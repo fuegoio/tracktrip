@@ -189,6 +189,9 @@ export const TransactionBaseForm = ({
                       field.onChange(date);
                       setIsDatePickerOpen(false);
                     }}
+                    disabled={(date) =>
+                      date < travel.startDate || date > travel.endDate
+                    }
                   />
                 </PopoverContent>
               </Popover>

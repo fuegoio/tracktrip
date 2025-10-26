@@ -73,6 +73,8 @@ export const EditTransactionDrawer = ({
             Math.ceil(
               dayjs(values.departureDate).diff(dayjs(values.date), "day", true),
             ) + (transaction.type === "accommodation" ? 0 : 1);
+        } else {
+          transaction.days = 1;
         }
 
         editTransactionForm.reset({
@@ -132,6 +134,7 @@ export const EditTransactionDrawer = ({
               <TransactionAdditionalForm
                 travel={travel}
                 transactionType={transactionType}
+                transactionDate={editTransactionForm.watch("date")}
               />
 
               <div className="h-px bg-border" />

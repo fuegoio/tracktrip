@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { and, eq, useLiveQuery } from "@tanstack/react-db";
@@ -36,9 +36,11 @@ import { categoriesCollection } from "@/store/collections";
 export const TransactionAdditionalForm = ({
   travel,
   transactionType,
+  transactionDate,
 }: {
   travel: Travel;
   transactionType: CategoryType;
+  transactionDate: Date;
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const form = useFormContext<z.infer<typeof additionalTransactionSchema>>();
@@ -55,6 +57,13 @@ export const TransactionAdditionalForm = ({
         ),
     [transactionType],
   );
+
+  useEffect(() => {
+    const departureDate = form.getValues("departureDate");
+    if (departureDate && departureDate < transactionDate) {
+      form.setValue("departureDate", null);
+    }
+  }, [transactionDate, form]);
 
   return (
     <>
@@ -141,6 +150,11 @@ export const TransactionAdditionalForm = ({
                         field.onChange(date ?? null);
                         setIsDatePickerOpen(false);
                       }}
+                      disabled={(date) =>
+                        date < travel.startDate ||
+                        date > travel.endDate ||
+                        date <= transactionDate
+                      }
                     />
                   </PopoverContent>
                 </Popover>

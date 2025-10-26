@@ -106,6 +106,8 @@ export const NewTransactionDrawer = ({
               true,
             ),
           ) + (transaction.type === "accommodation" ? 0 : 1);
+      } else {
+        transaction.days = 1;
       }
     });
 
@@ -172,6 +174,7 @@ export const NewTransactionDrawer = ({
                   <TransactionAdditionalForm
                     travel={travel}
                     transactionType={createdTransaction.type}
+                    transactionDate={createdTransaction.date}
                   />
 
                   <div className="h-px bg-border mt-6" />
