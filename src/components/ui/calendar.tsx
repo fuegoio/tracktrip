@@ -41,6 +41,9 @@ function Calendar({
           date.toLocaleString("default", { month: "short" }),
         ...formatters,
       }}
+      defaultMonth={
+        props.mode === "single" ? (props.selected ?? undefined) : undefined
+      }
       classNames={{
         root: cn("w-fit", defaultClassNames.root),
         months: cn(
