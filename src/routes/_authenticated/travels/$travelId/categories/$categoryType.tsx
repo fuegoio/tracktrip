@@ -319,10 +319,6 @@ function RouteComponent() {
                   />
 
                   {allCategories.map((category) => {
-                    const hasData = transactionsByPeriod.some(
-                      (periodData) => periodData[`category_${category.id}`] > 0,
-                    );
-                    if (!hasData) return null;
                     return (
                       <Bar
                         key={category.id}
