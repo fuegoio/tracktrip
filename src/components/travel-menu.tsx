@@ -16,7 +16,6 @@ import type { Travel } from "@/data/travels";
 const travelLinks = [
   { name: "Peoples", path: "/users", icon: User },
   { name: "Categories", path: "/categories", icon: Tag },
-  { name: "Places", path: "/places", icon: MapPin },
 ] as const;
 
 export const TravelMenu = ({ travel }: { travel: Travel }) => {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { eq, and, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, List } from "lucide-react";
+import { ArrowRight, EllipsisVertical, List } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { capitalize } from "remeda";
 
@@ -16,6 +16,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
@@ -32,6 +38,7 @@ import {
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/places/$placeId",
@@ -192,6 +199,23 @@ function RouteComponent() {
           <span className="text-foreground capitalize text-2xl font-medium">
             {place.name}
           </span>
+          <div className="flex-1" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="secondary" size="icon">
+                <EllipsisVertical className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => placesCollection.delete(place.id)}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="text-muted-foreground text-sm mt-1">
           A summary of your expenses at {place.name} for this travel.
