@@ -10,6 +10,7 @@ import { capitalize } from "remeda";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
+import { Button } from "@/components/ui/button";
 import {
   ChartContainer,
   ChartTooltip,
@@ -38,7 +39,6 @@ import {
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/places/$placeId",
@@ -202,7 +202,7 @@ function RouteComponent() {
           <div className="flex-1" />
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon">
                 <EllipsisVertical className="h-4 w-4 text-muted-foreground" />
               </Button>
