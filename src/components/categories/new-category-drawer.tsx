@@ -25,7 +25,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,14 +32,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  CategoryTypes,
   categoryTypeToDefaultName,
   categoryTypeToEmoji,
   type CategoryType,
@@ -49,18 +40,22 @@ import { categoriesCollection } from "@/store/collections";
 
 const formSchema = z.object({
   name: z.string("Name is required.").min(1, "Name is required."),
-  type: z.enum(CategoryTypes),
   emoji: z.string("Emoji is required.").min(1, "Emoji is required."),
 });
 
-export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
+export const NewCategoryDrawer = ({
+  travelId,
+  categoryType,
+}: {
+  travelId: string;
+  categoryType: CategoryType;
+}) => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: "food",
-      emoji: categoryTypeToEmoji["food"],
+      emoji: categoryTypeToEmoji[categoryType],
     },
   });
 
@@ -68,6 +63,7 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
     categoriesCollection.insert({
       id: crypto.randomUUID(),
       ...values,
+      type: categoryType,
       travel: travelId,
     });
 
@@ -84,10 +80,10 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
           <div className="flex justify-between">
             <div>
               <DrawerTitle className="font-semibold text-lg text-foreground">
-                Add a category
+                Add a {categoryType} category
               </DrawerTitle>
               <DrawerDescription>
-                Add a category to your travel.
+                Add a {categoryType} category to your travel.
               </DrawerDescription>
             </div>
             <DrawerClose asChild>
@@ -102,42 +98,6 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 mt-6"
             >
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Type</FormLabel>
-                    <Select
-                      onValueChange={(value: CategoryType) => {
-                        field.onChange(value);
-                        form.setValue("emoji", categoryTypeToEmoji[value]);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="w-full">
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {CategoryTypes.map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {categoryTypeToEmoji[type]}{" "}
-                            <span className="capitalize">{type}</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      A category type is useful to display more relevant
-                      insights about your expenses.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <div className="flex items-start gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -187,9 +147,7 @@ export const NewCategoryDrawer = ({ travelId }: { travelId: string }) => {
                       <FormLabel className="opacity-0">Name</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={
-                            categoryTypeToDefaultName[form.watch("type")]
-                          }
+                          placeholder={categoryTypeToDefaultName[categoryType]}
                           {...field}
                           className="h-10"
                         />

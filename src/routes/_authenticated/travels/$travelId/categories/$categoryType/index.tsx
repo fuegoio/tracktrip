@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 import { eq, and, useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import Color from "colorjs.io";
 import dayjs from "dayjs";
-import { List } from "lucide-react";
+import { Cog, List } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis } from "recharts";
 
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
@@ -33,9 +33,10 @@ import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection, transactionsCollection } from "@/store/collections";
 import { categoriesCollection } from "@/store/collections";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
-  "/_authenticated/travels/$travelId/categories/$categoryType",
+  "/_authenticated/travels/$travelId/categories/$categoryType/",
 )({
   component: RouteComponent,
   beforeLoad: async ({ params }) => {
@@ -189,6 +190,13 @@ function RouteComponent() {
           <span className="text-foreground capitalize text-2xl font-medium">
             {categoryType}
           </span>
+
+          <div className="flex-1" />
+          <Button size="icon" variant="secondary" asChild>
+            <Link to="./manage" from={Route.fullPath}>
+              <Cog />
+            </Link>
+          </Button>
         </div>
         <div className="text-muted-foreground text-sm mt-1">
           A summary of your {categoryType} expenses for this travel.
