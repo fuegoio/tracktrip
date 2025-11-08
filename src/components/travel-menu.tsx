@@ -16,6 +16,7 @@ import type { Travel } from "@/data/travels";
 const travelLinks = [
   { name: "Peoples", path: "/users", icon: User },
   { name: "Categories", path: "/categories", icon: Tag },
+  { name: "Places", path: "/places", icon: MapPin },
 ] as const;
 
 export const TravelMenu = ({ travel }: { travel: Travel }) => {
@@ -51,7 +52,7 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
         {travelLinks.map((link) => (
           <DropdownMenuItem asChild key={link.path}>
             <Link
-              to={`/travels/$travelId/settings${link.path}`}
+              to={`/travels/$travelId${link.path}`}
               params={{ travelId: travel.id }}
             >
               <link.icon />

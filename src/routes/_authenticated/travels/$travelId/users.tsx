@@ -14,7 +14,7 @@ import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
 import { useTravel } from "@/lib/params";
 
 export const Route = createFileRoute(
-  "/_authenticated/travels/$travelId/settings/users",
+  "/_authenticated/travels/$travelId/users",
 )({
   component: RouteComponent,
 });

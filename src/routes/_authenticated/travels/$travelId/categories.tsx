@@ -15,7 +15,7 @@ import {
 import { categoriesCollection } from "@/store/collections";
 
 export const Route = createFileRoute(
-  "/_authenticated/travels/$travelId/settings/categories",
+  "/_authenticated/travels/$travelId/categories",
 )({
   component: RouteComponent,
 });
