@@ -54,13 +54,15 @@ function UserSpendingSummary() {
     return sum + (transaction.amount ?? 0);
   }, 0);
 
-  const averagePerPerson = totalSpent / travel.users.length;
+  const transactionsPaidByMe = transactions
+    .filter((transaction) => transaction.user === session.user.id)
+    .reduce((sum, transaction) => sum + transaction.amount, 0);
 
   return (
     <>
       <ScreenHeader>
         <div className="flex items-center gap-2">
-          <span className="text-foreground capitalize text-2xl font-medium">
+          <span className="text-foreground text-2xl font-medium">
             Your spendings
           </span>
         </div>
@@ -71,11 +73,39 @@ function UserSpendingSummary() {
           <div className="text-subtle-foreground text-sm">
             Total cost for you
           </div>
-          <div className="text-3xl text-foreground font-mono mt-1">
-            {averagePerPerson.toLocaleString(undefined, {
+          <div className="text-4xl text-foreground font-mono mt-1">
+            {totalSpent.toLocaleString(undefined, {
               style: "currency",
               currency: travel.currency,
             })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 mt-4">
+          <div className="border-l-2 border-foreground px-4">
+            <div className="text-sm text-subtle-foreground">Paid by me</div>
+            <div className="text-foreground font-mono font-semibold">
+              {transactionsPaidByMe.toLocaleString(undefined, {
+                style: "currency",
+                currency: travel.currency,
+              })}
+            </div>
+          </div>
+          <div className="border-l-2 border-muted-foreground px-4">
+            <div className="text-sm text-subtle-foreground">
+              {totalSpent > transactionsPaidByMe
+                ? "Owned to others"
+                : "Owned to me"}
+            </div>
+            <div className="text-foreground font-mono font-semibold">
+              {Math.abs(totalSpent - transactionsPaidByMe).toLocaleString(
+                undefined,
+                {
+                  style: "currency",
+                  currency: travel.currency,
+                },
+              )}
+            </div>
           </div>
         </div>
       </ScreenHeader>
