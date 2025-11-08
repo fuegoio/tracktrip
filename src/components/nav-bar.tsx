@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions" | "/users/me" | "/analyse";
+  path: "" | "/transactions" | "/balances" | "/analyse";
 };
 
 const navItemsLeft: NavItem[] = [
@@ -28,7 +28,7 @@ const navItemsLeft: NavItem[] = [
 
 const navItemsRight: NavItem[] = [
   { icon: ChartPie, path: "/analyse" },
-  { icon: User, path: "/users/me" },
+  { icon: User, path: "/balances" },
 ];
 
 export const NavBar = ({
