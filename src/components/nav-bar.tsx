@@ -13,11 +13,12 @@ import { NewTransactionDrawer } from "./transactions/new-transaction-drawer";
 import { Button } from "./ui/button";
 
 import type { Travel } from "@/data/travels";
+
 import { cn } from "@/lib/utils";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions" | "/settings" | "/categories" | "/analyse";
+  path: "" | "/transactions" | "/settings" | "/explore" | "/analyse";
 };
 
 const navItemsLeft: NavItem[] = [
@@ -26,8 +27,8 @@ const navItemsLeft: NavItem[] = [
 ];
 
 const navItemsRight: NavItem[] = [
-  { icon: Gauge, path: "/categories" },
-  { icon: BarChart, path: "/analyse" },
+  { icon: Gauge, path: "/analyse" },
+  { icon: BarChart, path: "/explore" },
 ];
 
 export const NavBar = ({

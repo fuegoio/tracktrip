@@ -19,8 +19,7 @@ import { Route as AuthenticatedTravelsTravelIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedTravelsTravelIdIndexRouteImport } from './routes/_authenticated/travels/$travelId/index'
 import { Route as AuthenticatedTravelsTravelIdUsersIndexRouteImport } from './routes/_authenticated/travels/$travelId/users/index'
 import { Route as AuthenticatedTravelsTravelIdTransactionsIndexRouteImport } from './routes/_authenticated/travels/$travelId/transactions/index'
-import { Route as AuthenticatedTravelsTravelIdPlacesIndexRouteImport } from './routes/_authenticated/travels/$travelId/places/index'
-import { Route as AuthenticatedTravelsTravelIdCategoriesIndexRouteImport } from './routes/_authenticated/travels/$travelId/categories/index'
+import { Route as AuthenticatedTravelsTravelIdExploreIndexRouteImport } from './routes/_authenticated/travels/$travelId/explore/index'
 import { Route as AuthenticatedTravelsTravelIdAnalyseIndexRouteImport } from './routes/_authenticated/travels/$travelId/analyse/index'
 import { Route as AuthenticatedTravelsTravelIdUsersMeRouteImport } from './routes/_authenticated/travels/$travelId/users/me'
 import { Route as AuthenticatedTravelsTravelIdPlacesPlaceIdRouteImport } from './routes/_authenticated/travels/$travelId/places/$placeId'
@@ -81,16 +80,10 @@ const AuthenticatedTravelsTravelIdTransactionsIndexRoute =
     path: '/transactions/',
     getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
   } as any)
-const AuthenticatedTravelsTravelIdPlacesIndexRoute =
-  AuthenticatedTravelsTravelIdPlacesIndexRouteImport.update({
-    id: '/places/',
-    path: '/places/',
-    getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
-  } as any)
-const AuthenticatedTravelsTravelIdCategoriesIndexRoute =
-  AuthenticatedTravelsTravelIdCategoriesIndexRouteImport.update({
-    id: '/categories/',
-    path: '/categories/',
+const AuthenticatedTravelsTravelIdExploreIndexRoute =
+  AuthenticatedTravelsTravelIdExploreIndexRouteImport.update({
+    id: '/explore/',
+    path: '/explore/',
     getParentRoute: () => AuthenticatedTravelsTravelIdRoute,
   } as any)
 const AuthenticatedTravelsTravelIdAnalyseIndexRoute =
@@ -142,8 +135,7 @@ export interface FileRoutesByFullPath {
   '/travels/$travelId/places/$placeId': typeof AuthenticatedTravelsTravelIdPlacesPlaceIdRoute
   '/travels/$travelId/users/me': typeof AuthenticatedTravelsTravelIdUsersMeRoute
   '/travels/$travelId/analyse': typeof AuthenticatedTravelsTravelIdAnalyseIndexRoute
-  '/travels/$travelId/categories': typeof AuthenticatedTravelsTravelIdCategoriesIndexRoute
-  '/travels/$travelId/places': typeof AuthenticatedTravelsTravelIdPlacesIndexRoute
+  '/travels/$travelId/explore': typeof AuthenticatedTravelsTravelIdExploreIndexRoute
   '/travels/$travelId/transactions': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
   '/travels/$travelId/users': typeof AuthenticatedTravelsTravelIdUsersIndexRoute
   '/travels/$travelId/categories/$categoryType/manage': typeof AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute
@@ -160,8 +152,7 @@ export interface FileRoutesByTo {
   '/travels/$travelId/places/$placeId': typeof AuthenticatedTravelsTravelIdPlacesPlaceIdRoute
   '/travels/$travelId/users/me': typeof AuthenticatedTravelsTravelIdUsersMeRoute
   '/travels/$travelId/analyse': typeof AuthenticatedTravelsTravelIdAnalyseIndexRoute
-  '/travels/$travelId/categories': typeof AuthenticatedTravelsTravelIdCategoriesIndexRoute
-  '/travels/$travelId/places': typeof AuthenticatedTravelsTravelIdPlacesIndexRoute
+  '/travels/$travelId/explore': typeof AuthenticatedTravelsTravelIdExploreIndexRoute
   '/travels/$travelId/transactions': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
   '/travels/$travelId/users': typeof AuthenticatedTravelsTravelIdUsersIndexRoute
   '/travels/$travelId/categories/$categoryType/manage': typeof AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute
@@ -181,8 +172,7 @@ export interface FileRoutesById {
   '/_authenticated/travels/$travelId/places/$placeId': typeof AuthenticatedTravelsTravelIdPlacesPlaceIdRoute
   '/_authenticated/travels/$travelId/users/me': typeof AuthenticatedTravelsTravelIdUsersMeRoute
   '/_authenticated/travels/$travelId/analyse/': typeof AuthenticatedTravelsTravelIdAnalyseIndexRoute
-  '/_authenticated/travels/$travelId/categories/': typeof AuthenticatedTravelsTravelIdCategoriesIndexRoute
-  '/_authenticated/travels/$travelId/places/': typeof AuthenticatedTravelsTravelIdPlacesIndexRoute
+  '/_authenticated/travels/$travelId/explore/': typeof AuthenticatedTravelsTravelIdExploreIndexRoute
   '/_authenticated/travels/$travelId/transactions/': typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
   '/_authenticated/travels/$travelId/users/': typeof AuthenticatedTravelsTravelIdUsersIndexRoute
   '/_authenticated/travels/$travelId/categories/$categoryType/manage': typeof AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute
@@ -202,8 +192,7 @@ export interface FileRouteTypes {
     | '/travels/$travelId/places/$placeId'
     | '/travels/$travelId/users/me'
     | '/travels/$travelId/analyse'
-    | '/travels/$travelId/categories'
-    | '/travels/$travelId/places'
+    | '/travels/$travelId/explore'
     | '/travels/$travelId/transactions'
     | '/travels/$travelId/users'
     | '/travels/$travelId/categories/$categoryType/manage'
@@ -220,8 +209,7 @@ export interface FileRouteTypes {
     | '/travels/$travelId/places/$placeId'
     | '/travels/$travelId/users/me'
     | '/travels/$travelId/analyse'
-    | '/travels/$travelId/categories'
-    | '/travels/$travelId/places'
+    | '/travels/$travelId/explore'
     | '/travels/$travelId/transactions'
     | '/travels/$travelId/users'
     | '/travels/$travelId/categories/$categoryType/manage'
@@ -240,8 +228,7 @@ export interface FileRouteTypes {
     | '/_authenticated/travels/$travelId/places/$placeId'
     | '/_authenticated/travels/$travelId/users/me'
     | '/_authenticated/travels/$travelId/analyse/'
-    | '/_authenticated/travels/$travelId/categories/'
-    | '/_authenticated/travels/$travelId/places/'
+    | '/_authenticated/travels/$travelId/explore/'
     | '/_authenticated/travels/$travelId/transactions/'
     | '/_authenticated/travels/$travelId/users/'
     | '/_authenticated/travels/$travelId/categories/$categoryType/manage'
@@ -326,18 +313,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTravelsTravelIdTransactionsIndexRouteImport
       parentRoute: typeof AuthenticatedTravelsTravelIdRoute
     }
-    '/_authenticated/travels/$travelId/places/': {
-      id: '/_authenticated/travels/$travelId/places/'
-      path: '/places'
-      fullPath: '/travels/$travelId/places'
-      preLoaderRoute: typeof AuthenticatedTravelsTravelIdPlacesIndexRouteImport
-      parentRoute: typeof AuthenticatedTravelsTravelIdRoute
-    }
-    '/_authenticated/travels/$travelId/categories/': {
-      id: '/_authenticated/travels/$travelId/categories/'
-      path: '/categories'
-      fullPath: '/travels/$travelId/categories'
-      preLoaderRoute: typeof AuthenticatedTravelsTravelIdCategoriesIndexRouteImport
+    '/_authenticated/travels/$travelId/explore/': {
+      id: '/_authenticated/travels/$travelId/explore/'
+      path: '/explore'
+      fullPath: '/travels/$travelId/explore'
+      preLoaderRoute: typeof AuthenticatedTravelsTravelIdExploreIndexRouteImport
       parentRoute: typeof AuthenticatedTravelsTravelIdRoute
     }
     '/_authenticated/travels/$travelId/analyse/': {
@@ -391,8 +371,7 @@ interface AuthenticatedTravelsTravelIdRouteChildren {
   AuthenticatedTravelsTravelIdPlacesPlaceIdRoute: typeof AuthenticatedTravelsTravelIdPlacesPlaceIdRoute
   AuthenticatedTravelsTravelIdUsersMeRoute: typeof AuthenticatedTravelsTravelIdUsersMeRoute
   AuthenticatedTravelsTravelIdAnalyseIndexRoute: typeof AuthenticatedTravelsTravelIdAnalyseIndexRoute
-  AuthenticatedTravelsTravelIdCategoriesIndexRoute: typeof AuthenticatedTravelsTravelIdCategoriesIndexRoute
-  AuthenticatedTravelsTravelIdPlacesIndexRoute: typeof AuthenticatedTravelsTravelIdPlacesIndexRoute
+  AuthenticatedTravelsTravelIdExploreIndexRoute: typeof AuthenticatedTravelsTravelIdExploreIndexRoute
   AuthenticatedTravelsTravelIdTransactionsIndexRoute: typeof AuthenticatedTravelsTravelIdTransactionsIndexRoute
   AuthenticatedTravelsTravelIdUsersIndexRoute: typeof AuthenticatedTravelsTravelIdUsersIndexRoute
   AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute: typeof AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute
@@ -411,10 +390,8 @@ const AuthenticatedTravelsTravelIdRouteChildren: AuthenticatedTravelsTravelIdRou
       AuthenticatedTravelsTravelIdUsersMeRoute,
     AuthenticatedTravelsTravelIdAnalyseIndexRoute:
       AuthenticatedTravelsTravelIdAnalyseIndexRoute,
-    AuthenticatedTravelsTravelIdCategoriesIndexRoute:
-      AuthenticatedTravelsTravelIdCategoriesIndexRoute,
-    AuthenticatedTravelsTravelIdPlacesIndexRoute:
-      AuthenticatedTravelsTravelIdPlacesIndexRoute,
+    AuthenticatedTravelsTravelIdExploreIndexRoute:
+      AuthenticatedTravelsTravelIdExploreIndexRoute,
     AuthenticatedTravelsTravelIdTransactionsIndexRoute:
       AuthenticatedTravelsTravelIdTransactionsIndexRoute,
     AuthenticatedTravelsTravelIdUsersIndexRoute:

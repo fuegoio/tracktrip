@@ -1,22 +1,24 @@
 import { useState } from "react";
 
-import { eq, useLiveQuery } from "@tanstack/react-db";
-import { createFileRoute } from "@tanstack/react-router";
-import { ListFilterPlus, Search } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { CalendarIcon, Cog } from "lucide-react";
 
-import type { Filter } from "@/data/filters";
+import type { BudgetPeriod } from "@/data/budgets";
 
+import { AllBudgetsSummary } from "@/components/budgets/all-budgets-summary";
+import { BudgetTypeSummary } from "@/components/budgets/budget-type-summary";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
-import { TransactionFilter } from "@/components/transactions/transaction-filter";
-import { TransactionInsights } from "@/components/transactions/transactions-insights";
+import { PlacesSummary } from "@/components/places/places-summary";
+import { Button } from "@/components/ui/button";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { transactionsCollection } from "@/store/collections";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CategoryTypes } from "@/data/categories";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/analyse/",
@@ -24,112 +26,104 @@ export const Route = createFileRoute(
   component: RouteComponent,
 });
 
+const budgetsSummaries = [
+  {
+    name: "Today",
+    period: "day",
+  },
+  {
+    name: "Last week",
+    period: "week",
+  },
+  {
+    name: "Last month",
+    period: "month",
+  },
+  {
+    name: "Until now",
+    period: "travelUntilNow",
+  },
+  {
+    name: "Whole travel",
+    period: "travel",
+  },
+] as const;
+
 function RouteComponent() {
   const { travelId } = Route.useParams();
-  const { data: transactions } = useLiveQuery((q) =>
-    q
-      .from({ transactions: transactionsCollection })
-      .where(({ transactions }) => eq(transactions.travel, travelId)),
-  );
-
-  const [filters, setFilters] = useState<Filter[]>([]);
-  const [search, setSearch] = useState("");
-  const addFilter = (filter: Filter) => {
-    setFilters((prev) => [...prev, filter]);
-  };
-
-  const filteredTransactions = transactions.filter(
-    (transaction) =>
-      transaction.title.toLowerCase().includes(search.toLowerCase()) &&
-      filters.every((filter) => {
-        if (filter.value === undefined) return true;
-        if (filter.field === "type") {
-          return transaction.type === filter.value;
-        }
-        if (filter.field === "category") {
-          if (filter.value === null) {
-            return transaction.category === null;
-          }
-          return transaction.category === filter.value;
-        }
-        return true;
-      }),
-  );
+  const [selectedPeriod, setSelectedPeriod] = useState<BudgetPeriod>("week");
 
   return (
     <>
-      <ScreenHeader className="flex items-center">
-        <div className="flex-1 min-w-0">
-          <div className="text-2xl font-semibold">Analyse</div>
-          <div className="text-muted-foreground text-sm mt-1">
-            Analyse closely your expenses to understand how you travel.
+      <ScreenHeader>
+        <div className="flex justify-between items-center">
+          <div>
+            <div className="font-semibold text-2xl">Analyse</div>
           </div>
+          <Button size="icon" variant="secondary" asChild>
+            <Link to="../budgets/configure" from={Route.fullPath}>
+              <Cog />
+            </Link>
+          </Button>
+        </div>
+        <div className="text-muted-foreground text-sm mt-1">
+          Understand how much and where do you spend.
         </div>
       </ScreenHeader>
 
       <ScreenDrawer asChild>
         <div className="w-full p-4 shadow-up bg-background rounded-t-lg translate-y-4 z-0 pb-8">
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <InputGroup className="h-9 bg-background border-input">
-                <InputGroupInput
-                  name="search-transactions"
-                  placeholder="Search..."
-                  value={search}
-                  className="h-9"
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-                <InputGroupAddon className="text-secondary-foreground">
-                  <Search />
-                </InputGroupAddon>
-                <InputGroupAddon align="inline-end">
-                  {(search.length > 0 || filters.length > 0) && (
-                    <>
-                      {filteredTransactions.length} result
-                      {filteredTransactions.length > 1 ? "s" : ""}
-                    </>
-                  )}
-                  <InputGroupButton
-                    className="text-secondary-foreground"
-                    onClick={() =>
-                      addFilter({ field: undefined, value: undefined })
-                    }
-                  >
-                    <ListFilterPlus />
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
-            </div>
-
-            {filters.length > 0 && (
-              <div className="flex gap-2 flex-wrap">
-                {filters.map((filter, index) => (
-                  <TransactionFilter
-                    key={index}
-                    filter={filter}
-                    onChange={(newFilter) => {
-                      setFilters((previous) =>
-                        previous.map((f) => (f === filter ? newFilter : f)),
-                      );
-                    }}
-                    onDelete={() => {
-                      setFilters((previous) =>
-                        previous.filter((f) => f !== filter),
-                      );
-                    }}
-                    travelId={travelId}
-                  />
-                ))}
+          <div className="flex items-center justify-between">
+            <div className="px-1">
+              <div className="text-sm font-semibold text-foreground">
+                Spendings by type
               </div>
-            )}
+              <div className="text-xs text-subtle-foreground">
+                Each expense has a type to identify them.
+              </div>
+            </div>
+            <Select
+              onValueChange={(value: BudgetPeriod) => setSelectedPeriod(value)}
+              value={selectedPeriod}
+            >
+              <SelectTrigger
+                className="bg-background border-input font-semibold"
+                size="sm"
+              >
+                <CalendarIcon />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {budgetsSummaries.map((summary) => (
+                  <SelectItem
+                    key={summary.period}
+                    value={summary.period}
+                    textValue={summary.name}
+                  >
+                    {summary.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="pt-5 space-y-5">
+            <AllBudgetsSummary travelId={travelId} period={selectedPeriod} />
+
+            {CategoryTypes.map((type) => (
+              <div className="border-b border-border/50 pb-5" key={type}>
+                <BudgetTypeSummary
+                  travelId={travelId}
+                  type={type}
+                  period={selectedPeriod}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="w-full py-4 px-4 shadow-up pb-10 bg-background rounded-t-lg flex-1 translate-y-0">
-          <TransactionInsights
-            transactions={filteredTransactions}
-            travelId={travelId}
-          />
+        <div className="w-full pt-4 pb-20 px-4 shadow-up bg-background rounded-t-lg flex-1 translate-y-0">
+          <PlacesSummary travelId={travelId} />
         </div>
       </ScreenDrawer>
     </>
