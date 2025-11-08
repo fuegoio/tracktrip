@@ -41,7 +41,7 @@ export const NavBar = ({
       role="navigation"
       aria-label="navigation"
       data-slot="navigation"
-      className="w-full py-5 px-6 shadow-up flex items-center justify-between absolute bottom-0 bg-white max-w-md rounded-t-xl"
+      className="w-full py-5 px-6 shadow-up flex items-center justify-between absolute bottom-0 bg-white rounded-t-xl"
     >
       {navItemsLeft.map((item, index) => (
         <NavigationButton
