@@ -69,7 +69,23 @@ function RouteComponent() {
 
       <ScreenDrawer asChild>
         <div className="w-full p-4 shadow-up bg-background rounded-t-lg translate-y-4 z-0 pb-8">
-          <div className="space-y-2">
+          <TransactionInsights
+            transactions={filteredTransactions}
+            travelId={travelId}
+          />
+        </div>
+
+        <div className="w-full py-4 px-4 shadow-up pb-10 bg-background rounded-t-lg flex-1 translate-y-0">
+          <div>
+            <div className="text-sm font-semibold text-foreground">
+              Filter your expenses
+            </div>
+            <div className="text-xs text-subtle-foreground">
+              Search by name or add a filter
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-4">
             <div className="flex gap-2">
               <InputGroup className="h-9 bg-background border-input">
                 <InputGroupInput
@@ -123,13 +139,6 @@ function RouteComponent() {
               </div>
             )}
           </div>
-        </div>
-
-        <div className="w-full py-4 px-4 shadow-up pb-10 bg-background rounded-t-lg flex-1 translate-y-0">
-          <TransactionInsights
-            transactions={filteredTransactions}
-            travelId={travelId}
-          />
         </div>
       </ScreenDrawer>
     </>
