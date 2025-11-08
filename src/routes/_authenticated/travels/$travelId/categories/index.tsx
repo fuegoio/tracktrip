@@ -5,6 +5,7 @@ import { CalendarIcon, Cog } from "lucide-react";
 
 import type { BudgetPeriod } from "@/data/budgets";
 
+import { AllBudgetsSummary } from "@/components/budgets/all-budgets-summary";
 import { BudgetTypeSummary } from "@/components/budgets/budget-type-summary";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
@@ -17,10 +18,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CategoryTypes } from "@/data/categories";
-import { AllBudgetsSummary } from "@/components/budgets/all-budgets-summary";
 
 export const Route = createFileRoute(
-  "/_authenticated/travels/$travelId/budgets/",
+  "/_authenticated/travels/$travelId/categories/",
 )({
   component: RouteComponent,
 });
@@ -57,10 +57,10 @@ function RouteComponent() {
       <ScreenHeader>
         <div className="flex justify-between items-center">
           <div>
-            <div className="font-semibold text-2xl">Budgets</div>
+            <div className="font-semibold text-2xl">Categories</div>
           </div>
           <Button size="icon" variant="secondary" asChild>
-            <Link to="./configure" from={Route.fullPath}>
+            <Link to="../budgets/configure" from={Route.fullPath}>
               <Cog />
             </Link>
           </Button>
@@ -74,10 +74,10 @@ function RouteComponent() {
         <div className="flex items-center justify-between">
           <div className="px-1">
             <div className="text-sm font-semibold text-foreground">
-              Budgets by type
+              Spendings by type
             </div>
             <div className="text-xs text-subtle-foreground">
-              The base of your budget.
+              Each expense has a type to identify them.
             </div>
           </div>
           <Select

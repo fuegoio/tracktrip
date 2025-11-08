@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { Area, AreaChart } from "recharts";
 
-import { Budgets } from "@/components/home/budgets";
+import { TodaySummary } from "@/components/home/today-summary";
 import { Transactions } from "@/components/home/transactions";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
@@ -167,7 +167,7 @@ function TravelIndex() {
       </ScreenHeader>
 
       <ScreenDrawer asChild>
-        <Budgets travelId={travel.id} />
+        <TodaySummary travelId={travel.id} />
         <Transactions travelId={travel.id} userId={userId} />
       </ScreenDrawer>
     </>

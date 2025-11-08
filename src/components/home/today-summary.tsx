@@ -6,18 +6,18 @@ import { Button } from "../ui/button";
 
 import { CategoryTypes } from "@/data/categories";
 
-export const Budgets = ({ travelId }: { travelId: string }) => {
+export const TodaySummary = ({ travelId }: { travelId: string }) => {
   return (
     <div className="w-full py-4 px-2 shadow-up bg-background rounded-t-lg translate-y-4 z-0 pb-8">
       <div className="flex justify-between px-2 items-center">
         <div>
           <div className="text-sm font-semibold text-foreground">
-            Budgets by type
+            Expenses by type
           </div>
           <div className="text-xs text-subtle-foreground">For today</div>
         </div>
         <Button variant="secondary" size="icon" className="size-6" asChild>
-          <Link to="/travels/$travelId/budgets" params={{ travelId }}>
+          <Link to="/travels/$travelId/categories" params={{ travelId }}>
             <ArrowRight className="size-4" />
           </Link>
         </Button>
