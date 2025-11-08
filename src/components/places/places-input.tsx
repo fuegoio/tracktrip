@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { eq, useLiveQuery } from "@tanstack/react-db";
 import { Check, ChevronsUpDown, MapPin, Plus } from "lucide-react";
+
+import { usePlaces } from "./use-places";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,11 +38,18 @@ export function PlacesInput({
   const [value, setValue] = useState(externalValue || defaultValue || "");
   const [query, setQuery] = useState("");
 
-  const { data: places } = useLiveQuery((q) =>
-    q
-      .from({ places: placesCollection })
-      .where(({ places }) => eq(places.travel, travelId)),
-  );
+  const placesWithStats = usePlaces({
+    travelId,
+  });
+
+  // Sort places based on the selected criteria
+  const sortedPlaces = [...placesWithStats].sort((a, b) => {
+    // Sort by start date (newest first)
+    if (!a.startDate && !b.startDate) return 0;
+    if (!a.startDate) return 1;
+    if (!b.startDate) return -1;
+    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+  });
 
   const querySanitized = query.trim();
 
@@ -63,7 +71,7 @@ export function PlacesInput({
     setValue(externalValue ?? "");
   }, [externalValue]);
 
-  const queryMatchPlace = places.find(
+  const queryMatchPlace = placesWithStats.find(
     (place) => place.name.toLowerCase() === querySanitized.toLowerCase(),
   );
 
@@ -79,7 +87,7 @@ export function PlacesInput({
         >
           <MapPin className="h-4 w-4" />
           {value ? (
-            places.find((place) => place.id === value)?.name
+            placesWithStats.find((place) => place.id === value)?.name
           ) : (
             <span className="text-subtle-foreground">
               Select or add place...
@@ -94,7 +102,7 @@ export function PlacesInput({
           filter={(value, search) => {
             if (value.startsWith("new:")) return 1;
 
-            const place = places.find((place) => place.id === value);
+            const place = placesWithStats.find((place) => place.id === value);
             if (place?.name.toLowerCase().includes(search.trim().toLowerCase()))
               return 1;
             return 0;
@@ -107,7 +115,7 @@ export function PlacesInput({
           />
           <CommandList>
             <CommandGroup>
-              {places.map((place) => (
+              {sortedPlaces.map((place) => (
                 <CommandItem
                   key={place.id}
                   value={place.id}
