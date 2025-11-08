@@ -1,10 +1,10 @@
 import { useRouterState } from "@tanstack/react-router";
 import {
-  BarChart,
-  Gauge,
+  ChartPie,
   Home,
   List,
   Plus,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions" | "/settings" | "/explore" | "/analyse";
+  path: "" | "/transactions" | "/users/me" | "/analyse";
 };
 
 const navItemsLeft: NavItem[] = [
@@ -27,8 +27,8 @@ const navItemsLeft: NavItem[] = [
 ];
 
 const navItemsRight: NavItem[] = [
-  { icon: Gauge, path: "/analyse" },
-  { icon: BarChart, path: "/explore" },
+  { icon: ChartPie, path: "/analyse" },
+  { icon: User, path: "/users/me" },
 ];
 
 export const NavBar = ({
