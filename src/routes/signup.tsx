@@ -88,7 +88,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="p-6 flex flex-col justify-center gap-6 h-full">
+    <div className="p-6 flex flex-col justify-center gap-6 h-full dark">
       <div>
         <div className="text-2xl">🚄</div>
         <h1 className="text-lg font-semibold mt-3">Create an account</h1>

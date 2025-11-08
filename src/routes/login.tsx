@@ -71,10 +71,12 @@ function RouteComponent() {
   };
 
   return (
-    <div className="p-6 flex flex-col justify-center gap-6 h-full">
+    <div className="p-6 flex flex-col justify-center gap-6 h-full dark">
       <div>
         <div className="text-2xl">🚄</div>
-        <h1 className="text-lg font-semibold mt-3">Sign in to Voyage</h1>
+        <h1 className="text-lg font-semibold mt-3 text-foreground">
+          Sign in to Voyage
+        </h1>
         <div className="text-sm text-muted-foreground mt-1">
           Welcome back! Please enter your details.
         </div>
