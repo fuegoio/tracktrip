@@ -10,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis } from "recharts";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
+import { Button } from "@/components/ui/button";
 import {
   ChartContainer,
   ChartTooltip,
@@ -33,7 +34,6 @@ import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection, transactionsCollection } from "@/store/collections";
 import { categoriesCollection } from "@/store/collections";
-import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/categories/$categoryType/",
