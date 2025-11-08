@@ -1,7 +1,9 @@
-import dayjs from "dayjs";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import { useState } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import dayjs from "dayjs";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 import type { Transaction } from "@/data/transactions";
 
@@ -11,106 +13,165 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import {
-  CategoryTypes,
-  categoryTypeToColor,
-  type CategoryType,
-} from "@/data/categories";
-
-const chartConfig: ChartConfig = {};
-CategoryTypes.forEach((type) => {
-  chartConfig[`sumByType.${type}`] = {
-    label: type,
-    color: categoryTypeToColor[type].replace("bg-", ""),
-  };
-});
-
-type TransactionsByWeek = {
-  week: string;
-  sumByType: Record<CategoryType, number>;
-  transactions: Transaction[];
-};
+import { CategoryTypes, categoryTypeToColorHex } from "@/data/categories";
+import { getIntervalsBetweenDates } from "@/lib/dayjs";
+import { useTravel } from "@/lib/params";
 
 export const TransactionInsights = ({
+  travelId,
   transactions,
 }: {
+  travelId: string;
   transactions: Transaction[];
 }) => {
-  const transactionsByWeekAndType = transactions.reduce((acc, transaction) => {
-    const week = dayjs(transaction.date).startOf("week").format("YYYY-MM-DD");
-    const existingWeek = acc.find((item) => item.week === week);
-    if (existingWeek) {
-      existingWeek.transactions.push(transaction);
-      existingWeek.sumByType[transaction.type] += transaction.amount;
-    } else {
-      acc.push({
-        transactions: [transaction],
-        week,
-        sumByType: {
-          food: transaction.type === "food" ? transaction.amount : 0,
-          accommodation:
-            transaction.type === "accommodation" ? transaction.amount : 0,
-          transport: transaction.type === "transport" ? transaction.amount : 0,
-          activity: transaction.type === "activity" ? transaction.amount : 0,
-          other: transaction.type === "other" ? transaction.amount : 0,
-        },
-      });
-    }
-    return acc;
-  }, [] as TransactionsByWeek[]);
+  const [period, setPeriod] = useState<"week" | "day">("day");
 
-  const sortedTransactionsByWeek = transactionsByWeekAndType.toSorted((a, b) =>
-    a.week > b.week ? 1 : -1,
-  );
+  const travel = useTravel({
+    id: travelId,
+  });
+
+  const allCategoriesTypes = [
+    ...CategoryTypes.map((categoryType) => {
+      return {
+        id: categoryType,
+        color: categoryTypeToColorHex[categoryType],
+      };
+    }),
+  ];
+
+  function sumTransactionsByPeriod() {
+    const startOfTravel = dayjs(travel.startDate).startOf("day");
+    const periodsSinceStart = getIntervalsBetweenDates(
+      startOfTravel,
+      dayjs(),
+      period,
+    );
+
+    const result = periodsSinceStart.map((periodDate) => {
+      const periodData: Record<string, any> = { period: periodDate };
+      allCategoriesTypes.forEach((cat) => {
+        periodData[`type_${cat.id}`] = 0;
+      });
+      return periodData;
+    });
+
+    transactions.forEach((transaction) => {
+      const transactionPeriod = dayjs(transaction.date)
+        .startOf(period)
+        .format("YYYY-MM-DD");
+      const periodIndex = periodsSinceStart.indexOf(transactionPeriod);
+      if (periodIndex === -1) return;
+
+      result[periodIndex]![`type_${transaction.type}`] += transaction.amount;
+    });
+
+    return result;
+  }
+
+  const transactionsByPeriod = sumTransactionsByPeriod();
+
+  const chartConfig: ChartConfig = {};
+  if (transactionsByPeriod.length > 0) {
+    allCategoriesTypes.forEach((categoryType) => {
+      chartConfig[`type_${categoryType.id}`] = {
+        label:
+          categoryType.id.substring(0, 1).toUpperCase() +
+          categoryType.id.substring(1),
+        color: categoryType.color,
+      };
+    });
+  }
 
   return (
-    <Card className="shadow-none mt-4">
-      <CardHeader>
-        <CardTitle>Transactions by week</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-          <BarChart accessibilityLayer data={sortedTransactionsByWeek}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="week"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            {CategoryTypes.map((type, index) => (
-              <Bar
-                key={type}
-                dataKey={`sumByType.${type}`}
-                fill={`var(--color-${categoryTypeToColor[type].replace("bg-", "")})`}
-                radius={
-                  index === CategoryTypes.length - 1
-                    ? [4, 4, 0, 0]
-                    : [0, 0, 0, 0]
+    <>
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-sm font-semibold text-foreground">
+            Expenses evolution
+          </div>
+          <div className="text-xs text-subtle-foreground">
+            Since the beginning
+          </div>
+        </div>
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          value={period}
+          onValueChange={(value: "day" | "week" | "") => {
+            if (value) setPeriod(value);
+          }}
+          size="sm"
+        >
+          <ToggleGroupItem value="day" className="text-sm">
+            1D
+          </ToggleGroupItem>
+          <ToggleGroupItem value="week" className="text-sm">
+            7D
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+      <div className="mt-4 space-y-4">
+        {transactionsByPeriod.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">
+            No transactions found for this category type.
+          </div>
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[200px] w-full"
+          >
+            <BarChart data={transactionsByPeriod}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="period"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                }}
+              />
+              <ChartTooltip
+                trigger="hover"
+                content={
+                  <ChartTooltipContent
+                    className="min-w-[200px]"
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      });
+                    }}
+                    valueFormatter={(value) =>
+                      value.toLocaleString(undefined, {
+                        style: "currency",
+                        currency: travel.currency,
+                      })
+                    }
+                  />
                 }
-                stackId="a"
-              >
-                <LabelList
-                  position="top"
-                  offset={12}
-                  className="fill-foreground"
-                  fontSize={12}
-                  formatter={(value: number) =>
-                    value.toLocaleString(undefined, {
-                      style: "currency",
-                      currency: "EUR",
-                    })
-                  }
-                />
-              </Bar>
-            ))}
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+              />
+
+              {allCategoriesTypes.map((category) => {
+                return (
+                  <Bar
+                    key={category.id}
+                    dataKey={`type_${category.id}`}
+                    fill={`var(--color-type_${category.id}`}
+                    stackId="a"
+                  />
+                );
+              })}
+            </BarChart>
+          </ChartContainer>
+        )}
+      </div>
+    </>
   );
 };

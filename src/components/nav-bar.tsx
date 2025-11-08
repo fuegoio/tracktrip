@@ -1,5 +1,12 @@
 import { useRouterState } from "@tanstack/react-router";
-import { Gauge, Home, List, MapPin, Plus, type LucideIcon } from "lucide-react";
+import {
+  BarChart,
+  Gauge,
+  Home,
+  List,
+  Plus,
+  type LucideIcon,
+} from "lucide-react";
 
 import { NavigationButton } from "./navigation-button";
 import { NewTransactionDrawer } from "./transactions/new-transaction-drawer";
@@ -9,7 +16,7 @@ import type { Travel } from "@/data/travels";
 
 export type NavItem = {
   icon: LucideIcon;
-  path: "" | "/transactions" | "/settings" | "/budgets" | "/places";
+  path: "" | "/transactions" | "/settings" | "/budgets" | "/analyse";
 };
 
 const navItemsLeft: NavItem[] = [
@@ -19,7 +26,7 @@ const navItemsLeft: NavItem[] = [
 
 const navItemsRight: NavItem[] = [
   { icon: Gauge, path: "/budgets" },
-  { icon: MapPin, path: "/places" },
+  { icon: BarChart, path: "/analyse" },
 ];
 
 export const NavBar = ({
