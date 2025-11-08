@@ -35,7 +35,7 @@ function Index() {
   );
 
   return (
-    <div className="p-5 pt-10">
+    <div className="p-5 pt-10 dark">
       <div className="flex items-center justify-between dark">
         <div>
           <div className="font-semibold text-2xl text-foreground">
@@ -59,7 +59,7 @@ function Index() {
             params={{
               travelId: travel.id,
             }}
-            className="bg-background flex items-center justify-between py-3 px-4 text-foreground border rounded-lg gap-2 text-lg shadow-sm"
+            className="bg-card flex items-center justify-between py-3 px-4 text-foreground border rounded-lg gap-2 text-lg shadow-sm"
             key={travel.id}
           >
             <div>

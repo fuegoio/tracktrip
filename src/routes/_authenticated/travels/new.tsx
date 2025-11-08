@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { ArrowLeft, ArrowRight, CalendarIcon } from "lucide-react";
 import z from "zod";
@@ -92,20 +92,33 @@ function NewTravel() {
   const supportedCurrencies = Intl.supportedValuesOf("currency");
 
   return (
-    <div className="p-4">
-      <div className="flex items-center -mx-2">
-        <Button className="px-2.5!" variant="ghost">
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
+    <div className="flex flex-col h-full">
+      <div className="dark p-4">
+        <div className="flex items-center -mx-2">
+          <Button className="px-2.5!" variant="ghost" asChild>
+            <Link to="/">
+              <ArrowLeft className="h-4 w-4 text-foreground" />
+            </Link>
+          </Button>
+        </div>
+        <h1 className="text-4xl mt-8 text-foreground">Start a new travel</h1>
+        <h2 className=""></h2>
       </div>
-
-      <h1 className="font-light text-5xl mt-8 text-foreground">Where next?</h1>
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 mt-10"
+          className="space-y-8 mt-10 bg-background p-4 rounded-t-2xl flex-1"
         >
+          <div>
+            <div className="text-sm font-semibold text-foreground">
+              Travel information
+            </div>
+            <div className="text-xs text-subtle-foreground">
+              You will be able to change this later if needed.
+            </div>
+          </div>
+
           <div className="flex items-start gap-2 w-full">
             <FormField
               control={form.control}
@@ -120,9 +133,9 @@ function NewTravel() {
                     >
                       <PopoverTrigger asChild>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           data-empty={!field.value}
-                          className="data-[empty=true]:text-muted-foreground justify-start text-left font-normal h-10"
+                          className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
                         >
                           {field.value}
                         </Button>
@@ -174,9 +187,9 @@ function NewTravel() {
                   >
                     <PopoverTrigger asChild>
                       <Button
-                        variant="outline"
+                        variant="secondary"
                         data-empty={!field.value}
-                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal"
+                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
                       >
                         <CalendarIcon />
                         {field.value ? (
@@ -216,9 +229,9 @@ function NewTravel() {
                   >
                     <PopoverTrigger asChild>
                       <Button
-                        variant="outline"
+                        variant="secondary"
                         data-empty={!field.value}
-                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal"
+                        className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
                       >
                         <CalendarIcon />
                         {field.value ? (
