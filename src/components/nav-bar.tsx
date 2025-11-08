@@ -13,6 +13,7 @@ import { NewTransactionDrawer } from "./transactions/new-transaction-drawer";
 import { Button } from "./ui/button";
 
 import type { Travel } from "@/data/travels";
+import { cn } from "@/lib/utils";
 
 export type NavItem = {
   icon: LucideIcon;
@@ -48,7 +49,7 @@ export const NavBar = ({
       role="navigation"
       aria-label="navigation"
       data-slot="navigation"
-      className="w-full py-5 px-6 shadow-up flex items-center justify-between absolute bottom-0 bg-white rounded-t-xl"
+      className="w-full pt-1 pb-3 px-6 shadow-up flex items-center justify-between absolute bottom-0 bg-white rounded-t-xl"
     >
       {navItemsLeft.map((item, index) => (
         <NavigationButton
@@ -60,8 +61,14 @@ export const NavBar = ({
       ))}
 
       <NewTransactionDrawer travel={travel} userId={userId}>
-        <Button size="icon" className="size-10 mb-2 rounded-full">
-          <Plus className="size-6" />
+        <Button
+          size="icon"
+          className={cn(
+            "shadow-none",
+            "size-14 mb-2 rounded-full ring-8 ring-white -translate-y-4 shadow-up",
+          )}
+        >
+          <Plus className="size-8" />
         </Button>
       </NewTransactionDrawer>
 
