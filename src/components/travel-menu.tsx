@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowLeftRight, ArrowRight, MapPin, Tag, User } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, MapPin, Tag, Users } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -14,7 +14,7 @@ import {
 import type { Travel } from "@/data/travels";
 
 const travelLinks = [
-  { name: "Peoples", path: "/users", icon: User },
+  { name: "Travellers", path: "/users", icon: Users },
   { name: "Categories", path: "/categories", icon: Tag },
   { name: "Places", path: "/places", icon: MapPin },
 ] as const;

@@ -13,11 +13,11 @@ import {
 import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
 import { useTravel } from "@/lib/params";
 
-export const Route = createFileRoute(
-  "/_authenticated/travels/$travelId/users",
-)({
-  component: RouteComponent,
-});
+export const Route = createFileRoute("/_authenticated/travels/$travelId/users")(
+  {
+    component: RouteComponent,
+  },
+);
 
 /**
  * No optimistic update for inviting a user, because we don't know the user's id yet.
@@ -32,7 +32,7 @@ function RouteComponent() {
   return (
     <>
       <ScreenHeader>
-        <div className="font-semibold text-xl">Peoples</div>
+        <div className="font-semibold text-2xl">Travellers</div>
         <div className="text-muted-foreground text-sm mt-1">
           Who is traveling with you.
         </div>
