@@ -27,7 +27,7 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="text-2xl leading-none px-1 relative z-10 select-none cursor-pointer">
+        <div className="text-2xl leading-none px-1 relative z-0 select-none cursor-pointer">
           {travel.emoji}
         </div>
       </DropdownMenuTrigger>
