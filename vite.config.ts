@@ -41,9 +41,9 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
       },
       manifest: {
-        name: "Voyage",
-        short_name: "Voyage",
-        description: "Voyage is a travel app.",
+        name: "Tripot",
+        short_name: "Tripot",
+        description: "Tripot is a travel finance management app.",
         theme_color: "#232323",
         background_color: "#232323",
         icons: [

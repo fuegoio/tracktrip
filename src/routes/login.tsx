@@ -75,7 +75,7 @@ function RouteComponent() {
       <div>
         <div className="size-6 rounded-full bg-white mb-2" />
         <h1 className="text-lg font-semibold mt-3 text-foreground">
-          Sign in to Voyage
+          Sign in to Tripot
         </h1>
         <div className="text-sm text-muted-foreground mt-1">
           Welcome back! Please enter your details.
