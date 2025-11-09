@@ -5,6 +5,7 @@ import { List } from "lucide-react";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { TransactionsByDate } from "@/components/transactions/transactions-by-date";
+import { Badge } from "@/components/ui/badge";
 import {
   Empty,
   EmptyDescription,
@@ -45,18 +46,19 @@ function UserSpendingSummary() {
         } else if (transaction.users.includes(userId)) {
           amount = transaction.amount / transaction.users.length;
         } else {
-          amount = null;
+          amount = 0;
         }
 
         return { ...transaction, amount: amount };
       })
-      .filter((transaction) => transaction.amount !== null);
+      .filter((transaction) => transaction.amount !== 0);
   };
 
   const getTotalSpent = (userId: string) => {
-    return getTransactionsForUser(userId)
-      .filter((transaction) => transaction.user === userId)
-      .reduce((sum, transaction) => sum + (transaction.amount ?? 0), 0);
+    return getTransactionsForUser(userId).reduce(
+      (sum, transaction) => sum + (transaction.amount ?? 0),
+      0,
+    );
   };
 
   const getTotalPaid = (userId: string) => {
@@ -138,30 +140,34 @@ function UserSpendingSummary() {
               <div className="flex items-center gap-2 mt-4" key={user.id}>
                 <UserAvatar user={user} className="size-9" />
                 <div className="flex-1">
-                  <span className="flex-1 truncate font-medium">
+                  <span className="flex-1 truncate font-semibold text-sm">
                     {user.name}
                   </span>
-                  <div className="text-foreground font-mono text-sm">
-                    {getTotalSpent(user.id).toLocaleString(undefined, {
-                      style: "currency",
-                      currency: travel.currency,
-                    })}{" "}
-                    -{" "}
-                    <span className="text-subtle-foreground">
+                  <div className="text-foreground font-mono text-sm flex items-center gap-1">
+                    <Badge variant="secondary">
+                      <span className="font-normal">Total paid: </span>
+                      {getTotalSpent(user.id).toLocaleString(undefined, {
+                        style: "currency",
+                        currency: travel.currency,
+                      })}
+                    </Badge>
+                    -
+                    <Badge variant="default">
+                      <span className="font-normal">Total cost: </span>
                       {getTotalPaid(user.id).toLocaleString(undefined, {
                         style: "currency",
                         currency: travel.currency,
                       })}
-                    </span>{" "}
+                    </Badge>
                     ={" "}
-                    <span className="text-foreground font-semibold">
+                    <Badge className="font-semibold" variant="outline">
                       {Math.abs(
                         getTotalSpent(user.id) - getTotalPaid(user.id),
                       ).toLocaleString(undefined, {
                         style: "currency",
                         currency: travel.currency,
                       })}
-                    </span>
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -182,7 +188,7 @@ function UserSpendingSummary() {
           </div>
 
           <TransactionsByDate
-            transactions={transactions}
+            transactions={getTransactionsForUser(session.user.id)}
             userId={session.user.id}
           />
 
