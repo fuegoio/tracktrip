@@ -12,9 +12,9 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { UserAvatar } from "@/components/users/user-avatar";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
-import { UserAvatar } from "@/components/users/user-avatar";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/balances/",
@@ -40,7 +40,7 @@ function UserSpendingSummary() {
     return transactions
       .map((transaction) => {
         let amount;
-        if (transaction.users === null) {
+        if (transaction.users === null || transaction.users.length === 0) {
           amount = transaction.amount / travel.users.length;
         } else if (transaction.users.includes(userId)) {
           amount = transaction.amount / transaction.users.length;
@@ -136,33 +136,33 @@ function UserSpendingSummary() {
           <div className="py-2 space-y-2">
             {travel.users.map((user) => (
               <div className="flex items-center gap-2 mt-4" key={user.id}>
-                <div className="flex-1 flex items-center gap-2">
-                  <UserAvatar user={user} className="size-5" />
-                  <span className="flex-1 truncate font-medium text-sm">
+                <UserAvatar user={user} className="size-9" />
+                <div className="flex-1">
+                  <span className="flex-1 truncate font-medium">
                     {user.name}
                   </span>
-                </div>
-                <div className="text-foreground font-mono text-sm">
-                  {getTotalSpent(user.id).toLocaleString(undefined, {
-                    style: "currency",
-                    currency: travel.currency,
-                  })}{" "}
-                  -{" "}
-                  <span className="text-subtle-foreground">
-                    {getTotalPaid(user.id).toLocaleString(undefined, {
+                  <div className="text-foreground font-mono text-sm">
+                    {getTotalSpent(user.id).toLocaleString(undefined, {
                       style: "currency",
                       currency: travel.currency,
-                    })}
-                  </span>{" "}
-                  ={" "}
-                  <span className="text-foreground font-semibold">
-                    {Math.abs(
-                      getTotalSpent(user.id) - getTotalPaid(user.id),
-                    ).toLocaleString(undefined, {
-                      style: "currency",
-                      currency: travel.currency,
-                    })}
-                  </span>
+                    })}{" "}
+                    -{" "}
+                    <span className="text-subtle-foreground">
+                      {getTotalPaid(user.id).toLocaleString(undefined, {
+                        style: "currency",
+                        currency: travel.currency,
+                      })}
+                    </span>{" "}
+                    ={" "}
+                    <span className="text-foreground font-semibold">
+                      {Math.abs(
+                        getTotalSpent(user.id) - getTotalPaid(user.id),
+                      ).toLocaleString(undefined, {
+                        style: "currency",
+                        currency: travel.currency,
+                      })}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
