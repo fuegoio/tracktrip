@@ -16,6 +16,7 @@ import {
 import { UserAvatar } from "@/components/users/user-avatar";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/balances/",
@@ -137,13 +138,13 @@ function UserSpendingSummary() {
 
           <div className="py-2 space-y-2">
             {travel.users.map((user) => (
-              <div className="flex items-center gap-2 mt-4" key={user.id}>
-                <UserAvatar user={user} className="size-9" />
+              <div className="flex items-start gap-2 mt-4" key={user.id}>
+                <UserAvatar user={user} className="size-9 mt-1.5" />
                 <div className="flex-1">
                   <span className="flex-1 truncate font-semibold text-sm">
                     {user.name}
                   </span>
-                  <div className="text-foreground font-mono text-sm flex items-center gap-1">
+                  <div className="text-foreground font-mono text-sm flex flex-col gap-1">
                     <Badge variant="secondary">
                       <span className="font-normal">Total paid: </span>
                       {getTotalSpent(user.id).toLocaleString(undefined, {
@@ -151,23 +152,40 @@ function UserSpendingSummary() {
                         currency: travel.currency,
                       })}
                     </Badge>
-                    -
-                    <Badge variant="default">
-                      <span className="font-normal">Total cost: </span>
-                      {getTotalPaid(user.id).toLocaleString(undefined, {
-                        style: "currency",
-                        currency: travel.currency,
-                      })}
-                    </Badge>
-                    ={" "}
-                    <Badge className="font-semibold" variant="outline">
-                      {Math.abs(
-                        getTotalSpent(user.id) - getTotalPaid(user.id),
-                      ).toLocaleString(undefined, {
-                        style: "currency",
-                        currency: travel.currency,
-                      })}
-                    </Badge>
+                    <div className="flex items-center gap-1">
+                      -
+                      <Badge variant="outline">
+                        <span className="font-normal">Total cost: </span>
+                        {getTotalPaid(user.id).toLocaleString(undefined, {
+                          style: "currency",
+                          currency: travel.currency,
+                        })}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      =
+                      <Badge
+                        className={cn(
+                          "font-semibold",
+                          getTotalSpent(user.id) > getTotalPaid(user.id)
+                            ? "bg-red-500/20 text-red-500"
+                            : "bg-green-500/20 text-green-500",
+                        )}
+                        variant="default"
+                      >
+                        {getTotalSpent(user.id) > getTotalPaid(user.id) ? (
+                          <span className="font-normal">Owned to others: </span>
+                        ) : (
+                          <span className="font-normal">Owned to me: </span>
+                        )}
+                        {Math.abs(
+                          getTotalSpent(user.id) - getTotalPaid(user.id),
+                        ).toLocaleString(undefined, {
+                          style: "currency",
+                          currency: travel.currency,
+                        })}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </div>
