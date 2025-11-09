@@ -27,7 +27,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="h-full">
+      <div className="pb-16 h-full">
         <TopBar travel={travel} user={session.user} />
 
         <Outlet />
