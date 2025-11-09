@@ -90,7 +90,7 @@ function RouteComponent() {
   return (
     <div className="p-6 flex flex-col justify-center gap-6 h-full dark">
       <div>
-        <div className="text-2xl">🚄</div>
+        <div className="size-6 rounded-full bg-white mb-2" />
         <h1 className="text-lg font-semibold mt-3">Create an account</h1>
         <div className="text-sm text-muted-foreground mt-1">
           Welcome! Create an account to get started.
