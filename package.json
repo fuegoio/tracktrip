@@ -1,6 +1,7 @@
 {
   "name": "tracktrip",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "bunx --bun vite",
     "build:client": "bunx --bun vite build",
