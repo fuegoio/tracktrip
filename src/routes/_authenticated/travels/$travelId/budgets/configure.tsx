@@ -24,7 +24,7 @@ function RouteComponent() {
             className="text-subtle-foreground"
             size="icon"
           >
-            <Link from={Route.fullPath} to="/travels/$travelId/categories">
+            <Link from={Route.fullPath} to="/travels/$travelId/analyse">
               <ChevronLeft className="h-4 w-4" />
             </Link>
           </Button>

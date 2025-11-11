@@ -32,5 +32,5 @@
       "@docs/*": ["./docs/*"]
     }
   },
-  "include": ["src", "docs"]
+  "include": ["src"]
 }

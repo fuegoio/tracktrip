@@ -24,7 +24,7 @@ const router = createRouter({
           This page can't be found
         </p>
         <Button asChild className="mt-8" variant="secondary">
-          <Link to="/">
+          <Link to="/travels">
             Go home
             <ArrowRight className="h-4 w-4" />
           </Link>

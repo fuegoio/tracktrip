@@ -62,7 +62,7 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
         ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild onClick={clearTravelId}>
-          <Link to="/">
+          <Link to="/travels">
             <ArrowLeftRight />
             Switch travel
           </Link>

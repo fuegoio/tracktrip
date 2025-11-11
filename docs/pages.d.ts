@@ -1,9 +1,9 @@
+import type * as PageTree from "fumadocs-core/page-tree";
+
 declare module "fumadocs-mdx:pages" {
   interface Page {
     url: string;
-    slugs: string[];
-    data: any;
   }
-  export const getPage: (url: string) => Page | undefined;
   export const pages: Page[];
+  export const pageTree: PageTree.Root;
 }

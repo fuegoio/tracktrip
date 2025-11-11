@@ -106,7 +106,7 @@ function RouteComponent() {
     <div className="flex flex-col h-full">
       <div className="w-full flex items-center justify-between px-4 py-3 dark text-foreground">
         <Button size="icon" variant="ghost" asChild>
-          <Link to="/">
+          <Link to="/travels">
             <ArrowLeft className="size-5" />
           </Link>
         </Button>

@@ -19,13 +19,11 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/links";
 export const Route = createFileRoute("/docs/$")({
   component: Page,
   loader: async ({ params }) => {
-    const slugs = params._splat?.split("/") ?? [];
-    if (slugs[0] === "") {
-      slugs.shift();
-    }
-    const page = pages.find(
-      (p) => JSON.stringify(p.slugs) === JSON.stringify(slugs),
-    );
+    const page = pages.find((p) => {
+      if (params._splat === undefined) return p.url === "/docs";
+      else if (params._splat === "") return p.url === "/docs";
+      else return p.url === `/docs/${params._splat ?? ""}`;
+    });
 
     if (!page) throw notFound();
 
@@ -33,7 +31,7 @@ export const Route = createFileRoute("/docs/$")({
       tree: pageTree,
       path: page.path,
     };
-    await clientLoader.preload(data.path);
+    await clientLoader.preload(page.path);
     return data;
   },
 });

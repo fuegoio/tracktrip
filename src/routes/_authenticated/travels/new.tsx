@@ -96,7 +96,7 @@ function NewTravel() {
       <div className="dark p-4">
         <div className="flex items-center -mx-2">
           <Button className="px-2.5!" variant="ghost" asChild>
-            <Link to="/">
+            <Link to="/travels">
               <ArrowLeft className="h-4 w-4 text-foreground" />
             </Link>
           </Button>
