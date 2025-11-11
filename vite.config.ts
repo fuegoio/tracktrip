@@ -44,6 +44,7 @@ export default defineConfig({
         name: "Tracktrip",
         short_name: "Tracktrip",
         description: "Tracktrip is a travel finance management app.",
+        start_url: "/travels",
         theme_color: "#232323",
         background_color: "#232323",
         icons: [

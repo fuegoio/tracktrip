@@ -6,7 +6,7 @@ import { ArrowRight, ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { travelsCollection } from "@/store/collections";
 
-export const Route = createFileRoute("/_authenticated/")({
+export const Route = createFileRoute("/_authenticated/travels/")({
   component: Index,
   loader: () => {
     const lastTravelId = window.localStorage.getItem("travelId");
