@@ -65,8 +65,6 @@ export const AllBudgetsSummary = ({
 
   const daysOfPeriod = endOfPeriod.diff(startOfPeriod, "day");
 
-  // Ici, on calcule le budget total (à adapter selon votre logique métier)
-  // Par exemple, somme de tous les budgets du voyage
   const { data: budgets } = useLiveQuery((q) =>
     q
       .from({ budgets: budgetsCollection })
@@ -82,7 +80,6 @@ export const AllBudgetsSummary = ({
       : 0;
   const amountLeft = budgetAmountForPeriod - periodTransactionsAmount;
 
-  // Calcul de la moyenne (optionnel, comme dans l'original)
   const totalAmount =
     periodTransactions?.reduce((acc, transaction) => {
       const transactionDate = transaction.date;
