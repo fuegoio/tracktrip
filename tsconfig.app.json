@@ -28,8 +28,9 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "@docs/*": ["./docs/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "docs"]
 }

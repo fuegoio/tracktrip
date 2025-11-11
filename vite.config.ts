@@ -4,6 +4,8 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
+import { fumadocsMdxPlugin } from "docs/vite-plugin";
+import mdx from "fumadocs-mdx/vite";
 import { defineConfig, type ViteDevServer } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -27,6 +29,17 @@ const bunServerPlugin = {
 export default defineConfig({
   plugins: [
     bunServerPlugin,
+    mdx(await import("./docs/source.config"), {
+      generateIndexFile: {
+        runtime: "bun",
+      },
+      updateViteConfig: false,
+      configPath: "./docs/source.config.ts",
+      outDir: "docs/.source",
+    }),
+    fumadocsMdxPlugin({
+      baseUrl: "/docs",
+    }),
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
@@ -77,6 +90,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@docs": path.resolve(__dirname, "./docs"),
     },
   },
   server: {

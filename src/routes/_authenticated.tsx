@@ -57,8 +57,12 @@ export const Route = createFileRoute("/_authenticated")({
 
 function RouteComponent() {
   return (
-    <ScreenLayoutProvider>
-      <Outlet />
-    </ScreenLayoutProvider>
+    <div className="h-full w-full flex items-center justify-center sm:py-4">
+      <main className="bg-primary w-full max-w-lg mx-auto h-full relative sm:border border-white/10 sm:rounded-lg overflow-hidden sm:shadow-lg">
+        <ScreenLayoutProvider>
+          <Outlet />
+        </ScreenLayoutProvider>
+      </main>
+    </div>
   );
 }
