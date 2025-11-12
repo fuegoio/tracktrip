@@ -12,6 +12,7 @@ import {
   DocsPage,
   DocsTitle,
 } from "fumadocs-ui/page";
+import { ArrowRight } from "lucide-react";
 
 import type * as PageTree from "fumadocs-core/page-tree";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/links";
@@ -59,13 +60,25 @@ function baseOptions(): BaseLayoutProps {
   return {
     nav: {
       title: (
-        <div className="flex items-center font-semibold gap-2 px-2">
+        <div className="flex items-center font-semibold gap-2 md:px-2">
           <div className="size-4 rounded-full dark:bg-white bg-primary" />
           Tracktrip
         </div>
       ),
     },
+    searchToggle: {
+      enabled: false,
+    },
     githubUrl: "https://github.com/fueogio/voyage",
+    links: [
+      {
+        on: "nav",
+        type: "main",
+        icon: <ArrowRight />,
+        url: "/travels",
+        text: "My travels",
+      },
+    ],
   };
 }
 

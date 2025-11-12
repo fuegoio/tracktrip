@@ -7,7 +7,11 @@ export const Route = createFileRoute("/docs")({
 
 function RouteComponent() {
   return (
-    <RootProvider>
+    <RootProvider
+      search={{
+        enabled: false,
+      }}
+    >
       <Outlet />
     </RootProvider>
   );
