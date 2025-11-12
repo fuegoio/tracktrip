@@ -66,6 +66,7 @@ function RouteComponent() {
     setLoading(true);
     await authClient.signIn.social({
       provider: "google",
+      callbackURL: redirect || "/",
     });
     setLoading(false);
   };
