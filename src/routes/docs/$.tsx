@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 
 import { docs } from "@docs/.source";
+import { pageTree, pages } from "@docs/.source/pages";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { createClientLoader } from "fumadocs-mdx/runtime/vite";
-import { pageTree, pages } from "fumadocs-mdx:pages";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import {
