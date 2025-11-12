@@ -31,10 +31,20 @@ export const Route = createFileRoute("/docs/$")({
     const data = {
       tree: pageTree,
       path: page.path,
+      title: page.data.title,
     };
     await clientLoader.preload(page.path);
     return data;
   },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData
+          ? `${loaderData.title} | Documentation | Tracktrip`
+          : "Documentation | Tracktrip",
+      },
+    ],
+  }),
 });
 
 const clientLoader = createClientLoader(docs.doc, {

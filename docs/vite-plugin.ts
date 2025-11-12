@@ -10,19 +10,21 @@ import type { Plugin } from "vite";
 
 interface FumadocsMdxPluginOptions {
   baseUrl: string;
+  configPath?: string;
+  outputDir?: string;
 }
 
-const OUTPUT_FILE = resolve(process.cwd(), "docs/.source/pages.ts");
-
 export function fumadocsMdxPlugin(options: FumadocsMdxPluginOptions): Plugin {
-  const { baseUrl } = options;
+  const { baseUrl, configPath, outputDir = "./" } = options;
   let source: Awaited<ReturnType<typeof loader>>;
   let watcher: ReturnType<typeof watch> | null = null;
+
+  const OUTPUT_FILE = resolve(process.cwd(), `${outputDir}.source/pages.ts`);
 
   if (process.versions.bun) {
     Bun.plugin(
       createMdxPlugin({
-        configPath: "./docs/source.config.ts",
+        configPath,
       }),
     );
   } else {
@@ -31,7 +33,7 @@ export function fumadocsMdxPlugin(options: FumadocsMdxPluginOptions): Plugin {
 
   const updateSource = async () => {
     for (const file of Object.keys(require.cache)) {
-      if (file.includes("docs/content")) {
+      if (file.includes("/content")) {
         delete require.cache[file];
       }
     }

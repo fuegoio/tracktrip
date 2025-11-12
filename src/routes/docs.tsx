@@ -3,6 +3,13 @@ import { RootProvider } from "fumadocs-ui/provider/tanstack";
 
 export const Route = createFileRoute("/docs")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      {
+        title: "Documentation | Tracktrip",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {

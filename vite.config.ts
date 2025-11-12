@@ -40,6 +40,8 @@ export default defineConfig({
     process.env.NODE_ENV === "development" &&
       fumadocsMdxPlugin({
         baseUrl: "/docs",
+        configPath: "./docs/source.config.ts",
+        outputDir: "./docs/",
       }),
     tanstackRouter({
       target: "react",
