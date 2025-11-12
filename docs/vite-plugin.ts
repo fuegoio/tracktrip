@@ -8,16 +8,6 @@ import { createMdxPlugin } from "fumadocs-mdx/bun";
 
 import type { Plugin } from "vite";
 
-if (process.versions.bun) {
-  Bun.plugin(
-    createMdxPlugin({
-      configPath: "./docs/source.config.ts",
-    }),
-  );
-} else {
-  register("fumadocs-mdx/node/loader", import.meta.url);
-}
-
 interface FumadocsMdxPluginOptions {
   baseUrl: string;
 }
@@ -29,12 +19,23 @@ export function fumadocsMdxPlugin(options: FumadocsMdxPluginOptions): Plugin {
   let source: Awaited<ReturnType<typeof loader>>;
   let watcher: ReturnType<typeof watch> | null = null;
 
+  if (process.versions.bun) {
+    Bun.plugin(
+      createMdxPlugin({
+        configPath: "./docs/source.config.ts",
+      }),
+    );
+  } else {
+    register("fumadocs-mdx/node/loader", import.meta.url);
+  }
+
   const updateSource = async () => {
     for (const file of Object.keys(require.cache)) {
       if (file.includes("docs/content")) {
         delete require.cache[file];
       }
     }
+
     try {
       const { create, docs } = await import("./.source");
       source = loader({
@@ -46,14 +47,13 @@ export function fumadocsMdxPlugin(options: FumadocsMdxPluginOptions): Plugin {
       await writeFile(
         OUTPUT_FILE,
         `
-          const pages = ${JSON.stringify(source.getPages())};
-          const pageTree = ${JSON.stringify(source.getPageTree())};
-          export { pages, pageTree };
+const pages = ${JSON.stringify(source.getPages())};
+const pageTree = ${JSON.stringify(source.getPageTree())};
+export { pages, pageTree };
         `,
       );
     } catch (e) {
-      console.error("[fumadocs-mdx] Error reloading source:", e);
-      throw e; // Re-throw to fail the build explicitly
+      console.error("[fumadocs-mdx] Error updating pages index:", e);
     }
   };
 

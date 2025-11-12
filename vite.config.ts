@@ -37,9 +37,10 @@ export default defineConfig({
       configPath: "./docs/source.config.ts",
       outDir: "docs/.source",
     }),
-    // fumadocsMdxPlugin({
-    //   baseUrl: "/docs",
-    // }),
+    process.env.NODE_ENV === "development" &&
+      fumadocsMdxPlugin({
+        baseUrl: "/docs",
+      }),
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
