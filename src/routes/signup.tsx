@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { LoaderCircle } from "lucide-react";
 import z from "zod";
 
@@ -27,6 +27,15 @@ const searchParamsSchema = z.object({
 export const Route = createFileRoute("/signup")({
   component: RouteComponent,
   validateSearch: searchParamsSchema,
+  loader: async () => {
+    const res = await authClient.getSession();
+    if (res) {
+      throw redirect({
+        to: "/travels",
+      });
+    }
+    return null;
+  },
 });
 
 const formSchema = z.object({
