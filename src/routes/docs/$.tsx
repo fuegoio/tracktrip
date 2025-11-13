@@ -82,7 +82,6 @@ function baseOptions(): BaseLayoutProps {
     searchToggle: {
       enabled: false,
     },
-    githubUrl: "https://github.com/fueogio/voyage",
     links: [
       {
         on: "nav",
