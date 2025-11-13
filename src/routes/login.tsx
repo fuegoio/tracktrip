@@ -48,7 +48,7 @@ function RouteComponent() {
     const { error } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: redirect || "/",
+      callbackURL: redirect || "/travels",
     });
 
     if (error) {
@@ -56,7 +56,7 @@ function RouteComponent() {
         message: error.message,
       });
     } else {
-      navigate({ to: redirect || "/" });
+      navigate({ to: redirect || "/travels" });
     }
 
     setLoading(false);
@@ -66,7 +66,7 @@ function RouteComponent() {
     setLoading(true);
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: redirect || "/",
+      callbackURL: redirect || "/travels",
     });
     setLoading(false);
   };

@@ -65,7 +65,7 @@ function RouteComponent() {
       email,
       password,
       name: `${firstName} ${lastName}`,
-      callbackURL: redirect || "/",
+      callbackURL: redirect || "/travels",
     });
 
     if (error) {
@@ -73,7 +73,7 @@ function RouteComponent() {
         message: error.message,
       });
     } else {
-      navigate({ to: redirect || "/" });
+      navigate({ to: redirect || "/travels" });
     }
 
     setLoading(false);
