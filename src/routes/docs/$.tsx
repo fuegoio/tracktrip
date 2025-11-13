@@ -68,6 +68,9 @@ const clientLoader = createClientLoader(docs.doc, {
 
 function baseOptions(): BaseLayoutProps {
   return {
+    themeSwitch: {
+      enabled: false,
+    },
     nav: {
       title: (
         <div className="flex items-center font-semibold gap-2 md:px-2">

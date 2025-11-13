@@ -14,12 +14,17 @@ export const Route = createFileRoute("/docs")({
 
 function RouteComponent() {
   return (
-    <RootProvider
-      search={{
-        enabled: false,
-      }}
-    >
-      <Outlet />
-    </RootProvider>
+    <div className="dark bg-background text-foreground h-full w-full">
+      <RootProvider
+        theme={{
+          enabled: false,
+        }}
+        search={{
+          enabled: false,
+        }}
+      >
+        <Outlet />
+      </RootProvider>
+    </div>
   );
 }
