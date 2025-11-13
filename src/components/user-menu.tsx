@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { CircleUser, LogOut } from "lucide-react";
+import { BookOpen, CircleUser, LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -49,6 +49,13 @@ export const UserMenu = ({ user }: { user: User }) => {
             </div>
           </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/docs">
+            <BookOpen />
+            Documentation
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/profile">
