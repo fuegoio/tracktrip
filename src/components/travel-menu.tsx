@@ -65,7 +65,6 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
             <Cog />
             Travel settings
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
           {travelLinks.map((link) => (
             <DropdownMenuItem asChild key={link.path}>
               <Link
