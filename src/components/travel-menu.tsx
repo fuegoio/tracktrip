@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowLeftRight, ArrowRight, Cog, Users } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, Cog, Trash, Users } from "lucide-react";
 
 import { EditTravelSettings } from "./travels/edit-travel-settings";
 import {
@@ -16,16 +16,45 @@ import {
 
 import type { Travel } from "@/data/travels";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { travelsCollection } from "@/store/collections";
+
 const travelLinks = [
   { name: "Travellers", path: "/users", icon: Users },
 ] as const;
 
-export const TravelMenu = ({ travel }: { travel: Travel }) => {
+export const TravelMenu = ({
+  travel,
+  userId,
+}: {
+  travel: Travel;
+  userId: string;
+}) => {
+  const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const clearTravelId = () => {
     localStorage.removeItem("travelId");
   };
+
+  const deleteTravel = async () => {
+    clearTravelId();
+    await navigate({ to: "/travels" });
+    travelsCollection.delete(travel.id);
+  };
+
+  const userIsAdmin =
+    travel.users.find((user) => user.id === userId)?.role === "owner";
 
   return (
     <>
@@ -34,6 +63,22 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
         isOpen={settingsOpen}
         setIsOpen={setSettingsOpen}
       />
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this
+              travel and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteTravel}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -61,10 +106,6 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
-            <Cog />
-            Travel settings
-          </DropdownMenuItem>
           {travelLinks.map((link) => (
             <DropdownMenuItem asChild key={link.path}>
               <Link
@@ -83,6 +124,22 @@ export const TravelMenu = ({ travel }: { travel: Travel }) => {
               Switch travel
             </Link>
           </DropdownMenuItem>
+
+          {userIsAdmin && (
+            <>
+              <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
+                <Cog />
+                Edit travel
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setDeleteOpen(true)}
+              >
+                <Trash />
+                Delete travel
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
