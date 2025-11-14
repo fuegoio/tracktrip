@@ -27,7 +27,7 @@ export const Route = createFileRoute("/login")({
   validateSearch: searchParamsSchema,
   loader: async () => {
     const res = await authClient.getSession();
-    if (res) {
+    if (res.data) {
       throw redirect({
         to: "/travels",
       });

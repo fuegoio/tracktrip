@@ -29,7 +29,7 @@ export const Route = createFileRoute("/signup")({
   validateSearch: searchParamsSchema,
   loader: async () => {
     const res = await authClient.getSession();
-    if (res) {
+    if (res.data) {
       throw redirect({
         to: "/travels",
       });
