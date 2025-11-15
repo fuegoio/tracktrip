@@ -29,6 +29,23 @@ const formSchema = z.object({
   name: z.string("Name is required.").min(1, "Name is required."),
 });
 
+const passwordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(100, "Password must be less than 100 characters"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(100, "Password must be less than 100 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
 function RouteComponent() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
@@ -91,6 +108,15 @@ function RouteComponent() {
     },
   });
 
+  const passwordForm = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     await authClient.updateUser({
       name: values.name,
@@ -100,6 +126,27 @@ function RouteComponent() {
     setCachedSession({ ...session, user: { ...user, name: values.name } });
 
     toast.success("Profile updated successfully");
+  };
+
+  const onPasswordSubmit = async (values: z.infer<typeof passwordSchema>) => {
+    try {
+      const { error } = await authClient.changePassword({
+        newPassword: values.newPassword,
+        currentPassword: values.currentPassword,
+        revokeOtherSessions: true,
+      });
+
+      if (error) {
+        toast.error(error.message || "Failed to update password");
+        return;
+      }
+
+      toast.success("Password updated successfully");
+      passwordForm.reset();
+    } catch (error) {
+      console.error("Error updating password:", error);
+      toast.error("Error updating password");
+    }
   };
 
   return (
@@ -142,30 +189,101 @@ function RouteComponent() {
         </div>
       </div>
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 rounded-t-lg bg-background p-6 flex-1 shadow-up"
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className="space-y-4 rounded-t-lg bg-background p-6 flex-1 shadow-up">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type="submit" className="w-full">
-            Save Changes
-          </Button>
-        </form>
-      </Form>
+            <Button type="submit" className="w-full">
+              Save Changes
+            </Button>
+          </form>
+        </Form>
+
+        <div className="border-t pt-4">
+          <div className="font-semibold text-foreground text-base">
+            Password
+          </div>
+
+          <Form {...passwordForm}>
+            <form
+              onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
+              className="space-y-4 mt-6"
+            >
+              <FormField
+                control={passwordForm.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter current password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passwordForm.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter new password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passwordForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Confirm new password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full">
+                Update Password
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </div>
+
       <canvas ref={canvasRef} style={{ display: "none" }} />
     </div>
   );
