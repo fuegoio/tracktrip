@@ -105,8 +105,12 @@ function Index() {
               </EmptyHeader>
               <EmptyContent>
                 <div className="flex gap-2">
-                  <Button>Create Travel</Button>
-                  <Button variant="outline">Join Travel</Button>
+                  <Button asChild>
+                    <Link to="/travels/new">Create Travel</Link>
+                  </Button>
+                  <Button variant="outline">
+                    <Link to="/travels/join">Join Travel</Link>
+                  </Button>
                 </div>
               </EmptyContent>
             </Empty>

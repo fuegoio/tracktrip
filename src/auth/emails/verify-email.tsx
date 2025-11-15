@@ -6,6 +6,7 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Link,
   Preview,
   Section,
@@ -23,28 +24,34 @@ export const VerifyEmail = ({ url }: { url: string }) => (
         theme: {
           extend: {
             colors: {
-              background: "oklch(0.255 0 0)",
+              primary: "oklch(0.255 0 0)",
             },
           },
         },
       }}
     >
-      <Body className="bg-background font-sans">
+      <Body className="font-sans">
         <Preview>Your login code for Linear</Preview>
         <Container className="mx-auto my-0 max-w-[560px] px-0 pt-5 pb-12">
-          <div className="size-6 rounded-full bg-white mb-2" />
-          <Heading className="text-[24px] tracking-[-0.5px] leading-[1.3] font-normal text-white pt-[17px] px-0 pb-0">
+          <Img
+            src="https://tracktrip.app/icons/pwa-64x64.png"
+            alt="Tracktrip icon"
+            width="32"
+            height="32"
+            className="rounded"
+          />
+          <Heading className="text-[24px] tracking-[-0.5px] leading-[1.3] font-normal pt-[17px] px-0 pb-0">
             Verify your email address for Tracktrip
           </Heading>
           <Section className="py-[27px] px-0">
             <Button
-              className="bg-white rounded font-semibold text-background text-[15px] no-underline text-center block py-[11px] px-[23px]"
+              className="bg-primary rounded font-semibold text-white text-[15px] no-underline text-center block py-[11px] px-[23px]"
               href={url}
             >
               Verify my email
             </Button>
           </Section>
-          <Text className="mb-[15px] mx-0 mt-0 leading-[1.4] text-[15px] text-white">
+          <Text className="mb-[15px] mx-0 mt-0 leading-[1.4] text-[15px]">
             This link will only be valid for the next 5 minutes. If the link
             does not work, you can contact the support easily at
             support@tracktrip.app.
@@ -52,9 +59,15 @@ export const VerifyEmail = ({ url }: { url: string }) => (
           <Hr className="border-[#dfe1e4] mt-[42px] mb-[26px]" />
           <Link
             href="https://tracktrip.app"
-            className="text-white inline-flex font-semibold"
+            className="inline-flex font-semibold text-primary"
           >
-            <div className="size-3 rounded-full bg-white mt-1 mr-2" />
+            <Img
+              src="https://tracktrip.app/icons/pwa-64x64.png"
+              alt="Tracktrip icon"
+              width="16"
+              height="16"
+              className="rounded mt-0.5 mr-2"
+            />
             Tracktrip
           </Link>
         </Container>
