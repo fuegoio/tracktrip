@@ -2,7 +2,14 @@ import { useState } from "react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowLeftRight, ArrowRight, Cog, Trash, Users } from "lucide-react";
+import {
+  ArrowLeftRight,
+  ArrowRight,
+  Cog,
+  DoorOpen,
+  Trash,
+  Users,
+} from "lucide-react";
 
 import { EditTravelSettings } from "./travels/edit-travel-settings";
 import {
@@ -27,6 +34,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { travelsCollection } from "@/store/collections";
+import { trpcClient } from "@/trpc/client";
 
 const travelLinks = [
   { name: "Travellers", path: "/users", icon: Users },
@@ -42,6 +50,7 @@ export const TravelMenu = ({
   const navigate = useNavigate();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [quitOpen, setQuitOpen] = useState(false);
 
   const clearTravelId = () => {
     localStorage.removeItem("travelId");
@@ -51,6 +60,12 @@ export const TravelMenu = ({
     clearTravelId();
     await navigate({ to: "/travels" });
     travelsCollection.delete(travel.id);
+  };
+
+  const quitTravel = async () => {
+    clearTravelId();
+    await navigate({ to: "/travels" });
+    await trpcClient.travels.quit.mutate({ id: travel.id });
   };
 
   const userIsAdmin =
@@ -76,6 +91,22 @@ export const TravelMenu = ({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={deleteTravel}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={quitOpen} onOpenChange={setQuitOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to leave?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. You will be removed from this
+              travel.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={quitTravel}>Leave</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -125,7 +156,7 @@ export const TravelMenu = ({
             </Link>
           </DropdownMenuItem>
 
-          {userIsAdmin && (
+          {userIsAdmin ? (
             <>
               <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
                 <Cog />
@@ -139,6 +170,14 @@ export const TravelMenu = ({
                 Delete travel
               </DropdownMenuItem>
             </>
+          ) : (
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => setQuitOpen(true)}
+            >
+              <DoorOpen />
+              Leave travel
+            </DropdownMenuItem>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

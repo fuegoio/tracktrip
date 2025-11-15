@@ -479,4 +479,82 @@ export const travelsRouter = router({
         eventId,
       };
     }),
+
+  quit: authedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const dbTravel = (
+        await db
+          .select()
+          .from(travelsTable)
+          .where(eq(travelsTable.id, input.id))
+          .limit(1)
+      )[0];
+
+      if (!dbTravel) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Travel not found",
+        });
+      }
+
+      // Check if the user is the owner - owners cannot quit, they must delete
+      if (dbTravel.ownerId === ctx.session.user.id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Owner cannot quit travel. Use delete instead.",
+        });
+      }
+
+      // Remove the user from the travel
+      await db
+        .delete(travelsUsersTable)
+        .where(
+          and(
+            eq(travelsUsersTable.travel, input.id),
+            eq(travelsUsersTable.user, ctx.session.user.id),
+          ),
+        );
+
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, input.id));
+
+      const travel: Travel = {
+        ...dbTravel,
+        users: travelUsers.map((row) => ({
+          id: row.users.id,
+          name: row.users.name,
+          email: row.users.email,
+          image: row.users.image,
+          role: dbTravel.ownerId === row.users.id ? "owner" : "member",
+        })),
+      };
+
+      await travelsRouterSync.registerEvent({
+        currentUserId: ctx.session.user.id,
+        otherUserIds: travel.users.map((user) => user.id),
+        event: {
+          action: "update",
+          data: travel,
+        },
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
+      });
+
+      const eventId = await travelsRouterSync.registerEvent({
+        currentUserId: ctx.session.user.id,
+        event: {
+          action: "delete",
+          data: travel,
+        },
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
+      });
+
+      return {
+        item: travel,
+        eventId,
+      };
+    }),
 });
