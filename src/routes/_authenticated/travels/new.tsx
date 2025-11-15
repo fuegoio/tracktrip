@@ -9,6 +9,7 @@ import { travelSettingsFormSchema } from "@/components/travels/travel-schema";
 import { TravelSettings } from "@/components/travels/travel-settings";
 import { Button } from "@/components/ui/button";
 import { travelsCollection } from "@/store/collections";
+import { UserMenu } from "@/components/user-menu";
 
 export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
@@ -46,14 +47,20 @@ function NewTravel() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="dark p-6">
-        <div className="flex items-center -mx-2">
+      <div className="w-full flex items-center justify-between px-4 py-3 absolute">
+        <div className="flex items-center dark">
           <Button className="px-2.5!" variant="ghost" asChild>
             <Link to="/travels">
-              <ArrowLeft className="h-4 w-4 text-foreground" />
+              <ArrowLeft className="size-5 text-foreground" />
             </Link>
           </Button>
         </div>
+        <div className="flex items-center gap-2">
+          <UserMenu user={session.user} />
+        </div>
+      </div>
+
+      <div className="dark p-6 mt-10">
         <h1 className="text-4xl mt-8 text-foreground">Start a new travel</h1>
         <h2 className=""></h2>
       </div>

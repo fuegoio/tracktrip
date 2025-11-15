@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
+import { motion, useAnimation } from "framer-motion";
 import {
   ArrowLeftRight,
   ArrowRight,
@@ -12,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { EditTravelSettings } from "./travels/edit-travel-settings";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -71,6 +73,32 @@ export const TravelMenu = ({
   const userIsAdmin =
     travel.users.find((user) => user.id === userId)?.role === "owner";
 
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const sequence = async () => {
+      await controls.start("visible"); // Animate to visible
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
+      await controls.start("hidden"); // Animate back to hidden
+    };
+    sequence();
+  }, [controls]);
+
+  const textVariants = {
+    hidden: {
+      width: 0,
+      marginLeft: 0,
+      marginRight: 0,
+      opacity: 0,
+    },
+    visible: {
+      width: "auto",
+      marginLeft: 8,
+      marginRight: 8,
+      opacity: 1,
+    },
+  } as const;
+
   return (
     <>
       <EditTravelSettings
@@ -113,9 +141,22 @@ export const TravelMenu = ({
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="text-2xl leading-none px-1 relative z-0 select-none cursor-pointer">
-            {travel.emoji}
-          </div>
+          <Button
+            variant="secondary"
+            className="dark h-9 relative z-0 px-1.5 gap-0"
+          >
+            <div className="text-2xl leading-none">{travel.emoji}</div>
+            <motion.div
+              className="mt-1 font-medium"
+              initial="hidden"
+              animate={controls}
+              variants={textVariants}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              style={{ overflow: "hidden", whiteSpace: "nowrap" }}
+            >
+              {travel.name}
+            </motion.div>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-60 min-w-56 rounded-lg"

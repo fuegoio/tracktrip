@@ -16,6 +16,7 @@ export const env = createEnv({
     POSTGRES_LOCK_TIMEOUT: z.coerce.number().default(2000),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    RESEND_API_KEY: z.string(),
   },
   client: {},
   runtimeEnv: {
@@ -32,6 +33,7 @@ export const env = createEnv({
     POSTGRES_LOCK_TIMEOUT: process.env.POSTGRES_LOCK_TIMEOUT,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
 
   /**

@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/travels/$travelId")({
   loader: ({ params: { travelId } }) => {
     const travel = travelsCollection.get(travelId);
     if (!travel) {
+      window.localStorage.removeItem("travelId");
       throw notFound();
     }
 

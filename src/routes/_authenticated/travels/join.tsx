@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { UserMenu } from "@/components/user-menu";
 import { trpc } from "@/trpc/client";
 
 const formSchema = z.object({
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/_authenticated/travels/join")({
 });
 
 function JoinTravelPage() {
+  const { session } = Route.useRouteContext();
   const { code } = Route.useSearch();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +76,19 @@ function JoinTravelPage() {
 
   return (
     <div className="p-6 space-y-6">
+      <div className="w-full flex items-center justify-between px-4 py-3 absolute">
+        <div className="flex items-center dark">
+          <Button className="px-2.5!" variant="ghost" asChild>
+            <Link to="/travels">
+              <ArrowLeft className="size-5 text-foreground" />
+            </Link>
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <UserMenu user={session.user} />
+        </div>
+      </div>
+
       <h1 className="text-2xl font-bold">Join a Travel</h1>
 
       {success ? (
@@ -115,4 +130,3 @@ function JoinTravelPage() {
     </div>
   );
 }
-

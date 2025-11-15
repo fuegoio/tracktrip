@@ -21,9 +21,9 @@ export const UserAvatar = ({
     .toUpperCase();
 
   return (
-    <Avatar className={cn("size-6", className)} {...props}>
+    <Avatar className={cn("size-7", className)} {...props}>
       <AvatarImage src={user.image ?? ""} alt={user.name} />
-      <AvatarFallback className="text-[0.5rem]">{initials}</AvatarFallback>
+      <AvatarFallback className="text-xs">{initials}</AvatarFallback>
     </Avatar>
   );
 };

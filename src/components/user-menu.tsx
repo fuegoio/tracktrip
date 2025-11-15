@@ -20,8 +20,8 @@ export const UserMenu = ({ user }: { user: User }) => {
 
   const logout = async () => {
     await authClient.signOut();
+    await navigate({ to: "/login" });
     localStorage.clear();
-    navigate({ to: "/login" });
   };
 
   return (
@@ -29,7 +29,7 @@ export const UserMenu = ({ user }: { user: User }) => {
       <DropdownMenuTrigger asChild>
         <UserAvatar
           user={user}
-          className="outline-2 outline-offset-1 outline-border mr-2"
+          className="outline-2 outline-offset-1 outline-border mr-1.5"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent
