@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { reactStartCookies } from "better-auth/react-start";
 import { Resend } from "resend";
 
+import RecoverAccount from "./emails/recover-account";
 import VerifyEmail from "./emails/verify-email";
 
 import { db } from "@/db";
@@ -30,6 +31,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      console.log("Sending reset password email to", user.email, url);
+      resend.emails.send({
+        from: "Tracktrip <onboarding@notifications.tracktrip.app>",
+        to: user.email,
+        subject: "Reset your password",
+        react: <RecoverAccount url={url} />,
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: true,

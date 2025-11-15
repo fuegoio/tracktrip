@@ -114,7 +114,15 @@ function RouteComponent() {
               name="password"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Password</FormLabel>
+                  <div className="flex justify-between items-center">
+                    <FormLabel>Password</FormLabel>
+                    <Link
+                      to="/request-password-reset"
+                      className="text-sm text-muted-foreground underline underline-offset-4"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>

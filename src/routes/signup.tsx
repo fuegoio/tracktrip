@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import { LoaderCircle } from "lucide-react";
 import z from "zod";
 
@@ -19,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AnimatePresence, motion } from "framer-motion";
 
 const searchParamsSchema = z.object({
   redirect: z.string().optional(),

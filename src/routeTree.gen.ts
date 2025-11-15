@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RequestPasswordResetRouteImport } from './routes/request-password-reset'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
@@ -34,6 +36,16 @@ import { Route as AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRouteI
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestPasswordResetRoute = RequestPasswordResetRouteImport.update({
+  id: '/request-password-reset',
+  path: '/request-password-reset',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -153,6 +165,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
+  '/request-password-reset': typeof RequestPasswordResetRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
@@ -175,6 +189,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
+  '/request-password-reset': typeof RequestPasswordResetRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
@@ -198,6 +214,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
+  '/request-password-reset': typeof RequestPasswordResetRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
@@ -222,6 +240,8 @@ export interface FileRouteTypes {
     | '/'
     | '/docs'
     | '/login'
+    | '/request-password-reset'
+    | '/reset-password'
     | '/signup'
     | '/profile'
     | '/docs/$'
@@ -244,6 +264,8 @@ export interface FileRouteTypes {
     | '/'
     | '/docs'
     | '/login'
+    | '/request-password-reset'
+    | '/reset-password'
     | '/signup'
     | '/profile'
     | '/docs/$'
@@ -266,6 +288,8 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/docs'
     | '/login'
+    | '/request-password-reset'
+    | '/reset-password'
     | '/signup'
     | '/_authenticated/profile'
     | '/docs/$'
@@ -290,6 +314,8 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   DocsRoute: typeof DocsRouteWithChildren
   LoginRoute: typeof LoginRoute
+  RequestPasswordResetRoute: typeof RequestPasswordResetRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -300,6 +326,20 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request-password-reset': {
+      id: '/request-password-reset'
+      path: '/request-password-reset'
+      fullPath: '/request-password-reset'
+      preLoaderRoute: typeof RequestPasswordResetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -523,6 +563,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   DocsRoute: DocsRouteWithChildren,
   LoginRoute: LoginRoute,
+  RequestPasswordResetRoute: RequestPasswordResetRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
