@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -13,6 +13,11 @@ export const Route = createFileRoute("/_authenticated/travels/join")({
   component: JoinTravelPage,
   validateSearch: (search) => {
     return z.object({ code: z.string() }).parse(search);
+  },
+  onError: () => {
+    throw redirect({
+      to: "/travels",
+    });
   },
 });
 

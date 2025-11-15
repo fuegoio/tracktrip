@@ -78,7 +78,7 @@ export const travelsRouter = router({
     .mutation(async ({ input, ctx }) => {
       // Generate a random join code
       function generateJoinCode(): string {
-        return Math.random().toString(36).substring(2, 8).toUpperCase();
+        return Math.random().toString(36).substring(2).toUpperCase();
       }
 
       let joinCode = generateJoinCode();
