@@ -87,6 +87,7 @@ export const travelsTable = pgTable("travels", {
   ownerId: text("owner_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
+  joinCode: varchar("join_code", { length: 255 }).notNull().unique(),
 });
 
 export const travelsUsersTable = pgTable("travels_users", {

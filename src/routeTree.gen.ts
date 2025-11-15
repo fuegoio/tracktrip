@@ -17,6 +17,7 @@ import { Route as DocsSplatRouteImport } from './routes/docs/$'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedTravelsIndexRouteImport } from './routes/_authenticated/travels/index'
 import { Route as AuthenticatedTravelsNewRouteImport } from './routes/_authenticated/travels/new'
+import { Route as AuthenticatedTravelsJoinRouteImport } from './routes/_authenticated/travels/join'
 import { Route as AuthenticatedTravelsTravelIdRouteImport } from './routes/_authenticated/travels/$travelId'
 import { Route as AuthenticatedTravelsTravelIdIndexRouteImport } from './routes/_authenticated/travels/$travelId/index'
 import { Route as AuthenticatedTravelsTravelIdUsersIndexRouteImport } from './routes/_authenticated/travels/$travelId/users/index'
@@ -69,6 +70,12 @@ const AuthenticatedTravelsNewRoute = AuthenticatedTravelsNewRouteImport.update({
   path: '/travels/new',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTravelsJoinRoute =
+  AuthenticatedTravelsJoinRouteImport.update({
+    id: '/travels/join',
+    path: '/travels/join',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedTravelsTravelIdRoute =
   AuthenticatedTravelsTravelIdRouteImport.update({
     id: '/travels/$travelId',
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
+  '/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
   '/travels': typeof AuthenticatedTravelsIndexRoute
   '/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
@@ -162,6 +170,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
+  '/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
   '/travels': typeof AuthenticatedTravelsIndexRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdIndexRoute
@@ -184,6 +193,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/docs/$': typeof DocsSplatRoute
   '/_authenticated/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
+  '/_authenticated/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/_authenticated/travels/new': typeof AuthenticatedTravelsNewRoute
   '/_authenticated/travels/': typeof AuthenticatedTravelsIndexRoute
   '/_authenticated/travels/$travelId/': typeof AuthenticatedTravelsTravelIdIndexRoute
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/docs/$'
     | '/travels/$travelId'
+    | '/travels/join'
     | '/travels/new'
     | '/travels'
     | '/travels/$travelId/'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/profile'
     | '/docs/$'
+    | '/travels/join'
     | '/travels/new'
     | '/travels'
     | '/travels/$travelId'
@@ -246,6 +258,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/docs/$'
     | '/_authenticated/travels/$travelId'
+    | '/_authenticated/travels/join'
     | '/_authenticated/travels/new'
     | '/_authenticated/travels/'
     | '/_authenticated/travels/$travelId/'
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       path: '/travels/new'
       fullPath: '/travels/new'
       preLoaderRoute: typeof AuthenticatedTravelsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/travels/join': {
+      id: '/_authenticated/travels/join'
+      path: '/travels/join'
+      fullPath: '/travels/join'
+      preLoaderRoute: typeof AuthenticatedTravelsJoinRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/travels/$travelId': {
@@ -450,6 +470,7 @@ const AuthenticatedTravelsTravelIdRouteWithChildren =
 interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedTravelsTravelIdRoute: typeof AuthenticatedTravelsTravelIdRouteWithChildren
+  AuthenticatedTravelsJoinRoute: typeof AuthenticatedTravelsJoinRoute
   AuthenticatedTravelsNewRoute: typeof AuthenticatedTravelsNewRoute
   AuthenticatedTravelsIndexRoute: typeof AuthenticatedTravelsIndexRoute
 }
@@ -458,6 +479,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedTravelsTravelIdRoute:
     AuthenticatedTravelsTravelIdRouteWithChildren,
+  AuthenticatedTravelsJoinRoute: AuthenticatedTravelsJoinRoute,
   AuthenticatedTravelsNewRoute: AuthenticatedTravelsNewRoute,
   AuthenticatedTravelsIndexRoute: AuthenticatedTravelsIndexRoute,
 }

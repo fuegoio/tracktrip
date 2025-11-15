@@ -6,6 +6,7 @@ export type Travel = {
   startDate: Date;
   endDate: Date;
   users: TravelUser[];
+  joinCode?: string;
 };
 
 export type TravelUser = {

@@ -69,12 +69,44 @@ export const travelsRouter = router({
           id: true,
           createdAt: true,
           ownerId: true,
+          joinCode: true,
         })
         .extend({
           id: z.uuid().optional(),
         }),
     )
     .mutation(async ({ input, ctx }) => {
+      // Generate a random join code
+      function generateJoinCode(): string {
+        return Math.random().toString(36).substring(2, 8).toUpperCase();
+      }
+
+      let joinCode = generateJoinCode();
+      let attempt = 0;
+      const maxAttempts = 5;
+
+      // Ensure the join code is unique
+      while (attempt < maxAttempts) {
+        try {
+          const existing = await db
+            .select()
+            .from(travelsTable)
+            .where(eq(travelsTable.joinCode, joinCode))
+            .limit(1);
+
+          if (existing.length === 0) {
+            break;
+          }
+
+          // If code exists, generate a new one
+          joinCode = generateJoinCode();
+          attempt++;
+        } catch (error) {
+          console.error("Error checking join code uniqueness:", error);
+          break;
+        }
+      }
+
       const dbTravel = (
         await db
           .insert(travelsTable)
@@ -82,6 +114,7 @@ export const travelsRouter = router({
             id: crypto.randomUUID(),
             ...input,
             ownerId: ctx.session.user.id,
+            joinCode,
           })
           .returning()
       )[0];
@@ -363,6 +396,72 @@ export const travelsRouter = router({
           image: user.image,
           role: dbTravel.ownerId === user.id ? "owner" : "member",
         })),
+      };
+
+      const eventId = await travelsRouterSync.registerEvent({
+        currentUserId: ctx.session.user.id,
+        otherUserIds: travel.users.map((user) => user.id),
+        event: {
+          action: "update",
+          data: travel,
+        },
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
+      });
+
+      return {
+        item: travel,
+        eventId,
+      };
+    }),
+
+  joinByCode: authedProcedure
+    .input(z.object({ code: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const dbTravel = (
+        await db
+          .select()
+          .from(travelsTable)
+          .where(eq(travelsTable.joinCode, input.code))
+          .limit(1)
+      )[0];
+
+      if (!dbTravel) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Travel not found",
+        });
+      }
+
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, dbTravel.id));
+
+      if (travelUsers.find((row) => row.users.id === ctx.session.user.id)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User already in travel.",
+        });
+      }
+
+      await db.insert(travelsUsersTable).values({
+        id: crypto.randomUUID(),
+        travel: dbTravel.id,
+        user: ctx.session.user.id,
+      });
+
+      const travel: Travel = {
+        ...dbTravel,
+        users: [...travelUsers.map((row) => row.users), ctx.session.user].map(
+          (user) => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image ?? null,
+            role: dbTravel.ownerId === user.id ? "owner" : "member",
+          }),
+        ),
       };
 
       const eventId = await travelsRouterSync.registerEvent({
