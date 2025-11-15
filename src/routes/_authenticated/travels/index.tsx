@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, ChevronRight, List, Plus } from "lucide-react";
+import { ArrowRight, ChevronRight, List, Plus, TrainFront } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,13 +41,17 @@ function Index() {
 
   return (
     <>
-      <div className="w-full flex items-center justify-end px-4 py-3 absolute h-15">
+      <div className="w-full flex items-center justify-between px-4 py-3 absolute h-15">
+        <div className="flex items-center gap-2 font-semibold text-white">
+          <div className="size-4 rounded-full bg-white mx-1" />
+          Tracktrip
+        </div>
         <div className="flex items-center gap-2">
           <UserMenu user={session.user} />
         </div>
       </div>
 
-      <div className="p-5 pt-14 dark h-full flex flex-col">
+      <div className="p-5 pt-20 dark h-full flex flex-col">
         <div className="flex items-center justify-between dark">
           <div>
             <div className="font-semibold text-2xl text-foreground">
@@ -94,10 +98,10 @@ function Index() {
             <Empty className="py-8">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
-                  <List />
+                  <TrainFront />
                 </EmptyMedia>
                 <EmptyTitle className="text-foreground">
-                  You have no travels
+                  You have no travel yet
                 </EmptyTitle>
                 <EmptyDescription>
                   There is no travel yet. Create one to get started.

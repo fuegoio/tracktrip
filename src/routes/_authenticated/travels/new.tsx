@@ -8,8 +8,8 @@ import z from "zod";
 import { travelSettingsFormSchema } from "@/components/travels/travel-schema";
 import { TravelSettings } from "@/components/travels/travel-settings";
 import { Button } from "@/components/ui/button";
-import { travelsCollection } from "@/store/collections";
 import { UserMenu } from "@/components/user-menu";
+import { travelsCollection } from "@/store/collections";
 
 export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
