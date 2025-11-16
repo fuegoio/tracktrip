@@ -16,6 +16,7 @@ import { travelsCollection } from "@/store/collections";
 import { BudgetSettings } from "@/components/budgets/budget-settings";
 import { cn } from "@/lib/utils";
 import { Travellers } from "@/components/users/travellers";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
@@ -84,55 +85,70 @@ function NewTravel() {
 
       <div className="p-4">
         <div className="bg-background rounded-2xl py-4">
-          {step === 0 && (
-            <>
-              <TravelSettings form={form} onSubmit={onSubmit} />
-              <div className="text-xs text-subtle-foreground text-center">
-                You will be able to change this later if needed.
-              </div>
-            </>
-          )}
+          <AnimatePresence mode="wait">
+            {step === 0 && (
+              <motion.div
+                key="info"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <TravelSettings form={form} onSubmit={onSubmit} />
+                <div className="text-xs text-subtle-foreground text-center">
+                  You will be able to change this later if needed.
+                </div>
+              </motion.div>
+            )}
 
-          {step === 1 && travel && (
-            <div className="p-2">
-              <BudgetSettings
-                travelId={travel.id}
-                onboarding
-                onSave={() => setStep(2)}
-              />
-            </div>
-          )}
+            {step === 1 && travel && (
+              <motion.div
+                key="budget"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="p-2"
+              >
+                <BudgetSettings
+                  travelId={travel.id}
+                  onboarding
+                  onSave={() => setStep(2)}
+                />
+              </motion.div>
+            )}
 
-          {step === 2 && travel && (
-            <>
-              <Travellers travelId={travel.id} onboarding />
-              <div className="px-5">
-                <Button variant="secondary" onClick={skip} className="w-full">
-                  Continue
-                  <ArrowRight className="size-4" />
-                </Button>
-              </div>
-            </>
-          )}
+            {step === 2 && travel && (
+              <motion.div
+                key="travellers"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <Travellers travelId={travel.id} onboarding />
+                <div className="px-5">
+                  <Button variant="secondary" onClick={skip} className="w-full">
+                    Continue
+                    <ArrowRight className="size-4" />
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
       <div className="flex items-center justify-center gap-4 py-4 dark">
         <div
           className={cn(
-            "rounded-full border bg-white/50 size-3",
+            "rounded-full border bg-white/50 size-3 transition-colors",
             step >= 0 ? "bg-white/50" : "bg-white/5",
           )}
         />
         <div
           className={cn(
-            "rounded-full border bg-white/50 size-3",
+            "rounded-full border bg-white/50 size-3 transition-colors",
             step >= 1 ? "bg-white/50" : "bg-white/5",
           )}
         />
         <div
           className={cn(
-            "rounded-full border bg-white/50 size-3",
+            "rounded-full border bg-white/50 size-3 transition-colors",
             step >= 2 ? "bg-white/50" : "bg-white/5",
           )}
         />
