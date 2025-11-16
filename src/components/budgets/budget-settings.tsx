@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLiveQuery, eq } from "@tanstack/react-db";
+import dayjs from "dayjs";
 import * as z from "zod";
 
 import { CategoryTypeBadge } from "../category-type-badge";
@@ -16,7 +17,6 @@ import {
 import { CategoryTypes, type CategoryType } from "@/data/categories";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection } from "@/store/collections";
-import dayjs from "dayjs";
 
 interface BudgetSettingsProps {
   travelId: string;
@@ -103,6 +103,12 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
     }
   };
 
+  const getTypeValue = (type: CategoryType) => {
+    const value = watch(`budgets.${type}.amount`);
+    if (value === null || value === undefined || isNaN(value)) return undefined;
+    return value;
+  };
+
   return (
     <div className="space-y-6 px-3">
       <div>
@@ -122,9 +128,30 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
             return (
               <div key={type} className="space-y-2 border-b py-4">
                 <div className="flex items-center gap-2 justify-between">
-                  <div className="flex items-center gap-2">
-                    <CategoryTypeBadge categoryType={type} />
-                    <div className="font-medium text-sm capitalize">{type}</div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <CategoryTypeBadge categoryType={type} />
+                      <div className="font-medium text-sm capitalize">
+                        {type}
+                      </div>
+                    </div>
+                    <div className="text-subtle-foreground text-xs pl-9">
+                      {getTypeValue(type) ? (
+                        <>
+                          Travel forecast:{" "}
+                          <span className="font-mono">
+                            {(
+                              getTypeValue(type)! * travelDurationInDays
+                            ).toLocaleString(undefined, {
+                              style: "currency",
+                              currency: travel.currency,
+                            })}
+                          </span>
+                        </>
+                      ) : (
+                        "No budget set."
+                      )}
+                    </div>
                   </div>
 
                   <InputGroup className="w-44">
