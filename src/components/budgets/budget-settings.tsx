@@ -17,6 +17,7 @@ import {
 import { CategoryTypes, type CategoryType } from "@/data/categories";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection } from "@/store/collections";
+import { toast } from "sonner";
 
 interface BudgetSettingsProps {
   travelId: string;
@@ -98,6 +99,7 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
           });
         }
       }
+      toast.success("Budgets successfully saved.");
     } catch (error) {
       console.error("Failed to save budgets:", error);
     }
@@ -191,26 +193,38 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
           </div>
           <div className="flex items-center gap-2 justify-between">
             <div className="flex items-center gap-2">
-              <div className="font-medium text-sm">Travel duration</div>
+              <div className="font-medium text-sm">Travel forecast</div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-subtle-foreground text-sm">x</div>
-              <div className="text-sm font-mono">
-                {travelDurationInDays} days
+            <div className="flex items-center gap-2 text-sm font-mono">
+              <div className="text-subtle-foreground">
+                x {travelDurationInDays} days =
+              </div>
+              <div>
+                {totalForecast.toLocaleString(undefined, {
+                  style: "currency",
+                  currency: travel.currency,
+                })}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2 justify-between">
             <div className="flex items-center gap-2">
-              <div className="font-medium text-sm">Travel forecast</div>
+              <div className="font-medium text-sm">
+                Travel forecast per traveller
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="text-subtle-foreground text-sm">=</div>
-              <div className="text-sm font-mono">
-                {totalForecast.toLocaleString(undefined, {
-                  style: "currency",
-                  currency: travel.currency,
-                })}
+            <div className="flex items-center gap-2 text-sm font-mono">
+              <div className="text-subtle-foreground">
+                / {travel.users.length} =
+              </div>
+              <div>
+                {(totalForecast / travel.users.length).toLocaleString(
+                  undefined,
+                  {
+                    style: "currency",
+                    currency: travel.currency,
+                  },
+                )}
               </div>
             </div>
           </div>
