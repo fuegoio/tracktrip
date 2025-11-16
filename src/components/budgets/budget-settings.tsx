@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLiveQuery, eq } from "@tanstack/react-db";
 import dayjs from "dayjs";
+import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { CategoryTypeBadge } from "../category-type-badge";
@@ -17,10 +19,11 @@ import {
 import { CategoryTypes, type CategoryType } from "@/data/categories";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection } from "@/store/collections";
-import { toast } from "sonner";
 
 interface BudgetSettingsProps {
   travelId: string;
+  onboarding?: boolean;
+  onSave?: () => void;
 }
 
 // Define validation schema
@@ -39,7 +42,11 @@ const budgetSchema = z.object({
 
 type BudgetFormValues = z.infer<typeof budgetSchema>;
 
-export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
+export const BudgetSettings = ({
+  travelId,
+  onboarding,
+  onSave,
+}: BudgetSettingsProps) => {
   const budgetsQuery = useLiveQuery(
     (q) =>
       q
@@ -99,7 +106,10 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
           });
         }
       }
-      toast.success("Budgets successfully saved.");
+      if (!onboarding) {
+        toast.success("Budgets successfully saved.");
+      }
+      onSave?.();
     } catch (error) {
       console.error("Failed to save budgets:", error);
     }
@@ -231,7 +241,14 @@ export const BudgetSettings = ({ travelId }: BudgetSettingsProps) => {
         </div>
 
         <Button type="submit" className="w-full">
-          Save budgets
+          {onboarding ? (
+            <>
+              Next
+              <ArrowRight className="size-4" />
+            </>
+          ) : (
+            "Save budgets"
+          )}
         </Button>
       </form>
     </div>

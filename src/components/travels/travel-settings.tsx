@@ -56,7 +56,7 @@ export const TravelSettings = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 px-6 py-4 flex-1"
+        className="space-y-6 px-6 py-4 flex-1"
       >
         <div className="flex items-start gap-2 w-full">
           <FormField
@@ -223,12 +223,10 @@ export const TravelSettings = ({
           )}
         />
 
-        <div className="flex justify-end">
-          <Button type="submit">
-            {submitText ?? "Start travel"}
-            <ArrowRight className="size-4" />
-          </Button>
-        </div>
+        <Button type="submit" className="w-full">
+          {submitText ?? "Next"}
+          <ArrowRight className="size-4" />
+        </Button>
       </form>
     </Form>
   );

@@ -1,15 +1,21 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import z from "zod";
+
+import type { Travel } from "@/data/travels";
 
 import { travelSettingsFormSchema } from "@/components/travels/travel-schema";
 import { TravelSettings } from "@/components/travels/travel-settings";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/user-menu";
 import { travelsCollection } from "@/store/collections";
+import { BudgetSettings } from "@/components/budgets/budget-settings";
+import { cn } from "@/lib/utils";
+import { Travellers } from "@/components/users/travellers";
 
 export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
@@ -18,6 +24,8 @@ export const Route = createFileRoute("/_authenticated/travels/new")({
 function NewTravel() {
   const navigate = useNavigate({ from: "/travels/new" });
   const { session } = Route.useRouteContext();
+  const [step, setStep] = useState(0);
+  const [travel, setTravel] = useState<Travel | undefined>();
 
   const form = useForm<z.infer<typeof travelSettingsFormSchema>>({
     resolver: zodResolver(travelSettingsFormSchema),
@@ -29,7 +37,7 @@ function NewTravel() {
 
   const onSubmit = (values: z.infer<typeof travelSettingsFormSchema>) => {
     const id = crypto.randomUUID();
-    travelsCollection.insert({
+    const travel: Travel = {
       id,
       ...values,
       users: [
@@ -41,8 +49,16 @@ function NewTravel() {
           role: "owner",
         },
       ],
-    });
-    navigate({ to: "/travels/$travelId", params: { travelId: id } });
+    };
+    setTravel(travel);
+    setStep(1);
+
+    travelsCollection.insert(travel);
+  };
+
+  const skip = () => {
+    if (!travel) return;
+    navigate({ to: "/travels/$travelId", params: { travelId: travel.id } });
   };
 
   return (
@@ -61,21 +77,65 @@ function NewTravel() {
       </div>
 
       <div className="dark p-6 mt-10">
-        <h1 className="text-4xl mt-8 text-foreground">Start a new travel</h1>
-        <h2 className=""></h2>
+        <h1 className="text-5xl mt-8 text-foreground font-medium text-center">
+          Start an adventure
+        </h1>
       </div>
 
-      <div className="bg-background rounded-t-2xl flex-1">
-        <div className="px-6 py-4">
-          <div className="font-semibold text-foreground text-lg">
-            Travel information
-          </div>
-          <div className="text-sm text-subtle-foreground">
-            You will be able to change this later if needed.
-          </div>
-        </div>
+      <div className="p-4">
+        <div className="bg-background rounded-2xl py-4">
+          {step === 0 && (
+            <>
+              <TravelSettings form={form} onSubmit={onSubmit} />
+              <div className="text-xs text-subtle-foreground text-center">
+                You will be able to change this later if needed.
+              </div>
+            </>
+          )}
 
-        <TravelSettings form={form} onSubmit={onSubmit} />
+          {step === 1 && travel && (
+            <div className="p-2">
+              <BudgetSettings
+                travelId={travel.id}
+                onboarding
+                onSave={() => setStep(2)}
+              />
+            </div>
+          )}
+
+          {step === 2 && travel && (
+            <>
+              <Travellers travelId={travel.id} onboarding />
+              <div className="px-5">
+                <Button variant="secondary" onClick={skip} className="w-full">
+                  Continue
+                  <ArrowRight className="size-4" />
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center gap-4 py-4 dark">
+        <div
+          className={cn(
+            "rounded-full border bg-white/50 size-3",
+            step >= 0 ? "bg-white/50" : "bg-white/5",
+          )}
+        />
+        <div
+          className={cn(
+            "rounded-full border bg-white/50 size-3",
+            step >= 1 ? "bg-white/50" : "bg-white/5",
+          )}
+        />
+        <div
+          className={cn(
+            "rounded-full border bg-white/50 size-3",
+            step >= 2 ? "bg-white/50" : "bg-white/5",
+          )}
+        />
       </div>
     </div>
   );
