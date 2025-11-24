@@ -1,7 +1,8 @@
-<div align="center">
+<div align="center" width="100px">
  <picture>
    <source media="(prefers-color-scheme: dark)" srcset="public/title.white.png">
    <source media="(prefers-color-scheme: light)" srcset="public/title.black.png">
+   <img width="200" alt="logo" src="public/title.white.png">
  </picture>
 </div>
 
