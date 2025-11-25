@@ -7,8 +7,10 @@
 </div>
 
 <div align="center">
-  <strong>Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.</strong>
+  <strong>Tracktrip is a mobile and web application to record and budget your travel expenses.</strong>
 </div>
+
+<br />
 
 ## Why?
 
