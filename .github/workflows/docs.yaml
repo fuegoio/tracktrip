@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Docs Build / Push
 
 on:
   push:
@@ -47,8 +47,8 @@ jobs:
         id: push
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./docs/
+          file: ./docs/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -64,4 +64,4 @@ jobs:
           port: 22
           script: |
             cd voyage/
-            docker compose pull voyage; docker compose up -d; docker system prune -a -f;
+            docker compose pull voyage-docs; docker compose up -d; docker system prune -a -f;
