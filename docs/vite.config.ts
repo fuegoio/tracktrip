@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import mdx from "fumadocs-mdx/vite";
 
 export default defineConfig({
+  base: "/docs",
   server: {
     port: 3000,
   },
@@ -27,7 +28,7 @@ export default defineConfig({
 
       pages: [
         {
-          path: "/docs",
+          path: "/",
         },
         {
           path: "/api/search",

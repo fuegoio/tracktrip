@@ -15,7 +15,7 @@ import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { baseOptions } from '@/lib/layout.shared';
 import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions';
 
-export const Route = createFileRoute('/docs/$')({
+export const Route = createFileRoute('/$')({
   component: Page,
   loader: async ({ params }) => {
     const slugs = params._splat?.split('/') ?? [];
