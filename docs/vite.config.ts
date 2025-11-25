@@ -28,7 +28,7 @@ export default defineConfig({
 
       pages: [
         {
-          path: "/",
+          path: "/docs",
         },
         {
           path: "/api/search",
