@@ -10,32 +10,21 @@
   <strong>Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.</strong>
 </div>
 
-<br />
+## Why?
 
-<div align="center">
-  <a href="#features">Features</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#database-schema">Database Schema</a> •
-  <a href="#authentication">Authentication</a> •
-  <a href="#development">Development</a> •
-  <a href="#deployment">Deployment</a>
-</div>
-
-<br />
+As a traveler myself, I struggled to keep track of all my expenses in long trips. I wanted a simple app to set a budget, keep track of expenses and provide small analytics to correct the trajectory while travelling.
 
 ## Features
 
 Tracktrip is a comprehensive travel budget management application with the following key features:
 
-- **Multi-user Collaboration**: Create trips and invite friends to manage expenses together
-- **Expense Tracking**: Record and categorize travel expenses with detailed information
-- **Budget Management**: Set and monitor budgets for different expense categories
-- **Real-time Analytics**: Get instant insights into your spending patterns
-- **Location-based Expenses**: Track expenses by location/place
+- **Expense tracking**: Record and categorize travel expenses with detailed information
+- **Budget management**: Set and monitor budgets for different expense categories
+- **Multi-user collaboration**: Create trips and invite friends to manage expenses together
+- **Real-time analytics**: Get instant insights into your spending patterns
+- **Location-based expenses**: Track expenses by location/place
 - **Mobile-friendly UI**: Responsive design optimized for mobile devices
-- **Email Verification**: Secure account verification via email
-- **Social Login**: Sign in with Google for convenience
+- **Offline-first**: Works offline (read-only) thanks to intensive caching
 
 ## Tech Stack
 
@@ -50,7 +39,7 @@ Tracktrip is built using modern web technologies:
 - **Tailwind CSS** for utility-first styling
 - **Radix UI** for accessible components
 - **Recharts** for data visualization
-- **Day.js** for date manipulation
+- **PWA** capabilities for mobile installation
 
 ### Backend
 
@@ -61,80 +50,12 @@ Tracktrip is built using modern web technologies:
 - **Better Auth** for authentication
 - **Resend** for transactional emails
 
-### Infrastructure
-
-- **Docker** for containerization
-- **GitHub Actions** for CI/CD
-- **PWA** capabilities for mobile installation
-
-## Architecture
-
-Tracktrip follows a modern web application architecture:
-
-- **Monorepo Structure**: Single repository containing both frontend and backend code
-- **Component-based UI**: Organized React components for reusability
-- **Modular Routing**: Separated API routers for different domains (travels, transactions, budgets, etc.)
-- **Type Safety**: End-to-end type safety with TypeScript and tRPC
-- **Atomic Design**: UI components organized by feature domains
-
-### Key Directories
-
-- `src/components/`: React components organized by feature
-- `src/db/`: Database schema and ORM configuration
-- `src/trpc/`: API routers and procedures
-- `src/auth/`: Authentication configuration
-- `migrations/`: Database migration files
-
-### Application Flow
-
-1. **Authentication**: Users sign in via email/password or Google OAuth
-2. **Travel Management**: Users create and manage trips
-3. **Expense Tracking**: Users record expenses with categories and locations
-4. **Budget Monitoring**: Users set and track budgets against actual spending
-5. **Analytics**: Users view spending patterns and insights
-
-## Database Schema
-
-The application uses a PostgreSQL database with the following key tables:
-
-### Core Tables
-
-- **users**: User accounts with authentication information
-- **travels**: Trip information including dates, currency, and owner
-- **travels_users**: Many-to-many relationship between users and travels
-- **transactions**: Financial transactions with categories, amounts, and metadata
-- **categories**: Expense categories (food, transport, accommodation, etc.)
-- **places**: Locations where expenses occur
-- **budgets**: Budget limits for different expense categories
-
-### Authentication Tables
-
-- **sessions**: User sessions for authentication
-- **accounts**: Social login accounts (Google, etc.)
-- **verifications**: Email verification tokens
-
-### Relationships
-
-- Users can belong to multiple travels
-- Each travel has its own set of transactions, categories, and places
-- Transactions reference categories and places
-- Budgets can be set per category type or specific category
-
 ## Authentication
 
 Tracktrip implements secure authentication with:
 
 - **Email/Password**: Traditional email and password login
 - **Google OAuth**: Social login via Google
-- **Email Verification**: Mandatory email verification for new accounts
-- **Password Recovery**: Secure password reset flow
-- **Session Management**: Server-side session handling
-
-The authentication system uses **Better Auth** with:
-
-- Drizzle ORM adapter for PostgreSQL
-- Resend for transactional emails
-- React Start cookies plugin
 
 ## Development
 
@@ -156,9 +77,6 @@ The authentication system uses **Better Auth** with:
    Create a `.env` file with required variables:
 
    ```env
-   POSTGRES_USER=voyage
-   POSTGRES_PASSWORD=password
-   POSTGRES_DB=voyage
    GOOGLE_CLIENT_ID=your_google_client_id
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    RESEND_API_KEY=your_resend_api_key
@@ -201,64 +119,6 @@ Tracktrip uses Docker for deployment with GitHub Actions for CI/CD.
    docker compose up -d
    ```
 
-### CI/CD Pipeline
-
-The GitHub Actions workflow:
-
-1. **Triggers**: Runs on pushes to `main` branch or version tags
-2. **Build**: Creates Docker image with production build
-3. **Push**: Publishes image to GitHub Container Registry
-4. **Deploy**: SSH deployment to production server
-
-### Production Environment
-
-The production setup includes:
-
-- PostgreSQL database service
-- Bun runtime for JavaScript execution
-- PWA capabilities for mobile installation
-- Caching headers for static assets
-
-### Progressive Web App (PWA)
-
-Tracktrip is designed as a Progressive Web App with:
-
-- **Offline Support**: Service worker for offline functionality
-- **Installable**: Can be installed on mobile devices like a native app
-- **Push Notifications**: Capable of receiving notifications
-- **Responsive Design**: Optimized for both mobile and desktop
-
-The PWA configuration includes:
-
-- **Service Worker**: Configured with Vite PWA plugin
-- **Manifest**: Web app manifest with icons and theme colors
-- **Caching**: Static asset caching for offline access
-- **Install Prompt**: Automatic installation prompt for users
-
-### Service Worker Features
-
-The service worker implements advanced caching strategies:
-
-- **Cache-first**: For static assets and fonts
-- **Stale-while-revalidate**: For Google Fonts
-- **Network-first with fallback**: For navigation requests
-- **Automatic cache cleaning**: Removes outdated assets during activation
-- **Manifest deduplication**: Ensures unique asset caching
-
-### Testing
-
-Tracktrip uses TypeScript's type system for compile-time validation. For runtime testing:
-
-- **ESLint**: Static code analysis for code quality
-- **TypeScript**: Compile-time type checking
-- **Manual Testing**: Comprehensive manual testing of features
-
-Future testing improvements planned:
-
-- Unit tests for critical components
-- Integration tests for API endpoints
-- End-to-end tests for user flows
-
 ## Contributing
 
 Contributions are welcome! Please follow these guidelines:
@@ -283,19 +143,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 For support, please open an issue on GitHub or contact the maintainers.
 
-## Roadmap
-
-Future enhancements planned:
-
-- Offline-first capabilities
-- Advanced analytics and reporting
-- Integration with financial services
-- Multi-currency support
-- Mobile app improvements
-
 <br />
 
 <div align="center">
-  Made with ❤️ by the Tracktrip team
+  Made with ❤️ by one traveler, for others travelers
 </div>
 
