@@ -98,12 +98,5 @@
   },
   "optionalDependencies": {
     "@swc/core-linux-x64-gnu": "^1.2.160"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "esbuild",
-      "better-sqlite3"
-    ]
   }
 }
