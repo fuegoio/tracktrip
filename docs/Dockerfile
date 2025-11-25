@@ -1,4 +1,4 @@
-FROM node:24 AS builder
+FROM oven/bun:1 AS build
 
 WORKDIR /app
 COPY package.json bun.lock ./
