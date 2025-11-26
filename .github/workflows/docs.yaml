@@ -21,13 +21,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Install dependencies
         working-directory: ./docs
         run: bun install --frozen-lockfile
+
       - name: Build docs
         working-directory: ./docs
         run: bun run build
+
+      - name: Replace paths in dist/client
+        working-directory: ./docs
+        run: find ./dist/client -type f -exec sed -i 's|/__tsr/|/docs/__tsr/|g' {} +
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3

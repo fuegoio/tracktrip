@@ -17,15 +17,6 @@ export default defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tanstackStart({
-      router: {
-        basepath: "/docs",
-      },
-      client: {
-        base: "/docs",
-      },
-      serverFns: {
-        base: "/docs",
-      },
       spa: {
         enabled: true,
         prerender: {
