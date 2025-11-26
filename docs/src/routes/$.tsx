@@ -1,32 +1,42 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
-import { createServerFn } from '@tanstack/react-start';
-import { source } from '@/lib/source';
-import type * as PageTree from 'fumadocs-core/page-tree';
-import { useMemo } from 'react';
-import browserCollections from 'fumadocs-mdx:collections/browser';
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { DocsLayout } from "fumadocs-ui/layouts/docs";
+import { createServerFn } from "@tanstack/react-start";
+import { source } from "@/lib/source";
+import type * as PageTree from "fumadocs-core/page-tree";
+import { useMemo } from "react";
+import browserCollections from "fumadocs-mdx:collections/browser";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
-import { baseOptions } from '@/lib/layout.shared';
-import { staticFunctionMiddleware } from '@tanstack/start-static-server-functions';
+} from "fumadocs-ui/page";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import { baseOptions } from "@/lib/layout.shared";
+import { staticFunctionMiddleware } from "@tanstack/start-static-server-functions";
+import { icons } from "@/lib/icons";
 
-export const Route = createFileRoute('/$')({
+export const Route = createFileRoute("/$")({
   component: Page,
   loader: async ({ params }) => {
-    const slugs = params._splat?.split('/') ?? [];
+    const slugs = params._splat?.split("/") ?? [];
     const data = await loader({ data: slugs });
     await clientLoader.preload(data.path);
     return data;
   },
+  head: ({ loaderData }) => ({
+    meta: [
+      {
+        title: loaderData
+          ? `${loaderData.title} | Documentation | Tracktrip`
+          : "Documentation | Tracktrip",
+      },
+    ],
+  }),
 });
 
 const loader = createServerFn({
-  method: 'GET',
+  method: "GET",
 })
   .inputValidator((slugs: string[]) => slugs)
   .middleware([staticFunctionMiddleware])
@@ -37,6 +47,7 @@ const loader = createServerFn({
     return {
       tree: source.pageTree as object,
       path: page.path,
+      title: page.data.title,
     };
   });
 
@@ -75,20 +86,14 @@ function Page() {
 
 function transformPageTree(root: PageTree.Root): PageTree.Root {
   function mapNode<T extends PageTree.Node>(item: T): T {
-    if (typeof item.icon === 'string') {
+    if (typeof item.icon === "string") {
       item = {
         ...item,
-        icon: (
-          <span
-            dangerouslySetInnerHTML={{
-              __html: item.icon,
-            }}
-          />
-        ),
+        icon: icons[item.icon],
       };
     }
 
-    if (item.type === 'folder') {
+    if (item.type === "folder") {
       return {
         ...item,
         index: item.index ? mapNode(item.index) : undefined,
