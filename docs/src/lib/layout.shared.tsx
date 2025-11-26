@@ -13,6 +13,7 @@ export function baseOptions(): BaseLayoutProps {
           Tracktrip
         </div>
       ),
+      url: "https://tracktrip.app",
     },
     searchToggle: {
       enabled: false,
@@ -22,7 +23,7 @@ export function baseOptions(): BaseLayoutProps {
         on: "nav",
         type: "main",
         icon: <ArrowRight />,
-        url: "/travels",
+        url: "https://tracktrip.app/travels",
         text: "My travels",
       },
     ],

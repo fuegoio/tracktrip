@@ -1,3 +1,14 @@
 {
-  "pages": ["---Introduction---", "index", "test"]
+  "pages": [
+    "---Introduction---",
+    "index",
+    "install",
+    "---Basics---",
+    "transactions",
+    "budgets",
+    "categories",
+    "travellers",
+    "---Advanced---",
+    "places"
+  ]
 }
