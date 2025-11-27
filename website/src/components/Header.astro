@@ -1,0 +1,14 @@
+---
+const { title, desc } = Astro.props;
+---
+
+<div class="my-8 pb-8">
+  <div class="font-medium text-xl uppercase font-mono flex items-center gap-3">
+    <div class="rounded-full bg-white size-5"></div>
+    {title}
+    <div class="flex-1 border-t border-dashed border-border"></div>
+  </div>
+  <div class="text-5xl mt-3">
+    {desc}
+  </div>
+</div>
