@@ -14,7 +14,16 @@ import { Github } from "@lucide/astro";
       Tracktrip
     </a>
     <div class="flex-1"></div>
-    <Button variant="ghost" as="a" href="/why"> Why </Button>
+    <Button
+      variant="ghost"
+      as="a"
+      href="/why"
+      class={Astro.url.pathname === "/why"
+        ? "bg-accent text-accent-foreground"
+        : ""}
+    >
+      Why
+    </Button>
     <Button variant="ghost" as="a" href="/docs"> Documentation </Button>
     <Button variant="ghost" as="a" href="/blog"> Blog </Button>
     <Button variant="ghost" as="a" href="/contact"> Contact </Button>
