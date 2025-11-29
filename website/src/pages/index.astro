@@ -125,7 +125,7 @@ import screenshotBalance from "../assets/screenshot-balance.png";
   </div>
 
   <main
-    class="w-full max-w-[1400px] mx-auto pt-8 px-4 space-y-16 sm:space-y-96 sm:pb-96 relative"
+    class="w-full max-w-[1400px] mx-auto pt-8 px-4 space-y-16 sm:space-y-96 sm:pb-16 relative"
   >
     <section
       class="w-full sm:w-1/2 px-4 sm:px-8 space-y-8"
@@ -201,13 +201,19 @@ import screenshotBalance from "../assets/screenshot-balance.png";
       />
     </section>
 
-    <div class="absolute top-0 right-0 p-8 w-1/2 hidden sm:block h-full">
-      <div class="sticky top-20 mx-auto max-w-[480px]">
+    <div
+      id="imageContainer"
+      class="absolute top-0 right-0 p-8 w-1/2 hidden sm:flex h-full flex-col"
+    >
+      <div
+        id="stickyImageContainer"
+        class="sticky top-20 mx-auto max-w-[480px] w-full"
+      >
         <Image
           id="imageBudget"
           src={screenshotBudget}
           alt="Screenshot of budget setting"
-          class="absolute top-0 rounded-xl ring-4 ring-ring shadow-up-xl w-full opacity-100 transition-opacity duration-500"
+          class="rounded-xl ring-4 ring-ring shadow-up-xl w-full opacity-100 transition-opacity duration-500"
         />
         <Image
           id="imageTransactions"
@@ -222,6 +228,7 @@ import screenshotBalance from "../assets/screenshot-balance.png";
           class="absolute top-0 rounded-xl ring-4 ring-ring shadow-up-xl w-full opacity-0 transition-opacity duration-500"
         />
       </div>
+      <div id="imageEnd" class="h-[1px]"></div>
     </div>
   </main>
 </Layout>
@@ -257,5 +264,25 @@ import screenshotBalance from "../assets/screenshot-balance.png";
     sections.forEach((section) => {
       observer.observe(section);
     });
+
+    const lastSection = document.getElementById("imageEnd");
+    const stickyContainer = document.getElementById("stickyImageContainer");
+    const imageContainer = document.getElementById("imageContainer");
+    const endObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          stickyContainer.classList.remove("sticky");
+          imageContainer.classList.add("justify-end");
+          stickyContainer.classList.add("relative");
+        } else {
+          stickyContainer.classList.add("sticky");
+          imageContainer.classList.remove("justify-end");
+          stickyContainer.classList.remove("relative");
+        }
+      },
+      { threshold: 0.0 },
+    );
+
+    endObserver.observe(lastSection);
   });
 </script>
