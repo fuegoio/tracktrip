@@ -1,43 +1,127 @@
 ---
 import Button from "@/components/ui/button.astro";
-import { Github } from "@lucide/astro";
+import { Github, Menu, X } from "@lucide/astro";
 ---
 
 <header
-  class="fixed z-40 w-full left-0 top-0 backdrop-blur-lg border-b transition-colors bg-background/90 h-14"
+  class="fixed z-50 w-full left-0 top-0 backdrop-blur-lg border-b transition-colors bg-background/90"
 >
   <div
-    class="mx-auto w-full max-w-[1400px] h-full flex items-center gap-4 px-6"
+    class="mx-auto w-full max-w-[1400px] flex items-center gap-4 px-6 h-16 relative z-10"
   >
     <a href="/" class="flex items-center gap-2 font-semibold px-2">
       <div class="size-4 rounded-full bg-white"></div>
       Tracktrip
     </a>
-    <div class="flex-1"></div>
-    <Button
-      variant="ghost"
-      as="a"
-      href="/why"
-      class={Astro.url.pathname === "/why"
-        ? "bg-accent text-accent-foreground"
-        : ""}
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-4 flex-1">
+      <Button
+        variant="ghost"
+        as="a"
+        href="/why"
+        class={Astro.url.pathname === "/why"
+          ? "bg-accent text-accent-foreground"
+          : ""}
+      >
+        Why
+      </Button>
+      <Button variant="ghost" as="a" href="/docs">Documentation</Button>
+      <Button variant="ghost" as="a" href="/blog">Blog</Button>
+      <Button variant="ghost" as="a" href="/contact">Contact</Button>
+      <div class="flex-1"></div>
+      <Button
+        variant="secondary"
+        as="a"
+        href="https://github.com/fuegoio/tracktrip"
+        target="_blank"
+      >
+        <Github class="size-4 mr-2" />
+        Tracktrip is open-source
+      </Button>
+      <Button variant="ghost" as="a" href="/login">Login</Button>
+      <Button variant="default" as="a" href="/signup">Sign up</Button>
+    </div>
+
+    <!-- Mobile buttons -->
+    <div class="flex-1 md:hidden"></div>
+    <button
+      id="mobile-menu-button"
+      class="md:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+      aria-label="Ouvrir le menu"
     >
-      Why
-    </Button>
-    <Button variant="ghost" as="a" href="/docs"> Documentation </Button>
-    <Button variant="ghost" as="a" href="/blog"> Blog </Button>
-    <Button variant="ghost" as="a" href="/contact"> Contact </Button>
-    <div class="flex-1"></div>
-    <Button
-      variant="secondary"
-      as="a"
-      href="https://github.com/fuegoio/tracktrip"
-      target="_blank"
+      <Menu class="size-5" />
+    </button>
+    <button
+      id="mobile-menu-close"
+      class="hidden md:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+      aria-label="Fermer le menu"
     >
-      <Github />
-      Tracktrip is open-source
-    </Button>
-    <Button variant="ghost" as="a" href="/login"> Login </Button>
-    <Button variant="default" as="a" href="/signup"> Sign up </Button>
+      <X />
+    </button>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div
+    id="mobile-drawer"
+    class="hidden md:hidden animate-in fade-in duration-300 fill-mode-backwards shadow-xl relative z-10"
+  >
+    <div class="flex flex-col gap-2 p-6">
+      <Button variant="ghost" as="a" href="/why">Why</Button>
+      <Button variant="ghost" as="a" href="/docs">Documentation</Button>
+      <Button variant="ghost" as="a" href="/blog">Blog</Button>
+      <Button variant="ghost" as="a" href="/contact">Contact</Button>
+      <div class="h-px bg-border my-2"></div>
+      <Button
+        variant="secondary"
+        as="a"
+        href="https://github.com/fuegoio/tracktrip"
+        target="_blank"
+      >
+        <Github class="size-4 mr-2" />
+        Tracktrip is open-source
+      </Button>
+      <Button variant="secondary" as="a" href="/login">Login</Button>
+      <Button variant="default" as="a" href="/signup">Sign up</Button>
+    </div>
+  </div>
+
+  <div
+    id="mobile-menu-overlay"
+    class="hidden animate-in fade-in fixed h-screen w-screen inset-0 bg-black/30 z-0"
+  >
   </div>
 </header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuButton = document.getElementById("mobile-menu-button");
+    const closeButton = document.getElementById("mobile-menu-close");
+    const drawer = document.getElementById("mobile-drawer");
+    const overlay = document.getElementById("mobile-menu-overlay");
+
+    // Ouvrir le drawer
+    menuButton.addEventListener("click", () => {
+      drawer.classList.remove("hidden");
+      menuButton.classList.add("hidden");
+      closeButton.classList.remove("hidden");
+      overlay.classList.remove("hidden");
+    });
+
+    // Fermer le drawer
+    closeButton.addEventListener("click", () => {
+      drawer.classList.add("hidden");
+      menuButton.classList.remove("hidden");
+      closeButton.classList.add("hidden");
+      overlay.classList.add("hidden");
+    });
+
+    // Fermer le drawer si on clique en dehors
+    overlay.addEventListener("click", (e) => {
+      drawer.classList.add("hidden");
+      menuButton.classList.remove("hidden");
+      closeButton.classList.add("hidden");
+      overlay.classList.add("hidden");
+    });
+  });
+</script>
