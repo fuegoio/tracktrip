@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import { Content as Privacy } from "../content/privacy.md";
+---
+
+<Layout>
+  <main class="w-full flex flex-col max-w-[1100px] mx-auto py-16 gap-12 px-4">
+    <div class="text-4xl font-medium">Privacy policy</div>
+
+    <div class="prose prose-invert prose-sm w-full max-w-none">
+      <Privacy />
+    </div>
+  </main>
+</Layout>
