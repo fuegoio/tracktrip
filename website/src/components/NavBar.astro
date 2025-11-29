@@ -28,7 +28,14 @@ import { Github, Menu, X } from "@lucide/astro";
       </Button>
       <Button variant="ghost" as="a" href="/docs">Documentation</Button>
       <Button variant="ghost" as="a" href="/blog">Blog</Button>
-      <Button variant="ghost" as="a" href="/contact">Contact</Button>
+      <Button
+        variant="ghost"
+        as="a"
+        href="/contact"
+        class={Astro.url.pathname === "/contact"
+          ? "bg-accent text-accent-foreground"
+          : ""}>Contact</Button
+      >
       <div class="flex-1"></div>
       <Button
         variant="secondary"

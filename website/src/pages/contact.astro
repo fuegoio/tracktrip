@@ -1,11 +1,90 @@
 ---
+import { actions, isInputError } from "astro:actions";
 import Layout from "../layouts/Layout.astro";
+import Button from "../components/ui/button.astro";
+import Input from "../components/ui/input.astro";
+import Textarea from "../components/ui/textarea.astro";
+
+import { SendHorizontal } from "@lucide/astro";
+
+export const prerender = false;
+
+const result = Astro.getActionResult(actions.submitContact);
+const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 ---
 
 <Layout>
-  <main class="w-full flex flex-col max-w-[1150px] mx-auto py-16 gap-12 px-8">
-    <div class="text-4xl font-medium">Contact me</div>
+  <main
+    class="w-full flex flex-col sm:flex-row max-w-[1150px] mx-auto py-16 gap-12 px-8"
+  >
+    <div class="sm:w-1/2">
+      <div class="text-4xl font-medium">Contact me</div>
+      <div class="text-subtle-foreground mt-4 text-sm">
+        If you have any questions or just want to say hi, feel free to reach
+        out.
+      </div>
+    </div>
 
-    <div class="prose prose-invert prose-sm w-full max-w-none"></div>
+    {
+      result && !result.error ? (
+        <div class="font-medium py-4">Message sent successfully!</div>
+      ) : (
+        <form
+          method="POST"
+          action={actions.submitContact}
+          class="space-y-5 sm:w-1/2"
+        >
+          {result?.error && !isInputError(result.error) && (
+            <p class="text-destructive">
+              Unable to send message. Please try again later.
+            </p>
+          )}
+
+          <div class="flex flex-col gap-3">
+            <label for="name" class="text-sm">
+              Name
+            </label>
+            <Input
+              id="name"
+              name="name"
+              placeholder="Name"
+              aria-invalid={inputErrors.name ? "true" : "false"}
+            />
+          </div>
+          <div class="flex flex-col gap-3">
+            <label for="email" class="text-sm">
+              Email
+            </label>
+            <Input
+              id="email"
+              name="email"
+              placeholder="Email"
+              aria-invalid={inputErrors.email ? "true" : "false"}
+            />
+            <div class="text-xs text-muted-foreground">
+              This is only used to reply to your message.
+            </div>
+          </div>
+          <div class="flex flex-col gap-3">
+            <label for="message" class="text-sm">
+              Your message
+            </label>
+            <Textarea
+              id="message"
+              name="message"
+              placeholder="Message"
+              class="h-[150px]"
+              aria-invalid={inputErrors.message ? "true" : "false"}
+            />
+          </div>
+          <div class="flex justify-end">
+            <Button type="submit">
+              Send
+              <SendHorizontal class="h-4 w-4" />
+            </Button>
+          </div>
+        </form>
+      )
+    }
   </main>
 </Layout>

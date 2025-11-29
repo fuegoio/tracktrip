@@ -1,15 +1,22 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
-import react from '@astrojs/react';
+import react from "@astrojs/react";
+import bun from "@nurodev/astro-bun";
 
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
+  adapter: bun(),
+  integrations: [react()],
 
-  integrations: [react()]
+  env: {
+    schema: {
+      RESEND_API_KEY: envField.string({ context: "server", access: "secret" }),
+    },
+  },
 });
