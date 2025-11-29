@@ -12,6 +12,7 @@ export const server = {
       message: z.string().min(1),
     }),
     handler: async (input) => {
+      console.log("Received contact form submission:", input);
       const resend = new Resend(RESEND_API_KEY);
       await resend.emails.send({
         from: "Tracktrip <contract@tracktrip.app>",
