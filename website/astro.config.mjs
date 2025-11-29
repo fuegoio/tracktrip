@@ -19,4 +19,9 @@ export default defineConfig({
       RESEND_API_KEY: envField.string({ context: "server", access: "secret" }),
     },
   },
+
+  site: "https://tracktrip.app",
+  server: {
+    host: "0.0.0.0",
+  },
 });
