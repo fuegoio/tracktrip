@@ -12,15 +12,21 @@ export const server = {
       message: z.string().min(1),
     }),
     handler: async (input) => {
-      console.log("Received contact form submission:", input);
-      const resend = new Resend(RESEND_API_KEY);
-      await resend.emails.send({
-        from: "Tracktrip <contract@tracktrip.app>",
-        replyTo: `${input.name} <${input.email}>`,
-        to: "alexistacnet@gmail.com",
-        subject: "New message on Tracktrip",
-        text: input.message,
-      });
+      try {
+        console.log("Contact form submitted", input);
+        const resend = new Resend(RESEND_API_KEY);
+        await resend.emails.send({
+          from: "Tracktrip <contact@notifications.tracktrip.app>",
+          replyTo: `${input.name} <${input.email}>`,
+          to: ["alexistacnet@gmail.com"],
+          subject: "New message on Tracktrip",
+          text: input.message,
+        });
+        return { success: true };
+      } catch (error) {
+        console.error(error);
+        return { success: false };
+      }
     },
   }),
 };
