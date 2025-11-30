@@ -14,10 +14,15 @@ import Footer from "@/components/Footer.astro";
     <meta name="generator" content={Astro.generator} />
     <title>Tracktrip</title>
 
-    <script
-      defer
-      src="https://umami.alexistac.net/script.js"
-      data-website-id="e4947d3a-4cfd-482c-93d7-8198c85505d9"></script>
+    {
+      import.meta.env.PROD && (
+        <script
+          defer
+          src="https://umami.alexistac.net/script.js"
+          data-website-id="e4947d3a-4cfd-482c-93d7-8198c85505d9"
+        />
+      )
+    }
   </head>
   <body>
     <div class="h-full w-full pt-14">
