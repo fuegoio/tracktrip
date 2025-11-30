@@ -25,6 +25,10 @@ export default defineConfig({
           crawlLinks: true,
         },
       },
+      sitemap: {
+        enabled: true,
+        host: "https://tracktrip.app",
+      },
 
       pages: [
         {

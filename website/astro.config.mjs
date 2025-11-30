@@ -15,7 +15,12 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      customSitemaps: ["https://tracktrip.app/docs/sitemap.xml"],
+    }),
+  ],
 
   env: {
     schema: {
