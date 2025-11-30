@@ -15,7 +15,7 @@ import { Github, Menu, X } from "@lucide/astro";
     </a>
 
     <!-- Desktop nav -->
-    <div class="hidden md:flex items-center gap-4 flex-1">
+    <div class="hidden lg:flex items-center gap-4 flex-1">
       <Button
         variant="ghost"
         as="a"
@@ -51,17 +51,17 @@ import { Github, Menu, X } from "@lucide/astro";
     </div>
 
     <!-- Mobile buttons -->
-    <div class="flex-1 md:hidden"></div>
+    <div class="flex-1 lg:hidden"></div>
     <button
       id="mobile-menu-button"
-      class="md:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+      class="lg:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
       aria-label="Ouvrir le menu"
     >
       <Menu class="size-5" />
     </button>
     <button
       id="mobile-menu-close"
-      class="hidden md:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+      class="hidden lg:hidden p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
       aria-label="Fermer le menu"
     >
       <X />
@@ -71,7 +71,7 @@ import { Github, Menu, X } from "@lucide/astro";
   <!-- Mobile drawer -->
   <div
     id="mobile-drawer"
-    class="hidden md:hidden animate-in fade-in duration-300 fill-mode-backwards shadow-xl relative z-10"
+    class="hidden lg:hidden animate-in fade-in duration-300 fill-mode-backwards shadow-xl relative z-10"
   >
     <div class="flex flex-col gap-2 p-6">
       <Button variant="ghost" as="a" href="/why">Why</Button>
