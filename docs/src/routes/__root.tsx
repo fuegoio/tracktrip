@@ -24,6 +24,13 @@ export const Route = createRootRoute({
       },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
+    scripts: [
+      {
+        src: "https://umami.alexistac.net/script.js",
+        "data-website-id": "e4947d3a-4cfd-482c-93d7-8198c85505d9",
+        defer: true,
+      },
+    ],
   }),
   component: RootComponent,
 });
