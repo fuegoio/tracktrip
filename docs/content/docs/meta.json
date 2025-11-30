@@ -5,10 +5,11 @@
     "install",
     "---Basics---",
     "transactions",
+    "types",
     "budgets",
-    "categories",
     "travellers",
     "---Advanced---",
-    "places"
+    "places",
+    "categories"
   ]
 }
