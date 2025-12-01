@@ -20,10 +20,19 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Documentation | Tracktrip",
+        title:
+          "Documentation | Tracktrip — Track your expenses while travelling",
+      },
+      {
+        name: "description",
+        content:
+          "Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.",
       },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: "https://tracktrip.app/docs" },
+    ],
     scripts: [
       import.meta.env.PROD
         ? {

@@ -28,8 +28,8 @@ export const Route = createFileRoute("/$")({
     meta: [
       {
         title: loaderData
-          ? `${loaderData.title} | Documentation | Tracktrip`
-          : "Documentation | Tracktrip",
+          ? `${loaderData.title} | Documentation | Tracktrip — Track your expenses while travelling`
+          : "Documentation | Tracktrip — Track your expenses while travelling",
       },
     ],
   }),
