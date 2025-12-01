@@ -46,8 +46,18 @@ import { Github, Menu, X } from "@lucide/astro";
         <Github class="size-4 mr-2" />
         Tracktrip is open-source
       </Button>
-      <Button variant="ghost" as="a" href="/login">Login</Button>
-      <Button variant="default" as="a" href="/signup">Sign up</Button>
+      <Button
+        variant="ghost"
+        as="a"
+        href="/login"
+        data-umami-event="login-click">Login</Button
+      >
+      <Button
+        variant="default"
+        as="a"
+        href="/signup"
+        data-umami-event="signup-click">Sign up</Button
+      >
     </div>
 
     <!-- Mobile buttons -->
@@ -88,8 +98,18 @@ import { Github, Menu, X } from "@lucide/astro";
         <Github class="size-4 mr-2" />
         Tracktrip is open-source
       </Button>
-      <Button variant="secondary" as="a" href="/login">Login</Button>
-      <Button variant="default" as="a" href="/signup">Sign up</Button>
+      <Button
+        variant="secondary"
+        as="a"
+        href="/login"
+        data-umami-event="login-click">Login</Button
+      >
+      <Button
+        variant="default"
+        as="a"
+        href="/signup"
+        data-umami-event="signup-click">Sign up</Button
+      >
     </div>
   </div>
 
