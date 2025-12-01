@@ -64,4 +64,4 @@ jobs:
           port: 22
           script: |
             cd voyage/
-            docker compose pull website; docker compose up -d; docker system prune -a -f;
+            docker compose pull website; docker compose up -d website; 
