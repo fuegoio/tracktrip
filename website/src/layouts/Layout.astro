@@ -9,10 +9,74 @@ import Footer from "@/components/Footer.astro";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="generator" content={Astro.generator} />
-    <title>Tracktrip</title>
+
+    <!-- Primary Meta Tags -->
+    <title>Tracktrip - Track your expenses while travelling</title>
+    <meta
+      name="description"
+      content="Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends."
+    />
+    <meta name="keywords" content="travel, finance, trips, expenses" />
+    <meta name="author" content="Alexis Tacnet" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- OpenGraph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tracktrip.app/" />
+    <meta
+      property="og:title"
+      content="Tracktrip - Track your expenses while travelling"
+    />
+    <meta
+      property="og:description"
+      content="Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends."
+    />
+    <meta property="og:image" content="https://tracktrip.app/banner.png" />
+    <meta property="og:site_name" content="Tracktrip" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://tracktrip.app/" />
+    <meta
+      name="twitter:title"
+      content="Tracktrip - Track your expenses while travelling"
+    />
+    <meta
+      name="twitter:description"
+      content="Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends."
+    />
+    <meta name="twitter:image" content="https://tracktrip.app/banner.png" />
+    <meta name="twitter:creator" content="@fuegoio" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://tracktrip.app/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#232323" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Tracktrip",
+        "url": "https://tracktrip.app/",
+        "description": "Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends."
+      }
+    </script>
 
     {
       import.meta.env.PROD && (
