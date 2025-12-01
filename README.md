@@ -1,8 +1,8 @@
 <div align="center" width="200px">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="public/title.white.png">
-   <source media="(prefers-color-scheme: light)" srcset="public/title.black.png">
-   <img width="200" alt="logo" src="public/title.white.png">
+   <source media="(prefers-color-scheme: dark)" srcset="website/public/title.white.png">
+   <source media="(prefers-color-scheme: light)" srcset="website/public/title.black.png">
+   <img width="200" alt="logo" src="website/public/title.white.png">
  </picture>
 </div>
 
@@ -150,4 +150,3 @@ For support, please open an issue on GitHub or contact the maintainers.
 <div align="center">
   Made with ❤️ by one traveler, for others travelers
 </div>
-
