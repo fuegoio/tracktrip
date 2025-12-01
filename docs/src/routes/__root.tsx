@@ -10,7 +10,7 @@ import { RootProvider } from "fumadocs-ui/provider/tanstack";
 import SearchDialog from "@/components/search";
 
 export const Route = createRootRoute({
-  head: () => ({
+  head: (params) => ({
     meta: [
       {
         charSet: "utf-8",

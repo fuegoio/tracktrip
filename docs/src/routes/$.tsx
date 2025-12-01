@@ -24,12 +24,18 @@ export const Route = createFileRoute("/$")({
     await clientLoader.preload(data.path);
     return data;
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, match }) => ({
     meta: [
       {
         title: loaderData
           ? `${loaderData.title} | Documentation | Tracktrip — Track your expenses while travelling`
           : "Documentation | Tracktrip — Track your expenses while travelling",
+      },
+    ],
+    links: [
+      {
+        rel: "canonical",
+        href: `https://tracktrip.app/docs${match.pathname}`,
       },
     ],
   }),
