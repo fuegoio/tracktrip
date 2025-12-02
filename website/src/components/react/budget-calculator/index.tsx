@@ -12,7 +12,7 @@ import {
   InputGroupText,
 } from "../ui/input-group";
 
-import { CategoryTypes, type CategoryType } from "./categories";
+import { CategoryTypes, isCategoryType, type CategoryType } from "./categories";
 import {
   Field,
   FieldDescription,
@@ -29,6 +29,8 @@ import { useState } from "react";
 import { ButtonGroup } from "../ui/button-group";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+import { BudgetsPresets, type BudgetPreset } from "./budgets";
+import { cn } from "@/lib/utils";
 
 // Define validation schema
 const budgetSchema = z.object({
@@ -53,6 +55,7 @@ type BudgetFormValues = z.infer<typeof budgetSchema>;
 export const BudgetCalculator = () => {
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
+  const [selectedPreset, setPreset] = useState<BudgetPreset>();
 
   const { watch, register, setValue } = useForm<BudgetFormValues>({
     resolver: zodResolver(budgetSchema),
@@ -90,6 +93,13 @@ export const BudgetCalculator = () => {
     return value;
   };
 
+  const applyPreset = (preset: BudgetPreset) => {
+    setPreset(preset);
+    CategoryTypes.forEach((type) => {
+      setValue(`budgets.${type}.amount`, preset[type] * travellers);
+    });
+  };
+
   return (
     <form className="space-y-6 w-full">
       <FieldGroup>
@@ -101,7 +111,7 @@ export const BudgetCalculator = () => {
 
           <FieldGroup className="sm:flex-row">
             <Field>
-              <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+              <FieldLabel htmlFor="startDate">
                 Start date of your trip
               </FieldLabel>
               <Popover
@@ -110,6 +120,7 @@ export const BudgetCalculator = () => {
               >
                 <PopoverTrigger asChild>
                   <Button
+                    id="startDate"
                     variant="secondary"
                     data-empty={!startDate}
                     className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
@@ -137,15 +148,14 @@ export const BudgetCalculator = () => {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-                End date of your trip
-              </FieldLabel>
+              <FieldLabel htmlFor="endDate">End date of your trip</FieldLabel>
               <Popover
                 open={isEndDatePickerOpen}
                 onOpenChange={setIsEndDatePickerOpen}
               >
                 <PopoverTrigger asChild>
                   <Button
+                    id="endDate"
                     variant="secondary"
                     data-empty={!endDate}
                     className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal rounded-md h-10"
@@ -175,10 +185,8 @@ export const BudgetCalculator = () => {
           </FieldGroup>
 
           <Field>
-            <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-              Number of travellers
-            </FieldLabel>
-            <ButtonGroup className="w-full">
+            <FieldLabel htmlFor="travellers">Number of travellers</FieldLabel>
+            <ButtonGroup className="w-full" id="travellers">
               <Button
                 variant="secondary"
                 className="h-10 shadow-none"
@@ -208,14 +216,50 @@ export const BudgetCalculator = () => {
 
       <Separator />
 
-      <FieldGroup className="mt-8">
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>
+            Budget preset{" "}
+            <span className="text-subtle-foreground">(optional)</span>
+          </FieldLegend>
+          <FieldDescription>
+            Use a preset to quickly set your budget for your trip.
+          </FieldDescription>
+        </FieldSet>
+
+        <Field>
+          <div className="flex items-center gap-2">
+            {BudgetsPresets.map((preset) => (
+              <Button
+                key={preset.name}
+                type="button"
+                onClick={() => applyPreset(preset)}
+                variant="secondary"
+                size="sm"
+                className={cn(
+                  "h-8 transition-colors",
+                  preset.name === selectedPreset?.name &&
+                    "bg-accent ring ring-indigo-400",
+                )}
+              >
+                {preset.name}
+              </Button>
+            ))}
+          </div>
+        </Field>
+      </FieldGroup>
+
+      <Separator />
+
+      <FieldGroup>
         <FieldSet>
           <FieldLegend>Expense types</FieldLegend>
           <FieldDescription>
             Set a budget for each type of expense and evaluate your total
             spending.
           </FieldDescription>
-          <FieldGroup>
+
+          <FieldGroup className="mt-4">
             {/* Category Budget Rows */}
             {CategoryTypes.map((type) => {
               return (
@@ -223,9 +267,12 @@ export const BudgetCalculator = () => {
                   <div className="flex items-center gap-3">
                     <CategoryTypeBadge categoryType={type} />
                     <div className="flex-1">
-                      <div className="font-medium text-sm capitalize">
+                      <label
+                        className="font-medium text-sm capitalize"
+                        htmlFor={type}
+                      >
                         {type}
-                      </div>
+                      </label>
                       <div className="text-subtle-foreground text-xs">
                         {getTypeValue(type) ? (
                           <>
@@ -247,10 +294,14 @@ export const BudgetCalculator = () => {
 
                     <InputGroup className="w-44">
                       <InputGroupInput
+                        id={type}
                         placeholder="10"
                         step="0.01"
                         {...register(`budgets.${type}.amount` as const, {
                           valueAsNumber: true,
+                          onChange: (e) => {
+                            setPreset(undefined);
+                          },
                         })}
                       />
 
