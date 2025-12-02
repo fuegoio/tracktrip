@@ -13,7 +13,7 @@ const result = Astro.getActionResult(actions.submitContact);
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 ---
 
-<Layout>
+<Layout title="Contact">
   <main
     class="w-full flex flex-col sm:flex-row max-w-[1150px] mx-auto py-16 gap-12 px-8"
   >
