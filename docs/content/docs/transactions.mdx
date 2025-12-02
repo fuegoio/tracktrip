@@ -3,6 +3,10 @@ title: Transactions
 description: How to track expenses in Tracktrip
 ---
 
+<div className="shadow rounded-xl p-4 relative overflow-hidden h-[200px] sm:h-[400px] bg-gradient-to-r from-indigo-400 to-purple-400">
+  <img src="./transactions.png" className="border rounded-xl absolute right-1/4 -top-1/4 w-1/2 -skew-12 rotate-[40deg] shadow-xl" />
+</div>
+
 Transactions are the core of Tracktrip. They are the expenses you make during your trip.
 
 ## Adding transactions
@@ -20,4 +24,23 @@ A transaction offers several fields for you to track your expense:
 * **Amount**: the amount of your expense. Tracktrip supports multiple currencies.
 * **Type**: the type of your expense. You can choose between *Food*, *Transport*, *Accommodation*, *Activity*, *Other*. Every type has a different treatment in the app, you can learn more about them [here](/types).
 * **Date**: the date of your expense.
+* **Who paid**: which traveller paid for this expense. This is useful to compute the balance between travellers.
+* **Who was involved**: which travellers were involved in this expense. This is useful to compute the balance between travellers as well.
+* **Category**: the category of your expense. This is useful to refine your expense categorization. You can learn more about categories [here](/categories).
+* **Place**: the place where you made your expense. This is useful to track your expenses by location if you are traveling to multiple places.
 
+Then, depending on the type of your expense, you will have additional fields to fill in that will be useful to compute your budget.
+
+The transaction will then be added to the list of transactions and will be shared with the other travellers.
+
+## Editing transactions
+
+You can edit a transaction by clicking on it in the list of transactions and then selecting "Edit" at the bottom. Edition will automatically be propagated to other travellers.
+
+## Deleting transactions
+
+You can delete a transaction by clicking on it and then selecting "Delete" at the bottom. Deletion will automatically be propagated to other travellers.
+
+## Viewing transactions
+
+You can view all your transactions by clicking on the **Transactions** tab in the bottom bar of the app. You can filter them by type and category currently. 

@@ -3,3 +3,34 @@ title: Types
 description: What are expense types and what they imply
 ---
 
+<div className="shadow rounded-xl p-4 relative overflow-hidden h-[200px] sm:h-[400px] bg-gradient-to-r from-amber-400 to-red-400">
+  <img src="./food.png" className="border rounded-xl absolute right-1/4 -top-1/4 w-1/2 -skew-12 rotate-[40deg] shadow-xl" />
+</div>
+
+Types are the main way to categorize your expenses in Tracktrip. They are used to compute your budget and to display your expenses in the app.
+
+## Types
+
+There are 5 types of expenses in Tracktrip:
+
+* **Food**: expenses related to food and drinks. This type is used to compute your food budget.
+* **Transport**: expenses related to transportation. This type is used to compute your transport budget.
+* **Accommodation**: expenses related to accommodation. This type is used to compute your accommodation budget.
+* **Activity**: expenses related to activities. This type is used to compute your activity budget.
+* **Other**: expenses that do not fit in the other types. This type is used to compute your other budget.
+
+## Budget computation
+
+The budget computation is based on the type of the expense. For example, if you have a food expense of 10€, it will be added to your food budget. If you have a transport expense of 20€, it will be added to your transport budget, and so on.
+
+## Analytics
+
+By clicking on the **Analytics** tab in the bottom bar of the app, you can see your expenses by type. This is useful to see where you spend the most money.
+
+Click on a type to see the details of your expenses for this type as well as an historic. You can also access this view by clicking on a type on a transaction details.
+
+<div className="flex flex-row justify-between">
+  <img src="./food.png" width="33%" className="border rounded-xl" />
+  <img src="./transport.png" width="33%" className="border rounded-xl" />
+  <img src="./activities.png" width="33%" className="border rounded-xl" />
+</div>
