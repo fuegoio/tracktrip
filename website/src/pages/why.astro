@@ -34,9 +34,7 @@ import Layout from "../layouts/Layout.astro";
         alt="Mountain"
         class="object-cover"
         width="1400"
-        height="400"
-        decoding="async"
-        loading="lazy"
+        layout="full-width"
       />
     </div>
 
@@ -98,7 +96,13 @@ import Layout from "../layouts/Layout.astro";
         <div
           class="h-[220px] w-full sm:w-[220px] overflow-hidden rounded shrink-0 flex justify-center"
         >
-          <Image src={alexis} alt="Alexis" class="object-cover" />
+          <Image
+            src={alexis}
+            alt="Alexis"
+            class="object-cover"
+            height="220"
+            layout="constrained"
+          />
         </div>
         <div>
           <h2 class="text-3xl sm:text-4xl sm:mb-10 font-medium">About me</h2>
