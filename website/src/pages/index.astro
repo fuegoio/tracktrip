@@ -4,6 +4,7 @@ import Badge from "@/components/ui/badge.astro";
 import Button from "@/components/ui/button.astro";
 import { ArrowRight } from "@lucide/astro";
 import Header from "@/components/Header.astro";
+import CallToAction from "@/components/CallToAction.astro";
 
 import { Image } from "astro:assets";
 import mountain from "../assets/mountain.jpg";
@@ -267,6 +268,29 @@ import screenshotBalance from "../assets/screenshot-balance.png";
       </div>
       <div id="imageEnd" class="h-px absolute bottom-0"></div>
     </div>
+  </main>
+
+  <main
+    class="w-full max-w-[1400px] mx-auto pt-8 px-4 space-y-12 pb-32 border-t"
+  >
+    <section class="w-full flex flex-col items-center px-6 py-16">
+      <div class="space-y-4 text-center">
+        <h3 class="text-4xl sm:text-6xl font-medium max-w-2xl mx-auto">
+          Open-source and transparent
+        </h3>
+      </div>
+      <div
+        class="text-lg text-muted-foreground max-w-xl mx-auto text-center mt-4"
+      >
+        Tracktrip is open-source, privacy-friendly, and transparent. We believe
+        in building trust through openness.
+      </div>
+
+      <Button as="a" variant="secondary" class="mt-8" href="/transparency">
+        Learn about our transparency
+        <ArrowRight class="size-4" />
+      </Button>
+    </section>
   </main>
 </Layout>
 
