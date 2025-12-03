@@ -2,6 +2,7 @@
 import Badge from "@/components/ui/badge.astro";
 import Header from "@/components/Header.astro";
 import { Image } from "astro:assets";
+import CallToAction from "../components/CallToAction.astro";
 import alexis from "../assets/alexis.jpg";
 import mountain from "../assets/mountain.jpg";
 import Layout from "../layouts/Layout.astro";
@@ -100,7 +101,6 @@ import Layout from "../layouts/Layout.astro";
             src={alexis}
             alt="Alexis"
             class="object-cover"
-            height="220"
             layout="constrained"
           />
         </div>
@@ -120,11 +120,13 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </section>
 
-    <section class="w-full text-center py-12">
+    <section class="w-full text-center pt-12">
       <div class="text-muted-foreground max-w-xl mx-auto font-light">
         Travel is about freedom. Tracktrip gives you the freedom to spend
         wisely, so you can focus on what matters.
       </div>
     </section>
+
+    <CallToAction />
   </main>
 </Layout>

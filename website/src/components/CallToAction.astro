@@ -1,0 +1,18 @@
+---
+import Button from "./ui/button.astro";
+import { ArrowRight } from "@lucide/astro";
+---
+
+<section class="w-full max-w-[1200px] mx-auto my-12">
+  <div
+    class="flex justify-between items-center p-8 bg-primary-color text-white rounded-lg my-8 border"
+  >
+    <div class="flex-1 text-2xl">Start budgeting your next trip today.</div>
+
+    <Button as="a" href="/login" data-umami-event="cta-click">
+      Get started
+      <ArrowRight class="size-4" />
+    </Button>
+  </div>
+</section>
+
