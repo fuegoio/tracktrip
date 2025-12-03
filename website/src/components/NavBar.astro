@@ -27,8 +27,14 @@ import { Github, Menu, X } from "@lucide/astro";
         Why
       </Button>
       <Button variant="ghost" as="a" href="/docs">Documentation</Button>
-      <Button variant="ghost" as="a" href="/budget">Budget calculator</Button>
-      <Button variant="ghost" as="a" href="/transparency">Transparency</Button>
+      <Button
+        variant="ghost"
+        as="a"
+        href="/transparency"
+        class={Astro.url.pathname === "/transparency"
+          ? "bg-accent text-accent-foreground"
+          : ""}>Transparency</Button
+      >
       <Button variant="ghost" as="a" href="/blog" class="hidden">Blog</Button>
       <Button
         variant="ghost"
@@ -88,7 +94,6 @@ import { Github, Menu, X } from "@lucide/astro";
     <div class="flex flex-col gap-2 p-6">
       <Button variant="ghost" as="a" href="/why">Why</Button>
       <Button variant="ghost" as="a" href="/docs">Documentation</Button>
-      <Button variant="ghost" as="a" href="/budget">Budget calculator</Button>
       <Button variant="ghost" as="a" href="/transparency">Transparency</Button>
       <Button variant="ghost" as="a" href="/blog" class="hidden">Blog</Button>
       <Button variant="ghost" as="a" href="/contact">Contact</Button>
