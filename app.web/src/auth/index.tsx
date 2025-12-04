@@ -1,6 +1,7 @@
+import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { reactStartCookies } from "better-auth/react-start";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Resend } from "resend";
 
 import RecoverAccount from "./emails/recover-account";
@@ -61,5 +62,13 @@ export const auth = betterAuth({
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
-  plugins: [reactStartCookies()],
+  trustedOrigins: [
+    "tracktrip://",
+    ...(process.env.NODE_ENV === "development"
+      ? [
+          "exp://*/*", // Trust all Expo development URLs
+        ]
+      : []),
+  ],
+  plugins: [tanstackStartCookies(), expo()],
 });
