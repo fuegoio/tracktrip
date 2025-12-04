@@ -3,15 +3,17 @@
     "name": "Tracktrip",
     "description": "Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.",
     "slug": "tracktrip",
+    "scheme": "tracktrip",
     "version": "0.0.1",
     "githubUrl": "https://github.com/fuegoio/tracktrip",
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     },
     "experiments": {
       "tsconfigPaths": true
     },
-    "plugins": [],
+    "plugins": ["expo-router"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -21,9 +23,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#232323"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.fuegoio.tracktrip"
