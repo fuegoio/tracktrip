@@ -1,4 +1,4 @@
-import { ScreenContent } from '../components/ScreenContent';
+import { ScreenContent } from '@/components/ScreenContent';
 
 export default function App() {
   return (
