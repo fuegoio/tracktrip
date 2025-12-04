@@ -70,4 +70,7 @@ module.exports = {
     hoverOnlyWhenSupported: true,
   },
   plugins: [require('tailwindcss-animate')],
+  corePlugins: {
+    backgroundOpacity: true,
+  },
 };
