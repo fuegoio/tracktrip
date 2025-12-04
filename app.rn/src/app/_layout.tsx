@@ -11,7 +11,11 @@ export default function App() {
     <>
       <ThemeProvider value={NAV_THEME['dark']}>
         <StatusBar />
-        <Stack />
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
         <PortalHost />
       </ThemeProvider>
     </>

@@ -85,7 +85,7 @@ const LoginScreen = () => {
     <View className="dark h-full w-full flex-1 items-center justify-center bg-background p-6">
       <View className="w-full max-w-md">
         <View className="mb-6">
-          <View className="mb-2 size-6 rounded-full bg-white" />
+          <View className="size-6 rounded-full bg-white" />
           <Text className="mt-3 text-lg font-semibold text-foreground">Sign in to Tracktrip</Text>
           <Text className="mt-1 text-sm text-muted-foreground">
             Welcome back! Please enter your details.
@@ -173,7 +173,7 @@ const LoginScreen = () => {
             <Text>Login with Google</Text>
           </Button>
 
-          <Text className="mt-4 text-center text-sm text-muted-foreground">
+          <Text className="mt-2 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="underline underline-offset-4">
               Sign up
