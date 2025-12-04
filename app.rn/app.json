@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Tracktrip",
+    "description": "Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.",
+    "slug": "tracktrip",
+    "version": "0.0.1",
+    "githubUrl": "https://github.com/fuegoio/tracktrip",
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "plugins": [],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#232323",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#232323"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.fuegoio.tracktrip"
+    },
+    "android": {
+      "package": "app.fuegoio.tracktrip",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#232323"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b74b1ceb-3f9c-47d5-9f0e-4e7248044330"
+      }
+    },
+    "owner": "volcano-studio"
+  }
+}
