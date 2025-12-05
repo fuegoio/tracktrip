@@ -62,10 +62,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/express": "^5.0.6",
     "@types/react": "~19.1.10",
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^3.0.5",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.0",

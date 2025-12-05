@@ -65,7 +65,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     "tracktrip://",
     ...(process.env.NODE_ENV === "development"
-      ? ["http://localhost:8081", "exp://"]
+      ? ["http://localhost:8000", "exp://"]
       : []),
   ],
   plugins: [tanstackStartCookies(), expo()],
