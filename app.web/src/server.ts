@@ -23,10 +23,9 @@ const routes = {
     }
 
     const res = await auth.handler(req);
-    res.headers.set("Access-Control-Allow-Origin", "http://localhost:8081");
-    res.headers.set("Access-Control-Allow-Credentials", "true");
-    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+    Object.entries(CORS_HEADERS.headers).forEach(([key, value]) => {
+      res.headers.set(key, value);
+    });
     return res;
   },
   "/api/trpc/*": (req: Request) => {
