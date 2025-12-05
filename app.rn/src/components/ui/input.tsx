@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
-import { Platform, TextInput, type TextInputProps } from 'react-native';
+import { cn } from "@/lib/utils";
+import { Platform, TextInput, type TextInputProps } from "react-native";
 
 function Input({
   className,
@@ -9,21 +9,24 @@ function Input({
   return (
     <TextInput
       className={cn(
-        'flex h-10 w-full min-w-0 flex-row items-center rounded-md border border-transparent bg-background px-3 py-1 text-base leading-5 text-foreground shadow-black/5 dark:bg-secondary sm:h-10',
+        "flex h-10 w-full min-w-0 flex-row items-center rounded-md border border-transparent bg-background px-3 py-1 text-base leading-5 text-foreground shadow-black/5 dark:bg-secondary sm:h-10",
+        "aria-invalid:border-destructive",
         props.editable === false &&
           cn(
-            'opacity-50',
-            Platform.select({ web: 'disabled:pointer-events-none disabled:cursor-not-allowed' })
+            "opacity-50",
+            Platform.select({
+              web: "disabled:pointer-events-none disabled:cursor-not-allowed",
+            }),
           ),
         Platform.select({
           web: cn(
-            'outline-none transition-[color,box-shadow] selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground md:text-sm',
-            'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
-            'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive'
+            "outline-none transition-[color,box-shadow] selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground md:text-sm",
+            "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
           ),
-          native: 'placeholder:text-muted-foreground/50',
+          native: "placeholder:text-muted-foreground/50",
         }),
-        className
+        className,
       )}
       {...props}
     />

@@ -1,34 +1,14 @@
-import { Alert } from 'react-native';
+import { createAuthClient } from 'better-auth/react';
+import { expoClient } from '@better-auth/expo/client';
+import * as SecureStore from 'expo-secure-store';
 
-interface AuthResponse {
-  success: boolean;
-  error?: string;
-  data?: any;
-}
-
-class AuthClient {
-  async getSession(): Promise<AuthResponse> {
-    // TODO: Implement actual session check
-    // For now, return a mock response
-    return { success: false };
-  }
-  
-  async signInWithEmail(email: string, password: string): Promise<AuthResponse> {
-    // TODO: Implement actual email/password sign-in
-    // For now, simulate a successful login
-    return { success: true };
-  }
-  
-  async signInWithGoogle(): Promise<AuthResponse> {
-    // TODO: Implement actual Google sign-in
-    // For now, simulate a successful login
-    return { success: true };
-  }
-  
-  async signOut(): Promise<AuthResponse> {
-    // TODO: Implement actual sign-out
-    return { success: true };
-  }
-}
-
-export const authClient = new AuthClient();
+export const authClient = createAuthClient({
+  baseURL: 'http://localhost:3000', // Base URL of your Better Auth backend.
+  plugins: [
+    expoClient({
+      scheme: 'tracktrip',
+      storagePrefix: 'tracktrip',
+      storage: SecureStore,
+    }),
+  ],
+});

@@ -6,9 +6,28 @@ import { db } from "./db";
 import { appRouter } from "./trpc/server/router";
 import { createContext } from "./trpc/server/trpc";
 
+const CORS_HEADERS = {
+  headers: {
+    "Access-Control-Allow-Origin": "http://localhost:8081",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+    "Access-Control-Allow-Headers": "Content-Type",
+  },
+};
+
 const routes = {
-  "/api/auth/*": (req: Request) => {
-    return auth.handler(req);
+  "/api/auth/*": async (req: Request) => {
+    if (req.method === "OPTIONS") {
+      const res = new Response("Departed", CORS_HEADERS);
+      return res;
+    }
+
+    const res = await auth.handler(req);
+    res.headers.set("Access-Control-Allow-Origin", "http://localhost:8081");
+    res.headers.set("Access-Control-Allow-Credentials", "true");
+    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+    return res;
   },
   "/api/trpc/*": (req: Request) => {
     return fetchRequestHandler({
