@@ -6,9 +6,8 @@
     "scheme": "tracktrip",
     "version": "0.0.1",
     "githubUrl": "https://github.com/fuegoio/tracktrip",
-    "web": {
-      "bundler": "metro"
-    },
+    "owner": "volcano-studio",
+
     "experiments": {
       "tsconfigPaths": true
     },
@@ -23,6 +22,10 @@
       "backgroundColor": "#232323"
     },
     "assetBundlePatterns": ["**/*"],
+
+    "web": {
+      "bundler": "metro"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.fuegoio.tracktrip"
@@ -35,11 +38,11 @@
         "backgroundColor": "#232323"
       }
     },
+
     "extra": {
       "eas": {
         "projectId": "b74b1ceb-3f9c-47d5-9f0e-4e7248044330"
       }
-    },
-    "owner": "volcano-studio"
+    }
   }
 }
