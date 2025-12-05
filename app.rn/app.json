@@ -7,8 +7,7 @@
     "version": "0.0.1",
     "githubUrl": "https://github.com/fuegoio/tracktrip",
     "web": {
-      "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro"
     },
     "experiments": {
       "tsconfigPaths": true
