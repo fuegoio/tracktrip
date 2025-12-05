@@ -19,4 +19,7 @@ web-build/
 android/
 ios/
 
+credentials/
 credentials.json
+
+.env

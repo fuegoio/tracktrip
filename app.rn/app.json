@@ -24,7 +24,7 @@
     "assetBundlePatterns": ["**/*"],
 
     "web": {
-      "bundler": "metro"
+      "output": "server"
     },
     "ios": {
       "supportsTablet": true,
