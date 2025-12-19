@@ -7,8 +7,6 @@ import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-
-
 export const NavigationButton = ({
   icon,
   active,
@@ -41,7 +39,7 @@ export const NavigationButton = ({
       </Button>
       <div
         className={cn(
-          "h-1 w-1 rounded-full bg-foreground transition-opacity",
+          "h-1 w-1 rounded-full bg-foreground transition-opacity will-change-[opacity]",
           active ? "opacity-100" : "opacity-0",
         )}
       />

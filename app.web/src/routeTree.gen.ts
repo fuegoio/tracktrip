@@ -13,10 +13,8 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RequestPasswordResetRouteImport } from './routes/request-password-reset'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as DocsRouteImport } from './routes/docs'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DocsSplatRouteImport } from './routes/docs/$'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedTravelsIndexRouteImport } from './routes/_authenticated/travels/index'
 import { Route as AuthenticatedTravelsNewRouteImport } from './routes/_authenticated/travels/new'
@@ -53,11 +51,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DocsRoute = DocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -66,11 +59,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DocsSplatRoute = DocsSplatRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => DocsRoute,
 } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
@@ -163,13 +151,11 @@ const AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/docs/$': typeof DocsSplatRoute
   '/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
@@ -187,13 +173,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/docs/$': typeof DocsSplatRoute
   '/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/travels/new': typeof AuthenticatedTravelsNewRoute
   '/travels': typeof AuthenticatedTravelsIndexRoute
@@ -212,13 +196,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/docs': typeof DocsRouteWithChildren
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/docs/$': typeof DocsSplatRoute
   '/_authenticated/travels/$travelId': typeof AuthenticatedTravelsTravelIdRouteWithChildren
   '/_authenticated/travels/join': typeof AuthenticatedTravelsJoinRoute
   '/_authenticated/travels/new': typeof AuthenticatedTravelsNewRoute
@@ -238,13 +220,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/docs'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
     | '/signup'
     | '/profile'
-    | '/docs/$'
     | '/travels/$travelId'
     | '/travels/join'
     | '/travels/new'
@@ -262,13 +242,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/docs'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
     | '/signup'
     | '/profile'
-    | '/docs/$'
     | '/travels/join'
     | '/travels/new'
     | '/travels'
@@ -286,13 +264,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/docs'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
     | '/signup'
     | '/_authenticated/profile'
-    | '/docs/$'
     | '/_authenticated/travels/$travelId'
     | '/_authenticated/travels/join'
     | '/_authenticated/travels/new'
@@ -312,7 +288,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  DocsRoute: typeof DocsRouteWithChildren
   LoginRoute: typeof LoginRoute
   RequestPasswordResetRoute: typeof RequestPasswordResetRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -349,13 +324,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/docs': {
-      id: '/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -369,13 +337,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/docs/$': {
-      id: '/docs/$'
-      path: '/$'
-      fullPath: '/docs/$'
-      preLoaderRoute: typeof DocsSplatRouteImport
-      parentRoute: typeof DocsRoute
     }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
@@ -548,20 +509,9 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
-interface DocsRouteChildren {
-  DocsSplatRoute: typeof DocsSplatRoute
-}
-
-const DocsRouteChildren: DocsRouteChildren = {
-  DocsSplatRoute: DocsSplatRoute,
-}
-
-const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  DocsRoute: DocsRouteWithChildren,
   LoginRoute: LoginRoute,
   RequestPasswordResetRoute: RequestPasswordResetRoute,
   ResetPasswordRoute: ResetPasswordRoute,
