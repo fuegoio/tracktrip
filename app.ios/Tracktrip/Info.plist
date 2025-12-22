@@ -99,13 +99,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 	<key>UIStatusBarTranslucent</key>
 	<false/>
-
 	<key>WKAppBoundDomains</key>
 	<array>
+		<string>appleid.apple.com</string>
 		<string>tracktrip.app/travels</string>
 		<string>account.google.com</string>
 	</array>
