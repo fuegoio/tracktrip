@@ -29,7 +29,39 @@ export const Route = createRootRoute({
           "Tracktrip is a mobile and web application to record and budget your travel expenses, solo or with your friends.",
       },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "16x16",
+        href: "favicon-16x16.png",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        href: "favicon-32x32.png",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "48x48",
+        href: "favicon-48x48.png",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "192x192",
+        href: "favicon-192x192.png",
+      },
+      {
+        rel: "apple-touch-icon",
+        type: "image/png",
+        sizes: "180x180",
+        href: "icons/apple-touch-icon-180x180.png",
+      },
+    ],
     scripts: [
       import.meta.env.PROD
         ? {
