@@ -3,20 +3,20 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import z from "zod";
 
 import type { Travel } from "@/data/travels";
 
+import { BudgetSettings } from "@/components/budgets/budget-settings";
 import { travelSettingsFormSchema } from "@/components/travels/travel-schema";
 import { TravelSettings } from "@/components/travels/travel-settings";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/user-menu";
-import { travelsCollection } from "@/store/collections";
-import { BudgetSettings } from "@/components/budgets/budget-settings";
-import { cn } from "@/lib/utils";
 import { Travellers } from "@/components/users/travellers";
-import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { travelsCollection } from "@/store/collections";
 
 export const Route = createFileRoute("/_authenticated/travels/new")({
   component: NewTravel,
@@ -83,7 +83,7 @@ function NewTravel() {
         </h1>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 overflow-y-auto">
         <div className="bg-background rounded-2xl py-4">
           <AnimatePresence mode="wait">
             {step === 0 && (
