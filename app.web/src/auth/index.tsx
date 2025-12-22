@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { reactStartCookies } from "better-auth/react-start";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Resend } from "resend";
 
 import DeleteAccountEmail from "./emails/delete-account";
@@ -67,7 +67,7 @@ export const auth = betterAuth({
       appBundleIdentifier: env.APPLE_BUNDLE_ID,
     },
   },
-  plugins: [reactStartCookies()],
+  plugins: [tanstackStartCookies()],
   user: {
     deleteUser: {
       enabled: true,
