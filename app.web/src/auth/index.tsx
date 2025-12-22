@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { reactStartCookies } from "better-auth/react-start";
 import { Resend } from "resend";
 
+import DeleteAccountEmail from "./emails/delete-account";
 import RecoverAccount from "./emails/recover-account";
 import VerifyEmail from "./emails/verify-email";
 
@@ -14,7 +15,6 @@ import {
   verificationsTable,
 } from "@/db/schema";
 import { env } from "@/env";
-import DeleteAccountEmail from "./emails/delete-account";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -61,6 +61,11 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
+    apple: {
+      clientId: env.APPLE_CLIENT_ID,
+      clientSecret: env.APPLE_CLIENT_SECRET,
+      appBundleIdentifier: env.APPLE_BUNDLE_ID,
+    },
   },
   plugins: [reactStartCookies()],
   user: {
@@ -77,4 +82,5 @@ export const auth = betterAuth({
       },
     },
   },
+  trustedOrigins: ["https://appleid.apple.com"],
 });
