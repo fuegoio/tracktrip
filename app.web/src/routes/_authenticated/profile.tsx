@@ -3,12 +3,22 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Edit } from "lucide-react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import z from "zod";
 
 import { setCachedSession } from "@/auth/cache";
 import { authClient } from "@/auth/client";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -52,6 +62,8 @@ function RouteComponent() {
 
   const { session } = Route.useRouteContext();
   const [user, setUser] = useState(session.user);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -146,6 +158,26 @@ function RouteComponent() {
     } catch (error) {
       console.error("Error updating password:", error);
       toast.error("Error updating password");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      setIsDeleting(true);
+      await authClient.deleteUser({
+        callbackURL: "/account-deleted",
+      });
+
+      // Logout the user after successful deletion
+      toast.success("An email to confirm your account deletion has been sent");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete account",
+      );
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
     }
   };
 
@@ -282,9 +314,48 @@ function RouteComponent() {
             </form>
           </Form>
         </div>
+
+        <div className="border-t pt-4 mt-6">
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="secondary"
+              className="w-full justify-start gap-2"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              <Trash2 className="size-4" />
+              Delete Account
+            </Button>
+          </div>
+        </div>
       </div>
 
       <canvas ref={canvasRef} style={{ display: "none" }} />
+
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Account</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete your account? This action cannot
+              be undone and will permanently remove all your data.
+              <br />
+              An email will be sent to confirm your account deletion.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isDeleting}
+              onClick={handleDeleteAccount}
+            >
+              {isDeleting ? "Sending email..." : "Delete Account"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

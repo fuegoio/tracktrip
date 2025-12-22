@@ -13,6 +13,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RequestPasswordResetRouteImport } from './routes/request-password-reset'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AccountDeletedRouteImport } from './routes/account-deleted'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -49,6 +50,11 @@ const RequestPasswordResetRoute = RequestPasswordResetRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountDeletedRoute = AccountDeletedRouteImport.update({
+  id: '/account-deleted',
+  path: '/account-deleted',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -151,6 +157,7 @@ const AuthenticatedTravelsTravelIdCategoriesCategoryTypeManageRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account-deleted': typeof AccountDeletedRoute
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account-deleted': typeof AccountDeletedRoute
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/account-deleted': typeof AccountDeletedRoute
   '/login': typeof LoginRoute
   '/request-password-reset': typeof RequestPasswordResetRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -220,6 +229,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account-deleted'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account-deleted'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/account-deleted'
     | '/login'
     | '/request-password-reset'
     | '/reset-password'
@@ -288,6 +300,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AccountDeletedRoute: typeof AccountDeletedRoute
   LoginRoute: typeof LoginRoute
   RequestPasswordResetRoute: typeof RequestPasswordResetRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -322,6 +335,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account-deleted': {
+      id: '/account-deleted'
+      path: '/account-deleted'
+      fullPath: '/account-deleted'
+      preLoaderRoute: typeof AccountDeletedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -512,6 +532,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AccountDeletedRoute: AccountDeletedRoute,
   LoginRoute: LoginRoute,
   RequestPasswordResetRoute: RequestPasswordResetRoute,
   ResetPasswordRoute: ResetPasswordRoute,

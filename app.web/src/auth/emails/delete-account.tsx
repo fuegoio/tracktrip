@@ -15,7 +15,7 @@ import {
   pixelBasedPreset,
 } from "@react-email/components";
 
-export const VerifyEmail = ({ url }: { url: string }) => (
+export const DeleteAccountEmail = ({ url }: { url: string }) => (
   <Html>
     <Head />
     <Tailwind
@@ -31,7 +31,7 @@ export const VerifyEmail = ({ url }: { url: string }) => (
       }}
     >
       <Body className="font-sans">
-        <Preview>Verify your email</Preview>
+        <Preview>Confirm your account deletion</Preview>
         <Container className="mx-auto my-0 max-w-[560px] px-0 pt-5 pb-12">
           <Img
             src="https://tracktrip.app/icons/pwa-64x64.png"
@@ -41,14 +41,18 @@ export const VerifyEmail = ({ url }: { url: string }) => (
             className="rounded"
           />
           <Heading className="text-[24px] tracking-[-0.5px] leading-[1.3] font-normal pt-[17px] px-0 pb-0">
-            Verify your email address for Tracktrip
+            Confirm your account deletion for Tracktrip
           </Heading>
+          <Text className="mb-[15px] mx-0 mt-0 leading-[1.4] text-[15px]">
+            This action is irreversible. All your data will be deleted and you
+            will not be able to recover it.
+          </Text>
           <Section className="py-[27px] px-0">
             <Button
               className="bg-primary rounded font-semibold text-white text-[15px] no-underline text-center block py-[11px] px-[23px]"
               href={url}
             >
-              Verify my email
+              Delete my account
             </Button>
           </Section>
           <Text className="mb-[15px] mx-0 mt-0 leading-[1.4] text-[15px]">
@@ -76,8 +80,8 @@ export const VerifyEmail = ({ url }: { url: string }) => (
   </Html>
 );
 
-VerifyEmail.PreviewProps = {
+DeleteAccountEmail.PreviewProps = {
   url: "https://localhost:3000/auth/verify-email?token=1234567890",
 };
 
-export default VerifyEmail;
+export default DeleteAccountEmail;

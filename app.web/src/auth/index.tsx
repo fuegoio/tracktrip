@@ -14,6 +14,7 @@ import {
   verificationsTable,
 } from "@/db/schema";
 import { env } from "@/env";
+import DeleteAccountEmail from "./emails/delete-account";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -62,4 +63,18 @@ export const auth = betterAuth({
     },
   },
   plugins: [reactStartCookies()],
+  user: {
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url }) => {
+        console.log("Sending account deletion email to", user.email, url);
+        resend.emails.send({
+          from: "Tracktrip <onboarding@notifications.tracktrip.app>",
+          to: user.email,
+          subject: "Confirm your account deletion",
+          react: <DeleteAccountEmail url={url} />,
+        });
+      },
+    },
+  },
 });
