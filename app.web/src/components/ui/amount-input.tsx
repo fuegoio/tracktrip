@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { Check, ChevronDown } from "lucide-react";
 
-
 import {
   Command,
   CommandEmpty,
@@ -80,8 +79,8 @@ export function AmountInput({
         inputMode="decimal"
         value={amount}
         onChange={(e) => {
-          setAmount(e.target.value.replace(/[^\d.]/g, ""));
-          onAmountChange(parseFloat(e.target.value.replace(/[^\d.]/g, "")));
+          setAmount(e.target.value.replace(/[^\d.,]/g, ""));
+          onAmountChange(parseFloat(e.target.value.replace(/[^\d.,]/g, "")));
         }}
         className="flex-1 text-sm bg-transparent py-1 outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
