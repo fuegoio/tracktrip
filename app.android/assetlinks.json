@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.fuegoio.tracktrip",
+      "sha256_cert_fingerprints": [
+        "6C:C3:38:64:7D:56:7F:FA:E2:E6:50:B6:5F:7C:F0:33:A2:74:C4:D6:60:54:95:7E:5E:5C:A6:E5:61:E8:13:40",
+        "9C:B3:9D:B4:1F:D6:96:CE:E0:28:41:FE:C5:CC:FF:DA:00:E8:85:A8:58:8D:8A:52:52:C8:5D:A3:17:F8:ED:85"
+      ]
+    }
+  }
+]
