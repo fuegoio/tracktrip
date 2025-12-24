@@ -79,10 +79,14 @@ function TravelIndex() {
       ? transactionsSum * (travelDurationInDays / travelProgressInDays)
       : undefined;
 
+  const firstname = session.user.name.split(" ")[0];
+
   return (
     <>
       <ScreenHeader>
-        <div className="font-semibold text-xl text-foreground">Hi Alexis,</div>
+        <div className="font-semibold text-xl text-foreground">
+          Hi {firstname},
+        </div>
         <div className="mt-1 text-muted-foreground text-sm">
           What are we doing today?
         </div>
