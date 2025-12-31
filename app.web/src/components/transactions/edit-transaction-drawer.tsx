@@ -79,6 +79,7 @@ export const EditTransactionDrawer = ({
 
         editTransactionForm.reset({
           ...transaction,
+          users: values.users,
         });
       });
     }
