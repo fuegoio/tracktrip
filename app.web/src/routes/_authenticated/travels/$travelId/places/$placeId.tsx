@@ -189,7 +189,9 @@ function RouteComponent() {
         transaction.currency,
         travel,
       );
-      result[periodIndex]![categoryTypeKey] += convertedAmount;
+      result[periodIndex]![categoryTypeKey] = (
+        (result[periodIndex]![categoryTypeKey] as number) || 0
+      ) + convertedAmount;
     });
 
     return result;
@@ -371,8 +373,10 @@ function RouteComponent() {
 
                   {allCategoryTypes.map((categoryType) => {
                     const hasData = transactionsByPeriod.some(
-                      (periodData) =>
-                        periodData[`categoryType_${categoryType.type}`] > 0,
+                      (periodData) => {
+                        const value = periodData[`categoryType_${categoryType.type}`];
+                        return typeof value === 'number' && value > 0;
+                      },
                     );
                     if (!hasData) return null;
                     return (

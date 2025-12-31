@@ -12,8 +12,9 @@ import {
   real,
 } from "drizzle-orm/pg-core";
 
+import type { CurrencyRate } from "@/data/travels";
+
 import { CategoryTypes } from "@/data/categories";
-import { CurrencyRate } from "@/data/travels";
 
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),

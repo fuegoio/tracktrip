@@ -126,18 +126,20 @@ export const BudgetSummary = ({
   if (!compact) {
     return (
       <div className="flex gap-3">
-        <Link
-          to="/travels/$travelId/categories/$categoryType"
-          params={{
-            travelId: travel.id,
-            categoryType: budget.categoryType,
-          }}
-        >
-          <CategoryTypeBadge
-            categoryType={budget.categoryType}
-            className="size-10 text-lg rounded-lg"
-          />
-        </Link>
+        {budget.categoryType && (
+          <Link
+            to="/travels/$travelId/categories/$categoryType"
+            params={{
+              travelId: travel.id,
+              categoryType: budget.categoryType,
+            }}
+          >
+            <CategoryTypeBadge
+              categoryType={budget.categoryType}
+              className="size-10 text-lg rounded-lg"
+            />
+          </Link>
+        )}
 
         <div className="flex-1">
           <div className="flex items-center gap-2 justify-between">

@@ -51,10 +51,10 @@ export const UserMenu = ({ user }: { user: User }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/docs">
+          <a href="/docs" target="_blank">
             <BookOpen />
             Documentation
-          </Link>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>

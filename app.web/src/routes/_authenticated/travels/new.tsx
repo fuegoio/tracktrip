@@ -50,6 +50,7 @@ function NewTravel() {
           role: "owner",
         },
       ],
+      currencyRates: [],
     };
     setTravel(travel);
     setStep(1);
@@ -120,7 +121,7 @@ function NewTravel() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <Travellers travelId={travel.id} onboarding />
+                <Travellers travelId={travel.id} />
                 <div className="px-5">
                   <Button variant="secondary" onClick={skip} className="w-full">
                     Continue
