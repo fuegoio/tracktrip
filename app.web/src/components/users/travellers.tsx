@@ -10,13 +10,7 @@ import {
 import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
 import { useTravel } from "@/lib/params";
 
-export const Travellers = ({
-  travelId,
-  onboarding,
-}: {
-  travelId: string;
-  onboarding?: boolean;
-}) => {
+export const Travellers = ({ travelId }: { travelId: string }) => {
   const travel = useTravel({ id: travelId });
 
   // TODO: Implement user deletion

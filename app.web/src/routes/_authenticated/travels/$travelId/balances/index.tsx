@@ -14,9 +14,10 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { UserAvatar } from "@/components/users/user-avatar";
+import { convertCurrency } from "@/lib/currency";
 import { useTravel } from "@/lib/params";
-import { transactionsCollection } from "@/store/collections";
 import { cn } from "@/lib/utils";
+import { transactionsCollection } from "@/store/collections";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/balances/",
@@ -42,6 +43,7 @@ function UserSpendingSummary() {
     return transactions
       .map((transaction) => {
         let amount;
+
         if (transaction.users === null || transaction.users.length === 0) {
           amount = transaction.amount / travel.users.length;
         } else if (transaction.users.includes(userId)) {
@@ -56,16 +58,27 @@ function UserSpendingSummary() {
   };
 
   const getTotalSpent = (userId: string) => {
-    return getTransactionsForUser(userId).reduce(
-      (sum, transaction) => sum + (transaction.amount ?? 0),
-      0,
-    );
+    return getTransactionsForUser(userId).reduce((sum, transaction) => {
+      const convertedAmount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        travel,
+      );
+      return sum + (convertedAmount ?? 0);
+    }, 0);
   };
 
   const getTotalPaid = (userId: string) => {
     return transactions
       .filter((transaction) => transaction.user === userId)
-      .reduce((sum, transaction) => sum + transaction.amount, 0);
+      .reduce((sum, transaction) => {
+        const convertedAmount = convertCurrency(
+          transaction.amount,
+          transaction.currency,
+          travel,
+        );
+        return sum + convertedAmount;
+      }, 0);
   };
 
   const totalSpent = getTotalSpent(session.user.id);
@@ -208,6 +221,7 @@ function UserSpendingSummary() {
           <TransactionsByDate
             transactions={getTransactionsForUser(session.user.id)}
             userId={session.user.id}
+            travelId={travelId}
           />
 
           {transactions.length === 0 && (

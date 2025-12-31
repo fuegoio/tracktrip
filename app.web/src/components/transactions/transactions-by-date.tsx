@@ -7,9 +7,11 @@ import type { Transaction } from "@/data/transactions";
 export const TransactionsByDate = ({
   transactions,
   userId,
+  travelId,
 }: {
   transactions: Transaction[];
   userId: string;
+  travelId: string;
 }) => {
   const transactionsGroupedByDate = transactions.reduce(
     (acc, transaction) => {
@@ -36,6 +38,7 @@ export const TransactionsByDate = ({
       date={new Date(date)}
       transactions={transactionsGroupedByDate[date]!}
       userId={userId}
+      travelId={travelId}
     />
   ));
 };

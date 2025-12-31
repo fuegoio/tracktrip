@@ -7,6 +7,12 @@ export type Travel = {
   endDate: Date;
   users: TravelUser[];
   joinCode?: string;
+  currencyRates: CurrencyRate[];
+};
+
+export type CurrencyRate = {
+  currency: string;
+  rate: number;
 };
 
 export type TravelUser = {

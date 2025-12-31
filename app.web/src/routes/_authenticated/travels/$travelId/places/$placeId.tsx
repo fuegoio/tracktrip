@@ -37,6 +37,7 @@ import {
   categoryTypeToEmoji,
 } from "@/data/categories";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
+import { convertCurrency } from "@/lib/currency";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
 
@@ -118,15 +119,26 @@ function RouteComponent() {
 
   const { startDate, endDate, days } = calculatePlaceDateRange();
 
-  const transactionsSum = placeTransactions.reduce(
-    (acc, transaction) => acc + transaction.amount,
-    0,
-  );
+  const transactionsSum = placeTransactions.reduce((acc, transaction) => {
+    const convertedAmount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      travel,
+    );
+    return acc + convertedAmount;
+  }, 0);
 
   const getCategoryTypeTransactionsSum = (categoryType: string) => {
     return placeTransactions
       .filter((transaction) => transaction.type === categoryType)
-      .reduce((acc, transaction) => acc + transaction.amount, 0);
+      .reduce((acc, transaction) => {
+        const convertedAmount = convertCurrency(
+          transaction.amount,
+          transaction.currency,
+          travel,
+        );
+        return acc + convertedAmount;
+      }, 0);
   };
 
   // Create category type data with colors and sums
@@ -172,7 +184,12 @@ function RouteComponent() {
       if (periodIndex === -1) return;
 
       const categoryTypeKey = `categoryType_${transaction.type}`;
-      result[periodIndex]![categoryTypeKey] += transaction.amount;
+      const convertedAmount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        travel,
+      );
+      result[periodIndex]![categoryTypeKey] += convertedAmount;
     });
 
     return result;
@@ -388,6 +405,7 @@ function RouteComponent() {
           <TransactionsByDate
             transactions={placeTransactions}
             userId={userId}
+            travelId={travelId}
           />
 
           {placeTransactions.length === 0 && (

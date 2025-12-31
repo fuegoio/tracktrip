@@ -1,6 +1,8 @@
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import dayjs from "dayjs";
 
+import { convertCurrency } from "@/lib/currency";
+import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
 
 export const usePlaces = ({ travelId }: { travelId: string }) => {

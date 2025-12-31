@@ -14,6 +14,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { CategoryTypes, categoryTypeToColorHex } from "@/data/categories";
+import { convertCurrency } from "@/lib/currency";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 
@@ -62,7 +63,12 @@ export const TransactionInsights = ({
       const periodIndex = periodsSinceStart.indexOf(transactionPeriod);
       if (periodIndex === -1) return;
 
-      result[periodIndex]![`type_${transaction.type}`] += transaction.amount;
+      const convertedAmount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        travel,
+      );
+      result[periodIndex]![`type_${transaction.type}`] += convertedAmount;
     });
 
     return result;

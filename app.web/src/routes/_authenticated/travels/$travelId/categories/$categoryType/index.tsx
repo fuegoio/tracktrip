@@ -30,6 +30,7 @@ import {
   categoryTypeToEmoji,
   isCategoryType,
 } from "@/data/categories";
+import { convertCurrency } from "@/lib/currency";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection, transactionsCollection } from "@/store/collections";
@@ -78,10 +79,14 @@ function RouteComponent() {
       ),
   );
 
-  const transactionsSum = travelTransactions.reduce(
-    (acc, transaction) => acc + transaction.amount,
-    0,
-  );
+  const transactionsSum = travelTransactions.reduce((acc, transaction) => {
+    const convertedAmount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      travel,
+    );
+    return acc + convertedAmount;
+  }, 0);
 
   const getCategoryTransactionsSum = (categoryId: string) => {
     return travelTransactions
@@ -90,7 +95,14 @@ function RouteComponent() {
           transaction.category ===
           (categoryId === "no-category" ? null : categoryId),
       )
-      .reduce((acc, transaction) => acc + transaction.amount, 0);
+      .reduce((acc, transaction) => {
+        const convertedAmount = convertCurrency(
+          transaction.amount,
+          transaction.currency,
+          travel,
+        );
+        return acc + convertedAmount;
+      }, 0);
   };
 
   const getCategoryColor = (index: number) => {
@@ -150,7 +162,12 @@ function RouteComponent() {
       const categoryKey = transaction.category
         ? `category_${transaction.category}`
         : "category_no-category";
-      result[periodIndex]![categoryKey] += transaction.amount;
+      const convertedAmount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        travel,
+      );
+      result[periodIndex]![categoryKey] += convertedAmount;
     });
 
     return result;
@@ -357,6 +374,7 @@ function RouteComponent() {
           <TransactionsByDate
             transactions={travelTransactions}
             userId={userId}
+            travelId={travelId}
           />
 
           {travelTransactions.length === 0 && (

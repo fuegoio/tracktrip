@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Cog,
   DoorOpen,
+  Euro,
   Trash,
   Users,
 } from "lucide-react";
@@ -40,6 +41,7 @@ import { trpcClient } from "@/trpc/client";
 
 const travelLinks = [
   { name: "Travellers", path: "/users", icon: Users },
+  { name: "Currencies", path: "/currencies", icon: Euro },
 ] as const;
 
 export const TravelMenu = ({

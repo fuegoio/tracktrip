@@ -8,6 +8,7 @@ import { Progress } from "../ui/progress";
 
 import type { BudgetPeriod } from "@/data/budgets";
 
+import { convertCurrency } from "@/lib/currency";
 import { useTravel } from "@/lib/params";
 import { budgetsCollection, transactionsCollection } from "@/store/collections";
 
@@ -36,10 +37,22 @@ export const AllBudgetsSummary = ({
   const endOfPeriod =
     period === "travel" ? endOfTravel : now.add(1, "day").startOf("day");
 
-  const { data: periodTransactions } = useLiveQuery((q) => {
+  const periodTransactionsQuery = useLiveQuery((q) => {
     return q
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, travel.id));
+  });
+
+  const periodTransactions = periodTransactionsQuery.data.map((transaction) => {
+    const convertedAmount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      travel,
+    );
+    return {
+      ...transaction,
+      amount: convertedAmount,
+    };
   });
 
   const periodTransactionsAmount =

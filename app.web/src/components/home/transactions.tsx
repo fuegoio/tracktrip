@@ -54,7 +54,7 @@ export const Transactions = ({
         </Button>
       </div>
 
-      <TransactionsByDate transactions={recentTransactions} userId={userId} />
+      <TransactionsByDate transactions={recentTransactions} userId={userId} travelId={travelId} />
 
       {recentTransactions.length === 0 && (
         <Empty className="py-8">

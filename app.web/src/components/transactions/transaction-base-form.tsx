@@ -98,9 +98,9 @@ export const TransactionBaseForm = ({
                 amountDefaultValue={field.value}
                 onAmountChange={field.onChange}
                 currencyDefaultValue={form.getValues("currency")}
-                onCurrencyChange={(currency) =>
-                  form.setValue("currency", currency)
-                }
+                onCurrencyChange={(currency) => {
+                  form.setValue("currency", currency, { shouldDirty: true });
+                }}
               />
             </FormControl>
             <FormMessage />

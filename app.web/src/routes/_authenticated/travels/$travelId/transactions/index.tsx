@@ -148,6 +148,7 @@ function RouteComponent() {
             <TransactionsByDate
               transactions={filteredTransactions}
               userId={session.user.id}
+              travelId={travelId}
             />
           </>
         )}

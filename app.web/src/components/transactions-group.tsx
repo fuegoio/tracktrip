@@ -8,10 +8,12 @@ export const TransactionsGroup = ({
   date,
   transactions,
   userId,
+  travelId,
 }: {
   date: Date;
   transactions: Transaction[];
   userId: string;
+  travelId: string;
 }) => {
   // Sort the transactions in descending order
   const sortedTransactions = transactions.sort((a, b) => {
@@ -30,6 +32,7 @@ export const TransactionsGroup = ({
             key={transaction.id}
             transaction={transaction}
             userId={userId}
+            travelId={travelId}
           />
         ))}
       </div>

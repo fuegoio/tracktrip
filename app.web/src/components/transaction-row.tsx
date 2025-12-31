@@ -6,15 +6,19 @@ import { useTransactionDrawerStore } from "./transactions/transaction-drawer-sto
 
 import type { Transaction } from "@/data/transactions";
 
+import { convertCurrency } from "@/lib/currency";
+import { useTravel } from "@/lib/params";
 import { cn } from "@/lib/utils";
 import { placesCollection } from "@/store/collections";
 
 export const TransactionRow = ({
   transaction,
   userId,
+  travelId,
 }: {
   transaction: Transaction;
   userId: string;
+  travelId: string;
 }) => {
   const { data: places } = useLiveQuery(
     (q) =>
@@ -25,10 +29,20 @@ export const TransactionRow = ({
   );
   const transactionPlace = places[0];
 
+  const travel = useTravel({ id: travelId });
   const isUserConcerned =
     transaction.users === null || transaction.users.includes(userId);
 
   const { openDrawer } = useTransactionDrawerStore();
+
+  // Convert the amount to travel currency if needed
+  const convertedAmount = convertCurrency(
+    transaction.amount,
+    transaction.currency,
+    travel,
+  );
+
+  const showConversion = transaction.currency !== travel.currency;
 
   return (
     <div
@@ -52,11 +66,21 @@ export const TransactionRow = ({
         </div>
       )}
       <div className="flex-1" />
-      <div className="text-xs font-mono text-foreground">
-        {transaction.amount.toLocaleString(undefined, {
-          style: "currency",
-          currency: transaction.currency,
-        })}
+      <div className="text-xs font-mono text-foreground flex gap-2">
+        {showConversion && (
+          <span className="text-xs text-muted-foreground">
+            {convertedAmount.toLocaleString(undefined, {
+              style: "currency",
+              currency: travel.currency,
+            })}
+          </span>
+        )}
+        <span>
+          {transaction.amount.toLocaleString(undefined, {
+            style: "currency",
+            currency: transaction.currency,
+          })}
+        </span>
       </div>
     </div>
   );

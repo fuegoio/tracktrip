@@ -13,6 +13,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { CategoryTypes } from "@/data/categories";
+import { CurrencyRate } from "@/data/travels";
 
 export const usersTable = pgTable("users", {
   id: text("id").primaryKey(),
@@ -88,6 +89,10 @@ export const travelsTable = pgTable("travels", {
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
   joinCode: varchar("join_code", { length: 255 }).notNull().unique(),
+  currencyRates: jsonb("currency_rates")
+    .$type<CurrencyRate[]>()
+    .notNull()
+    .default([]),
 });
 
 export const travelsUsersTable = pgTable("travels_users", {

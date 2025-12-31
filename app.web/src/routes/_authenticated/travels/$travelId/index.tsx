@@ -8,6 +8,7 @@ import { Transactions } from "@/components/home/transactions";
 import { ScreenDrawer } from "@/components/layout/screen-drawer";
 import { ScreenHeader } from "@/components/layout/screen-header";
 import { ChartContainer } from "@/components/ui/chart";
+import { convertCurrency } from "@/lib/currency";
 import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { transactionsCollection } from "@/store/collections";
@@ -28,10 +29,16 @@ function TravelIndex() {
       .from({ transactions: transactionsCollection })
       .where(({ transactions }) => eq(transactions.travel, params.travelId)),
   );
-  const transactionsSum = travelTransactions.reduce(
-    (acc, transaction) => acc + transaction.amount,
-    0,
-  );
+
+  // Calculate total sum with currency conversion
+  const transactionsSum = travelTransactions.reduce((acc, transaction) => {
+    const convertedAmount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      travel,
+    );
+    return acc + convertedAmount;
+  }, 0);
 
   function sumTransactionsByWeek() {
     const startOfTravel = dayjs(travel.startDate).startOf("day");
@@ -47,7 +54,12 @@ function TravelIndex() {
         .format("YYYY-MM-DD");
       const weekIndex = periodsSinceStart.indexOf(transactionWeek);
       if (weekIndex !== -1) {
-        result[weekIndex]!.sum += transaction.amount;
+        const convertedAmount = convertCurrency(
+          transaction.amount,
+          transaction.currency,
+          travel,
+        );
+        result[weekIndex]!.sum += convertedAmount;
       }
     });
 
@@ -60,7 +72,12 @@ function TravelIndex() {
   const todayTransactionsSum = travelTransactions
     .filter((transaction) => dayjs(transaction.date).isSame(today, "day"))
     .reduce((acc, transaction) => {
-      return acc + transaction.amount;
+      const convertedAmount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        travel,
+      );
+      return acc + convertedAmount;
     }, 0);
 
   const travelersCount = travel.users.length;
