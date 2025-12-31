@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { eq, useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/input-group";
 import { useTravel } from "@/lib/params";
 import { travelsCollection, transactionsCollection } from "@/store/collections";
-import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute(
   "/_authenticated/travels/$travelId/currencies/",

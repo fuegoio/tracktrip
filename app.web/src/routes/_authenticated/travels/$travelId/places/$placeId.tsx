@@ -36,8 +36,8 @@ import {
   categoryTypeToColorHex,
   categoryTypeToEmoji,
 } from "@/data/categories";
-import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { convertCurrency } from "@/lib/currency";
+import { getIntervalsBetweenDates } from "@/lib/dayjs";
 import { useTravel } from "@/lib/params";
 import { placesCollection, transactionsCollection } from "@/store/collections";
 

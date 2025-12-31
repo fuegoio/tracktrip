@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { ArrowRight, ChevronRight, List, Plus, TrainFront } from "lucide-react";
+import { ArrowRight, ChevronRight, Plus, TrainFront } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
