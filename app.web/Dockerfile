@@ -17,4 +17,6 @@ COPY ./migrations ./migrations
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3000/tcp
+ENV NODE_ENV production
+
 ENTRYPOINT ["bun", "run", "start"]

@@ -16,4 +16,6 @@ COPY ./package.json .
 COPY --from=build /app/dist ./dist
 
 EXPOSE 4321/tcp
+ENV NODE_ENV production
+
 ENTRYPOINT ["bun", "run", "start"]
