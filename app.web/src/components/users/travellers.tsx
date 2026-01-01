@@ -1,5 +1,22 @@
-import { EllipsisVertical } from "lucide-react";
+import * as React from "react";
 
+import { useMutation } from "@tanstack/react-query";
+import { EllipsisVertical, LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+
+import type { User } from "better-auth";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -9,11 +26,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { InviteUserDrawer } from "@/components/users/invite-user-drawer";
 import { useTravel } from "@/lib/params";
+import { trpc } from "@/trpc/client";
 
-export const Travellers = ({ travelId }: { travelId: string }) => {
+export const Travellers = ({
+  travelId,
+  currentUser,
+}: {
+  travelId: string;
+  currentUser: User;
+}) => {
   const travel = useTravel({ id: travelId });
 
-  // TODO: Implement user deletion
+  const deleteUserMutation = useMutation(
+    trpc.travels.deleteUser.mutationOptions({
+      onSuccess: () => {
+        toast.success("User deleted successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to delete user");
+      },
+    }),
+  );
+
+  const currentUserRole = travel.users?.find(
+    (user) => user.id === currentUser.id,
+  )?.role;
 
   return (
     <div className="px-5 pb-4 space-y-4">
@@ -35,27 +72,66 @@ export const Travellers = ({ travelId }: { travelId: string }) => {
               </Badge>
             )}
           </div>
-          {user.role !== "owner" && (
+          {currentUserRole === "owner" && user.role !== "owner" && (
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <EllipsisVertical className="h-4 w-4 text-muted-foreground" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem
-                  variant="destructive"
-                  // onClick={() => deleteUser(user.id)}
-                >
-                  Delete
-                </DropdownMenuItem>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete traveller</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete {user.name} from this
+                        travel? This action cannot be undone.
+                        <br />
+                        <br />
+                        Transactions created by this traveller will be deleted.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        disabled={deleteUserMutation.status === "pending"}
+                        onClick={() =>
+                          deleteUserMutation.mutate({
+                            userId: user.id,
+                            travelId,
+                          })
+                        }
+                      >
+                        {deleteUserMutation.status === "pending" ? (
+                          <LoaderCircle className="size-4 animate-spin" />
+                        ) : (
+                          "Delete"
+                        )}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
         </div>
       ))}
 
-      <div className="h-px bg-border" />
-
-      <InviteUserDrawer travelId={travelId} />
+      {currentUserRole === "owner" && (
+        <>
+          <div className="h-px bg-border" />
+          <InviteUserDrawer travelId={travelId} />
+        </>
+      )}
     </div>
   );
 };

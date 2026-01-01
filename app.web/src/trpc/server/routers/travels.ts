@@ -557,4 +557,102 @@ export const travelsRouter = router({
         eventId,
       };
     }),
+
+  deleteUser: authedProcedure
+    .input(z.object({ travelId: z.string(), userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const dbTravel = (
+        await db
+          .select()
+          .from(travelsTable)
+          .where(eq(travelsTable.id, input.travelId))
+          .limit(1)
+      )[0];
+
+      if (!dbTravel) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Travel not found",
+        });
+      }
+
+      // Check if the current user is the owner of the travel
+      if (dbTravel.ownerId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Only the travel owner can delete users",
+        });
+      }
+
+      // Check if the user to delete is the owner (cannot delete themselves this way)
+      if (input.userId === dbTravel.ownerId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot delete the travel owner",
+        });
+      }
+
+      // Check if the user to delete is actually in the travel
+      const userToDelete = (
+        await db
+          .select()
+          .from(travelsUsersTable)
+          .where(
+            and(
+              eq(travelsUsersTable.travel, input.travelId),
+              eq(travelsUsersTable.user, input.userId),
+            ),
+          )
+          .limit(1)
+      )[0];
+
+      if (!userToDelete) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found in this travel",
+        });
+      }
+
+      // Remove the user from the travel
+      await db
+        .delete(travelsUsersTable)
+        .where(
+          and(
+            eq(travelsUsersTable.travel, input.travelId),
+            eq(travelsUsersTable.user, input.userId),
+          ),
+        );
+
+      const travelUsers = await db
+        .select()
+        .from(travelsUsersTable)
+        .innerJoin(usersTable, eq(travelsUsersTable.user, usersTable.id))
+        .where(eq(travelsUsersTable.travel, input.travelId));
+
+      const travel: Travel = {
+        ...dbTravel,
+        users: travelUsers.map((row) => ({
+          id: row.users.id,
+          name: row.users.name,
+          email: row.users.email,
+          image: row.users.image,
+          role: dbTravel.ownerId === row.users.id ? "owner" : "member",
+        })),
+      };
+
+      const eventId = await travelsRouterSync.registerEvent({
+        currentUserId: ctx.session.user.id,
+        otherUserIds: travel.users.map((user) => user.id),
+        event: {
+          action: "update",
+          data: travel,
+        },
+        saveEvent: (event) => drizzleEventsAdapter<Travel>("travels", event),
+      });
+
+      return {
+        item: travel,
+        eventId,
+      };
+    }),
 });

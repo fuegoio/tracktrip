@@ -12,6 +12,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { travelId } = Route.useParams();
+  const { session } = Route.useRouteContext();
 
   return (
     <>
@@ -23,7 +24,7 @@ function RouteComponent() {
       </ScreenHeader>
 
       <ScreenDrawer>
-        <Travellers travelId={travelId} />
+        <Travellers travelId={travelId} currentUser={session.user} />
       </ScreenDrawer>
     </>
   );
