@@ -16,6 +16,9 @@ const routes = {
       req,
       router: appRouter,
       createContext: () => createContext({ request: req }),
+      onError: (error) => {
+        console.error(error);
+      },
     });
   },
   "/*": async (req: Request) => {
