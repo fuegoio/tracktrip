@@ -4,7 +4,7 @@ import { Pool } from "pg";
 import * as schema from "./schema";
 
 import { env } from "@/env";
-
+import { logger } from "@/lib/logger";
 
 const globalForDrizzle = globalThis as unknown as {
   pool: Pool | undefined;
@@ -13,7 +13,7 @@ const globalForDrizzle = globalThis as unknown as {
 export type DbType = NodePgDatabase<typeof schema>;
 
 const createPool = () => {
-  console.log("[Database] Connecting to database...");
+  logger.info("[Database] Connecting to database...");
   const pool = new Pool({
     connectionString: `postgresql://${env.POSTGRES_USER}:${env.POSTGRES_PASSWORD}@${env.POSTGRES_HOST}:${env.POSTGRES_PORT}/${env.POSTGRES_DB}`,
     max: env.POSTGRES_MAX_CONNECTIONS,

@@ -11,7 +11,7 @@ const bunServerPlugin = {
   name: "bun-server-plugin",
   configureServer(server: ViteDevServer) {
     const startBunServer = () => {
-      const process = spawn("bun", ["run", "src/server.ts"], {
+      const process = spawn("bun", ["run", "--watch", "src/server.ts"], {
         stdio: "inherit",
         shell: true,
       });

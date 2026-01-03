@@ -42,7 +42,6 @@ export const UsersDropdown = ({
     }
 
     setSelectedUsers(newSelectedUsers);
-    console.log(newSelectedUsers);
     onChange(newSelectedUsers.length === 0 ? null : newSelectedUsers);
   };
 

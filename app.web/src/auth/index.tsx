@@ -14,6 +14,7 @@ import {
   verificationsTable,
 } from "@/db/schema";
 import { env } from "@/env";
+import { logger } from "@/lib/logger";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -32,7 +33,13 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
-      console.log("Sending reset password email to", user.email, url);
+      logger.info(
+        {
+          user,
+          url,
+        },
+        "Sending reset password email",
+      );
       resend.emails.send({
         from: "Tracktrip <onboarding@notifications.tracktrip.app>",
         to: user.email,
@@ -46,7 +53,13 @@ export const auth = betterAuth({
     sendOnSignIn: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      console.log("Sending verification email to", user.email, url);
+      logger.info(
+        {
+          user,
+          url,
+        },
+        "Sending verification email",
+      );
       resend.emails.send({
         from: "Tracktrip <onboarding@notifications.tracktrip.app>",
         to: user.email,
@@ -70,7 +83,13 @@ export const auth = betterAuth({
     deleteUser: {
       enabled: true,
       sendDeleteAccountVerification: async ({ user, url }) => {
-        console.log("Sending account deletion email to", user.email, url);
+        logger.info(
+          {
+            user,
+            url,
+          },
+          "Sending account deletion email",
+        );
         resend.emails.send({
           from: "Tracktrip <onboarding@notifications.tracktrip.app>",
           to: user.email,

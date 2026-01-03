@@ -3,6 +3,7 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 
 import { auth } from "./auth";
 import { db } from "./db";
+import { logger } from "./lib/logger";
 import { appRouter } from "./trpc/server/router";
 import { createContext } from "./trpc/server/trpc";
 
@@ -16,8 +17,8 @@ const routes = {
       req,
       router: appRouter,
       createContext: () => createContext({ request: req }),
-      onError: (error) => {
-        console.error(error);
+      onError: (opts) => {
+        logger.error(opts);
       },
     });
   },
@@ -49,15 +50,15 @@ const server = Bun.serve({
   routes,
 });
 
-console.info(
+logger.info(
   `[HTTP Server] Server is running on http://${server.hostname}:${server.port}`,
 );
 
-console.info("[Database] Running database migrations...");
+logger.info("[Database] Running database migrations...");
 migrate(db, { migrationsFolder: "./migrations" })
   .then(() => {
-    console.info("[Database] Database migrations complete");
+    logger.info("[Database] Database migrations complete");
   })
   .catch((err) => {
-    console.error(`[Database] Error running migrations: ${String(err)}`);
+    logger.error({ error: err }, "[Database] Error running migrations");
   });
