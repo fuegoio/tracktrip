@@ -20,6 +20,7 @@ export const env = createEnv({
     APPLE_CLIENT_SECRET: z.string(),
     APPLE_BUNDLE_ID: z.string().default("app.fuegoio.tracktrip"),
     RESEND_API_KEY: z.string(),
+    LOG_LEVEL: z.string().default("info"),
   },
   client: {},
   runtimeEnv: {
@@ -40,6 +41,7 @@ export const env = createEnv({
     APPLE_CLIENT_SECRET: process.env.APPLE_CLIENT_SECRET,
     APPLE_BUNDLE_ID: process.env.APPLE_BUNDLE_ID,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    LOG_LEVEL: process.env.LOG_LEVEL,
   },
 
   /**

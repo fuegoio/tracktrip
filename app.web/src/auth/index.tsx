@@ -100,4 +100,9 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: ["https://appleid.apple.com"],
+  logger: {
+    log: (level, message, ...args) => {
+      logger[level](args, message);
+    },
+  },
 });
