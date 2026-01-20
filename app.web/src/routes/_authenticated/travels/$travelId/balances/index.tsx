@@ -159,7 +159,7 @@ function UserSpendingSummary() {
                   </span>
                   <div className="text-foreground font-mono text-sm flex flex-col gap-1">
                     <Badge variant="secondary">
-                      <span className="font-normal">Total paid: </span>
+                      <span className="font-normal">Total spent: </span>
                       {getTotalSpent(user.id).toLocaleString(undefined, {
                         style: "currency",
                         currency: travel.currency,
@@ -168,7 +168,7 @@ function UserSpendingSummary() {
                     <div className="flex items-center gap-1">
                       -
                       <Badge variant="outline">
-                        <span className="font-normal">Total cost: </span>
+                        <span className="font-normal">Total paid: </span>
                         {getTotalPaid(user.id).toLocaleString(undefined, {
                           style: "currency",
                           currency: travel.currency,
