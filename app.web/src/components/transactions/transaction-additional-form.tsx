@@ -61,7 +61,9 @@ export const TransactionAdditionalForm = ({
   useEffect(() => {
     const departureDate = form.getValues("departureDate");
     if (departureDate && departureDate < transactionDate) {
-      form.setValue("departureDate", null);
+      form.setValue("departureDate", null, {
+        shouldDirty: true,
+      });
     }
   }, [transactionDate, form]);
 

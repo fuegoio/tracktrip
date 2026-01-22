@@ -126,7 +126,9 @@ export const EditTransactionDrawer = ({
               <TransactionBaseForm
                 travel={travel}
                 onTypeChange={() => {
-                  editTransactionForm.setValue("category", null);
+                  editTransactionForm.setValue("category", null, {
+                    shouldDirty: true,
+                  });
                 }}
               />
 
