@@ -11,11 +11,15 @@ const bunServerPlugin = {
   name: "bun-server-plugin",
   configureServer(server: ViteDevServer) {
     const startBunServer = () => {
-      const process = spawn("bun", ["run", "--watch", "src/server.ts"], {
-        stdio: "inherit",
+      const bunProcess = spawn("bun", ["run", "--watch", "src/server.ts"], {
         shell: true,
       });
-      process.on("error", (err) => {
+      const pinoPretty = spawn("pino-pretty", {
+        stdio: ["pipe", "inherit", "inherit"],
+      });
+
+      bunProcess.stdout.pipe(pinoPretty.stdin);
+      bunProcess.on("error", (err) => {
         console.error("Failed to start Bun server:", err);
       });
     };
