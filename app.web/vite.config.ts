@@ -22,6 +22,10 @@ const bunServerPlugin = {
       bunProcess.on("error", (err) => {
         console.error("Failed to start Bun server:", err);
       });
+      bunProcess.on("close", (code) => {
+        console.log(`Bun server exited with code ${code}`);
+        pinoPretty.kill();
+      });
     };
 
     server.httpServer?.once("listening", startBunServer);
