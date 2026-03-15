@@ -1,13 +1,12 @@
 {
   "name": "tracktrip",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "bunx --bun vite",
     "build:client": "bunx --bun vite build",
-    "build:server": "bun build ./src/server.ts --outdir ./dist --target bun",
+    "build:server": "SKIP_ENV_VALIDATION=1 bun build ./src/server.ts --compile --target=bun --outfile=dist/server",
     "build": "bun run build:client && bun run build:server",
-    "start": "bun ./dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "migrate": "drizzle-kit migrate",
