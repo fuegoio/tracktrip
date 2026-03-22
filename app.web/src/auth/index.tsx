@@ -7,12 +7,7 @@ import RecoverAccount from "./emails/recover-account";
 import VerifyEmail from "./emails/verify-email";
 
 import { db } from "@/db";
-import {
-  usersTable,
-  accountsTable,
-  sessionsTable,
-  verificationsTable,
-} from "@/db/schema";
+import { usersTable, accountsTable, sessionsTable, verificationsTable } from "@/db/schema";
 import { env } from "@/env";
 import { logger } from "@/lib/logger";
 
@@ -41,7 +36,7 @@ export const auth = betterAuth({
         "Sending reset password email",
       );
       resend.emails.send({
-        from: "Tracktrip <onboarding@notifications.tracktrip.app>",
+        from: "Tracktrip <tracktrip@emails.alexistac.net>",
         to: user.email,
         subject: "Reset your password",
         react: <RecoverAccount url={url} />,
@@ -61,7 +56,7 @@ export const auth = betterAuth({
         "Sending verification email",
       );
       resend.emails.send({
-        from: "Tracktrip <onboarding@notifications.tracktrip.app>",
+        from: "Tracktrip <tracktrip@emails.alexistac.net>",
         to: user.email,
         subject: "Verify your email address",
         react: <VerifyEmail url={url} />,
@@ -91,7 +86,7 @@ export const auth = betterAuth({
           "Sending account deletion email",
         );
         resend.emails.send({
-          from: "Tracktrip <onboarding@notifications.tracktrip.app>",
+          from: "Tracktrip <tracktrip@emails.alexistac.net>",
           to: user.email,
           subject: "Confirm your account deletion",
           react: <DeleteAccountEmail url={url} />,
