@@ -19,7 +19,7 @@ export const miscRouter = router({
       const name = ctx.session.user.name;
       const email = ctx.session.user.email;
       await resend.emails.send({
-        from: "Tracktrip <tracktrip@emails.alexistac.net>",
+        from: "Tracktrip <tracktrip@resend.alexistac.net>",
         replyTo: `${name} <${email}>`,
         to: ["alexistacnet@gmail.com"],
         subject: "Message from Tracktrip app",

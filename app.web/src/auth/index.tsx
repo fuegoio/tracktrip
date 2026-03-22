@@ -36,7 +36,7 @@ export const auth = betterAuth({
         "Sending reset password email",
       );
       resend.emails.send({
-        from: "Tracktrip <tracktrip@emails.alexistac.net>",
+        from: "Tracktrip <tracktrip@resend.alexistac.net>",
         to: user.email,
         subject: "Reset your password",
         react: <RecoverAccount url={url} />,
@@ -56,7 +56,7 @@ export const auth = betterAuth({
         "Sending verification email",
       );
       resend.emails.send({
-        from: "Tracktrip <tracktrip@emails.alexistac.net>",
+        from: "Tracktrip <tracktrip@resend.alexistac.net>",
         to: user.email,
         subject: "Verify your email address",
         react: <VerifyEmail url={url} />,
@@ -86,7 +86,7 @@ export const auth = betterAuth({
           "Sending account deletion email",
         );
         resend.emails.send({
-          from: "Tracktrip <tracktrip@emails.alexistac.net>",
+          from: "Tracktrip <tracktrip@resend.alexistac.net>",
           to: user.email,
           subject: "Confirm your account deletion",
           react: <DeleteAccountEmail url={url} />,
